@@ -1,9 +1,10 @@
 package multisala.core;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class Show {
+public class Show implements Serializable {
 	
 	private String title;
 	private Calendar time;

@@ -1,6 +1,8 @@
 package multisala.core;
 
-public class Reservation {
+import java.io.Serializable;
+
+public class Reservation implements Serializable {
 	
 	private Show show;
 	private String user;

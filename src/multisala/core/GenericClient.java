@@ -1,6 +1,8 @@
 package multisala.core;
 
-public abstract class GenericClient {
+import java.io.Serializable;
+
+public abstract class GenericClient implements Serializable {
 
 	ICentralServer centralServer;
 

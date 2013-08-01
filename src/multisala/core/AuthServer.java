@@ -1,29 +1,71 @@
 package multisala.core;
 
 import java.io.IOException;
+import java.rmi.AccessException;
 import java.rmi.MarshalledObject;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.activation.Activatable;
+import java.rmi.activation.ActivationException;
 import java.rmi.activation.ActivationID;
+import java.rmi.activation.UnknownObjectException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.server.UnicastRemoteObject;
+import java.rmi.server.Unreferenced;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.rmi.ssl.SslRMIClientSocketFactory;
 import javax.rmi.ssl.SslRMIServerSocketFactory;
 
-public class AuthServer extends Activatable implements IAuthServer {
+public class AuthServer extends Activatable implements IAuthServer, Unreferenced {
 
 	private ICentralServer centralServer;
+	private Connection dbConnection;
 
 	public AuthServer(ActivationID id, MarshalledObject<ICentralServer> centralServer) 
-			throws ClassNotFoundException, IOException, RemoteException {
+			throws ClassNotFoundException, IOException, RemoteException, SQLException {
 		super(id, 12000, new SslRMIClientSocketFactory(), new SslRMIServerSocketFactory());
-		this.centralServer = (ICentralServer) centralServer.get();
+		this.centralServer = centralServer.get();
+		Class.forName("org.sqlite.JDBC");
+		dbConnection = DriverManager.getConnection("jdbc:sqlite:multisala.db");
+		LocateRegistry.getRegistry(1098).rebind("AuthServer", this);
 	}
 	
 	@Override
 	public GenericClient login(String user, String password)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+			throws RemoteException, SQLException {
+		PreparedStatement query = dbConnection.prepareStatement("select password, type from users where name = ? and approved = TRUE");
+		query.setString(1, user);
+		ResultSet rs = query.executeQuery();
+		if(!rs.first() || !rs.getString("password").equals(password))
+			throw new RemoteException("Login fallito.");
+		if(rs.getString("type").equals("user"))
+			return new UserMA(centralServer);
+		else {
+			AdminMS adMS = new AdminMS(centralServer);
+			UnicastRemoteObject.unexportObject(adMS, false);
+			return adMS;
+		}
+	}
+	
+	@Override
+	public IGuest login() throws RemoteException {
+		return new GuestMA(centralServer);
+	}
+
+	@Override
+	public void unreferenced() {
+		try {
+			LocateRegistry.getRegistry(1098).unbind("AuthServer");
+			inactive(getID());
+		} catch (RemoteException | NotBoundException | ActivationException e) {
+			e.printStackTrace();
+		}
+		System.gc();
 	}
 
 }

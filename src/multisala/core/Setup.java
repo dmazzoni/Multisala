@@ -22,11 +22,7 @@ public final class Setup {
 			groupProperties.put("java.security.policy", groupPolicy);
 			groupProperties.put("multisala.codebase", implCodebase);
 			groupProperties.put("java.class.path", "no_classpath");
-			
-			/** Controllo se esistono i file dei GroupID.
-			Se esistono, estraggo i GroupID e passo a fase 3
-			Se non esiste, creo, registro e salvo su file, poi fase 3
-		**/
+
 			// Registrazione dei gruppi o recupero del loro ID
 			ActivationGroupID groupID1 = getGroupID("group1", groupProperties);
 			ActivationGroupID groupID2 = getGroupID("group2", groupProperties);

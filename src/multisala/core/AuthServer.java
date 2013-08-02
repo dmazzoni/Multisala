@@ -62,7 +62,8 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 		try {
 			LocateRegistry.getRegistry(1098).unbind("AuthServer");
 			inactive(getID());
-		} catch (RemoteException | NotBoundException | ActivationException e) {
+			dbConnection.close();
+		} catch (RemoteException | NotBoundException | ActivationException | SQLException e) {
 			e.printStackTrace();
 		}
 		System.gc();

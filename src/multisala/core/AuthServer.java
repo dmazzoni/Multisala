@@ -47,7 +47,6 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 			return new UserMA(centralServer);
 		else {
 			AdminMS adMS = new AdminMS(centralServer);
-			UnicastRemoteObject.unexportObject(adMS, false);
 			return adMS;
 		}
 	}

@@ -41,10 +41,12 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 		PreparedStatement query = dbConnection.prepareStatement("select password, type from users where name = ? and approved = TRUE");
 		query.setString(1, user);
 		ResultSet rs = query.executeQuery();
+		if (!rs.first())
+			throw new RemoteException("Login fallito.");
 		String rsPassword = rs.getString("password");
 		String rsType = rs.getString("type");
 		query.close();
-		if(!rs.first() || !rsPassword.equals(password))
+		if(!rsPassword.equals(password))
 			throw new RemoteException("Login fallito.");
 		if(rsType.equals("user"))
 			return new UserMA(centralServer);

@@ -80,7 +80,7 @@ public final class Setup {
 		Statement dbStatement = dbConnection.createStatement();
 		dbStatement.executeUpdate("CREATE TABLE IF NOT EXISTS users (" +
 										"user_id INTEGER PRIMARY KEY" +
-										"name VARCHAR(30) NOT NULL," +
+										"name VARCHAR(30) UNIQUE NOT NULL," +
 										"password VARCHAR(15) NOT NULL," +
 										"type VARCHAR(10) NOT NULL," +
 										"approved BOOLEAN NOT NULL)");

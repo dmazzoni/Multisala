@@ -16,6 +16,7 @@ import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 
 public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
+	
 	private GuestMA mobileAgent;
 	
 	private InitialContext RMIRegistry;
@@ -100,7 +101,7 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 		if (task != null)
 			task.cancel();
 		synchronized (refCount) {
-			count = refCount--;
+			count = --refCount;
 		}
 		if (count == 0)
 			unreferenced();
@@ -135,7 +136,7 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 			}
 			
 			synchronized (refCount) {
-				count = refCount--;
+				count = --refCount;
 			}
 			if (count == 0)
 				BootstrapServer.this.unreferenced();

@@ -3,7 +3,7 @@ package multisala.core;
 import java.io.Serializable;
 
 public class ClientLease implements Serializable {
-	
+
 	private long duration;
 	private int clientID;
 	private static Integer maxID;
@@ -17,6 +17,10 @@ public class ClientLease implements Serializable {
 
 	public long getDuration() {
 		return duration;
+	}
+	
+	public void setDuration(long duration) {
+		this.duration = duration;
 	}
 
 	public int getClientID() {

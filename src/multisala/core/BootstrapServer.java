@@ -22,10 +22,10 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 	private InitialContext RMIRegistry;
 	private InitialContext COSNaming;
 	
-	private Integer refCount;
+	private Integer refCount = 0;
 	private Timer dgcTimer;
 	private ConcurrentMap<Integer, DGCTask> dgcTasks;
-	private static Integer maxClientID;
+	private static Integer maxClientID = 0;
 
 	public BootstrapServer(IAuthServer auth, InitialContext cxt1, InitialContext cxt2) throws RemoteException {
 		mobileAgent = auth.login();
@@ -71,8 +71,13 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 
 	@Override
 	public Integer gotReference() throws RemoteException {
-		int leaseValue = Integer.parseInt(System.getProperty("java.rmi.dgc.leaseValue"));
+		int leaseValue;
+		String leaseProperty = System.getProperty("java.rmi.dgc.leaseValue");
 		Integer clientID;
+		if (leaseProperty == null)
+			leaseValue = 600000;
+		else
+			leaseValue = Integer.parseInt(leaseProperty);
 		synchronized (maxClientID) {
 			clientID = maxClientID++;
 		}

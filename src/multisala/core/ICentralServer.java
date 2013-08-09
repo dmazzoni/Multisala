@@ -2,12 +2,12 @@ package multisala.core;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
-import java.util.Calendar;
+import java.sql.SQLException;
 import java.util.List;
 
 public interface ICentralServer extends Remote {
 
-	List<Show> getSchedule(Calendar dt) throws RemoteException;
+	List<Show> getSchedule(String dt) throws RemoteException, SQLException;
 	void register(String user, String password) throws RemoteException;
 	
 	List<Reservation> getReservations(String user) throws RemoteException;

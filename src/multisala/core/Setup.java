@@ -3,7 +3,6 @@ package multisala.core;
 import java.io.*;
 import java.rmi.MarshalledObject;
 import java.rmi.RMISecurityManager;
-import java.rmi.RemoteException;
 import java.rmi.activation.*;
 import java.rmi.registry.LocateRegistry;
 import java.sql.*;
@@ -87,7 +86,8 @@ public final class Setup {
 		dbStatement.executeUpdate("CREATE TABLE IF NOT EXISTS shows (" +
 										"show_id INTEGER PRIMARY KEY," +
 										"title VARCHAR(30) NOT NULL," +
-										"time DATETIME NOT NULL," +
+										"show_date CHARACTER(10) NOT NULL," +
+										"show_time CHARACTER(5) NOT NULL" +
 										"theater VARCHAR(15) NOT NULL," +
 										"free_seats INTEGER NOT NULL)");
 		dbStatement.executeUpdate("CREATE TABLE IF NOT EXISTS reservations (" +

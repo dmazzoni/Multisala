@@ -1,23 +1,23 @@
 package multisala.core;
 
 import java.io.Serializable;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.text.ParseException;
 
 public class Show implements Serializable {
 	
 	private int id;
 	private String title;
-	private Calendar time;
+	private String date;
+	private String time;
 	private String theater;
 	
-	public Show(int id, String title, int year, int month, int day, int hour, int min, String theater) {
+	public Show(int id, String title, String date, String time, String theater) 
+			throws ParseException {
 		this.id = id;
 		this.title = title;
 		this.theater = theater;
-		Calendar c = new GregorianCalendar();
-		c.set(year, month, day, hour, min);
-		this.time = c;
+	    this.date = date;
+		this.time = time;
 	}
 
 	public int getId() {
@@ -27,8 +27,12 @@ public class Show implements Serializable {
 	public String getTitle() {
 		return title;
 	}
+	
+	public String getDate() {
+		return date;
+	}
 
-	public Calendar getTime() {
+	public String getTime() {
 		return time;
 	}
 

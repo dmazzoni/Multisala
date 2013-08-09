@@ -36,23 +36,29 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 	}
 	
 	@Override
-	public GenericClient login(String user, String password)
+	public GenericClient login(String user, String password) 
 			throws RemoteException, SQLException {
-		PreparedStatement query = dbConnection.prepareStatement("select password, type from users where name = ? and approved = TRUE");
-		query.setString(1, user);
-		ResultSet rs = query.executeQuery();
-		if (!rs.first())
-			throw new RemoteException("Login fallito.");
-		String rsPassword = rs.getString("password");
-		String rsType = rs.getString("type");
-		query.close();
-		if(!rsPassword.equals(password))
-			throw new RemoteException("Login fallito.");
-		if(rsType.equals("user"))
-			return new UserMA(centralServer);
-		else {
-			AdminMS adMS = new AdminMS(centralServer);
-			return adMS;
+		PreparedStatement query;
+		try {
+			query = dbConnection.prepareStatement("select password, type from users where name = ? and approved = TRUE");
+			query.setString(1, user);
+			ResultSet rs = query.executeQuery();
+			if (!rs.first())
+				throw new RemoteException("Login fallito.");
+			String rsPassword = rs.getString("password");
+			String rsType = rs.getString("type");
+			if(!rsPassword.equals(password))
+				throw new RemoteException("Login fallito.");
+			if(rsType.equals("user"))
+				return new UserMA(centralServer);
+			else {
+				AdminMS adMS = new AdminMS(centralServer);
+				return adMS;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			query.close();
 		}
 	}
 	

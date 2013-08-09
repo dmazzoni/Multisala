@@ -25,6 +25,7 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 	private Integer refCount;
 	private Timer dgcTimer;
 	private ConcurrentMap<Integer, DGCTask> dgcTasks;
+	private static Integer maxClientID;
 
 	public BootstrapServer(IAuthServer auth, InitialContext cxt1, InitialContext cxt2) throws RemoteException {
 		mobileAgent = auth.login();
@@ -64,40 +65,30 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 	}
 
 	@Override
-	public GuestUI getClient() throws RemoteException {
+	public Runnable getClient() throws RemoteException {
 		return new GuestUI(mobileAgent);
 	}
 
 	@Override
-	public ClientLease gotReference() throws RemoteException {
+	public Integer gotReference() throws RemoteException {
 		int leaseValue = Integer.parseInt(System.getProperty("java.rmi.dgc.leaseValue"));
-		ClientLease lease = new ClientLease(leaseValue);
+		Integer clientID;
+		synchronized (maxClientID) {
+			clientID = maxClientID++;
+		}
 		DGCTask task = new DGCTask();
 		dgcTimer.schedule(task, leaseValue);
-		dgcTasks.put(lease.getClientID(), task);
+		dgcTasks.put(clientID, task);
 		synchronized (refCount) {
 			refCount++;
 		}
-		return lease;
+		return clientID;
 	}
 
 	@Override
-	public ClientLease refreshReference(ClientLease lease) throws RemoteException {
-		int leaseValue = Integer.parseInt(System.getProperty("java.rmi.dgc.leaseValue"));
-		lease.setDuration(leaseValue);
-		DGCTask currentTask = new DGCTask();
-		DGCTask previousTask = dgcTasks.replace(lease.getClientID(), currentTask);
-		if (previousTask == null)
-			throw new RemoteException("Lease inesistente: impossibile rinnovare.");
-		previousTask.cancel();
-		dgcTimer.schedule(currentTask, leaseValue);
-		return lease;
-	}
-
-	@Override
-	public void releaseReference(ClientLease lease) throws RemoteException {
+	public void releaseReference(Integer clientID) throws RemoteException {
 		int count;
-		DGCTask task = dgcTasks.remove(lease.getClientID());
+		DGCTask task = dgcTasks.remove(clientID);
 		if (task != null)
 			task.cancel();
 		synchronized (refCount) {

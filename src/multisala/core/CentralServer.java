@@ -40,12 +40,10 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setString(1, dt);
 			ResultSet rs = query.executeQuery();
 			//TODO Costruzione List<Show>
-		} catch (SQLException e) {
-			e.printStackTrace();
+			return schedule;
 		} finally {
 			query.close();
 		}
-		return schedule;
 	}
 
 	@Override

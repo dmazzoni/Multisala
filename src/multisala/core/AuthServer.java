@@ -55,8 +55,6 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 				AdminMS adMS = new AdminMS(centralServer);
 				return adMS;
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
 		} finally {
 			query.close();
 		}

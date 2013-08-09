@@ -88,7 +88,8 @@ public final class Setup {
 										"show_id INTEGER PRIMARY KEY," +
 										"title VARCHAR(30) NOT NULL," +
 										"time DATETIME NOT NULL," +
-										"theater VARCHAR(15) NOT NULL)");
+										"theater VARCHAR(15) NOT NULL," +
+										"free_seats INTEGER NOT NULL)");
 		dbStatement.executeUpdate("CREATE TABLE IF NOT EXISTS reservations (" +
 										"reservation_id INTEGER PRIMARY KEY," +
 										"user_id INTEGER NOT NULL," +

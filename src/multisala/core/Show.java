@@ -1,7 +1,6 @@
 package multisala.core;
 
 import java.io.Serializable;
-import java.text.ParseException;
 
 public class Show implements Serializable {
 	
@@ -9,15 +8,15 @@ public class Show implements Serializable {
 	private String title;
 	private String date;
 	private String time;
-	private int theater;
+	private String theater;
 	private int freeSeats;
 	
-	public Show(int id, String title, String date, String time, int theater, int freeSeats) {
+	public Show(int id, String title, String date, String time, String theater, int freeSeats) {
 		this.id = id;
 		this.title = title;
-		this.theater = theater;
 	    this.date = date;
 		this.time = time;
+		this.theater = theater;
 		this.freeSeats = freeSeats;
 	}
 
@@ -37,7 +36,7 @@ public class Show implements Serializable {
 		return time;
 	}
 
-	public int getTheater() {
+	public String getTheater() {
 		return theater;
 	}
 	

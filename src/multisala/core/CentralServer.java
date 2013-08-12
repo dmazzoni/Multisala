@@ -16,6 +16,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Vector;
 
@@ -42,7 +43,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			while (rs.next()) {
 				int id = rs.getInt("show_id");
 				String title = rs.getString("title");
-				int theater = rs.getInt("theater_id");
+				String theater = rs.getString("theater_id");
 				String date = rs.getString("show_date");
 				String time = rs.getString("show_time");
 				int seats = rs.getInt("free_seats");
@@ -50,7 +51,8 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			}
 			return schedule;
 		} finally {
-			query.close();
+			if (query != null)
+				query.close();
 		}
 	}
 
@@ -64,7 +66,24 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setString(2, password);
 			query.executeUpdate();
 		} finally {
-			query.close();
+			if (query != null)
+				query.close();
+		}
+	}
+	
+	@Override
+	public synchronized List<Reservation> getReservations() throws RemoteException, SQLException {
+		Statement query = null;
+		List<Reservation> reservations = new Vector<Reservation>();
+		try {
+			query = dbConnection.createStatement();
+			ResultSet rs = query.executeQuery("SELECT user_id FROM users");
+			while (rs.next())
+				reservations.addAll(getReservations(rs.getString("user_id")));
+			return reservations;
+		} finally {
+			if (query != null)
+				query.close();
 		}
 	}
 
@@ -74,7 +93,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		List<Reservation> reservations = new Vector<Reservation>();
 		try {
 			query = dbConnection.prepareStatement("SELECT a.reservation_id, a.seats," +
-					"b.show_id, b.title, b.show_date, b.show_time, b.theater_id, b.free_seats " +
+					"b.show_id, b.title, b.show_date, b.show_time, b.theater, b.free_seats " +
 					"FROM reservations AS a, shows AS b " +
 					"WHERE a.user_id = ? AND a.show_id = b.show_id");
 			query.setString(1, user);
@@ -82,9 +101,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			while (rs.next()) {
 				int id = rs.getInt("b.show_id");
 				String title = rs.getString("b.title");
-				int theater = rs.getInt("b.theater_id");
 				String date = rs.getString("b.show_date");
 				String time = rs.getString("b.show_time");
+				String theater = rs.getString("b.theater");
 				int seats = rs.getInt("b.free_seats");
 				Show s = new Show(id, title, date, time, theater, seats);
 				id = rs.getInt("a.reservation_id");
@@ -93,7 +112,8 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			}
 			return reservations;
 		} finally {
-			query.close();
+			if (query != null)
+				query.close();
 		}
 	}
 
@@ -109,64 +129,141 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query1.setInt(2, res.getShow().getId());
 			query1.setInt(3, res.getSeats());
 			query1.executeUpdate();
-			query2 = dbConnection.preparedStatement("UPDATE shows SET show_id ///////)
-			
+			query2 = dbConnection.prepareStatement("UPDATE shows SET free_seats = free_seats - ?" +
+					"WHERE show_id = ?");
+			query2.setInt(1, res.getSeats());
+			query2.setInt(2, res.getShow().getId());
+			query2.executeUpdate();
+			dbConnection.commit();
+		} catch (SQLException e) {
+			dbConnection.rollback();
+			throw e;
 		} finally {
 			dbConnection.setAutoCommit(true);
-			query1.close();
+			if (query1 != null)
+				query1.close();
+			if (query2 != null)
+				query2.close();
 		}
 	}
 
 	@Override
-	public synchronized void editReservation(Reservation updated) throws RemoteException {
+	public synchronized void editReservation(Reservation updated) throws RemoteException, SQLException {
+		PreparedStatement query1 = null;
+		PreparedStatement query2 = null;
+		try {
+			dbConnection.setAutoCommit(false);
+			query1 = dbConnection.prepareStatement("UPDATE shows SET free_seats = free_seats + " +
+					"((SELECT seats FROM reservations WHERE reservation_id = ?) - ?)");
+			query1.setInt(1, updated.getId());
+			query1.setInt(2, updated.getSeats());
+			query1.executeUpdate();
+			query2 = dbConnection.prepareStatement("UPDATE reservations SET seats = ? WHERE reservation_id = ?");
+			query2.setInt(1, updated.getSeats());
+			query2.setInt(2, updated.getId());
+			query2.executeUpdate();
+			dbConnection.commit();
+		} catch (SQLException e) { 
+			dbConnection.rollback();
+			throw e;
+		} finally {
+			dbConnection.setAutoCommit(true);
+			if (query1 != null)
+				query1.close();
+			if (query2 != null)
+				query2.close();
+		}
+	}
+
+	@Override
+	public synchronized void deleteReservation(int id) throws RemoteException, SQLException {
+		PreparedStatement query1 = null;
+		PreparedStatement query2 = null;
+		try {
+			dbConnection.setAutoCommit(false);
+			query1 = dbConnection.prepareStatement("UPDATE shows SET free_seats = free_seats + " +
+					"(SELECT seats FROM reservations WHERE reservation_id = ?)");
+			query1.setInt(1, id);
+			query1.executeUpdate();
+			query2 = dbConnection.prepareStatement("DELETE FROM reservations WHERE reservation_id = ?");
+			query2.setInt(1, id);
+			query2.executeUpdate();
+			dbConnection.commit();
+		} catch (SQLException e) { 
+			dbConnection.rollback();
+			throw e;
+		} finally {
+			dbConnection.setAutoCommit(true);
+			if (query1 != null)
+				query1.close();
+			if (query2 != null)
+				query2.close();
+		}
+	}
+
+	@Override
+	public synchronized void insertShow(Show sh) throws RemoteException, SQLException {
 		PreparedStatement query = null;
 		try {
-			query = dbConnection.prepareStatement("UPDATE OR ROLLBACK reservations " +
-					"SET /////////");
-			query.setString(1, res.getUser());
-			query.setInt(2, res.getShow().getId());
-			query.setInt(3, res.getSeats());
+			query = dbConnection.prepareStatement("INSERT OR ROLLBACK INTO shows " +
+					"(title, show_date, show_time, theater) VALUES (?, ?, ?, ?)");
+			query.setString(1, sh.getTitle());
+			query.setString(2, sh.getDate());
+			query.setString(3, sh.getTime());
+			query.setString(4, sh.getTheater());
 			query.executeUpdate();
 		} finally {
-			query.close();
+			if (query != null)
+				query.close();
 		}
-
 	}
 
 	@Override
-	public synchronized void deleteReservation(int id) throws RemoteException {
-		// TODO Auto-generated method stub
-
+	public synchronized void editShow(Show updated) throws RemoteException, SQLException {
+		PreparedStatement query = null;
+		try {
+			query = dbConnection.prepareStatement("UPDATE OR ROLLBACK shows " +
+					"SET title = ?, show_date = ?, show_time = ?, theater = ?)" +
+					"WHERE show_id = ?");
+			query.setString(1, updated.getTitle());
+			query.setString(2, updated.getDate());
+			query.setString(3, updated.getTime());
+			query.setString(4, updated.getTheater());
+			query.setInt(5, updated.getId());
+			query.executeUpdate();
+		} finally {
+			if (query != null)
+				query.close();
+		}
 	}
 
 	@Override
-	public synchronized void insertShow(Show sh) throws RemoteException {
-		// TODO Auto-generated method stub
-
+	public synchronized void deleteShow(int id) throws RemoteException, SQLException {
+		PreparedStatement query = null;
+		try {
+			query = dbConnection.prepareStatement("DELETE OR ROLLBACK FROM shows " +
+					"WHERE show_id = ?");
+			query.setInt(1, id);
+			query.executeUpdate();
+		} finally {
+			if (query != null)
+				query.close();
+		}
 	}
 
 	@Override
-	public synchronized void editShow(int id, Show current) throws RemoteException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public synchronized void deleteShow(int id) throws RemoteException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public synchronized void sellTickets(Show sh, int tickets) throws RemoteException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public synchronized List<Reservation> getReservations() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+	public synchronized void sellTickets(int id, int tickets) throws RemoteException, SQLException {
+		PreparedStatement query = null;
+		try {
+			query = dbConnection.prepareStatement("UPDATE OR ROLLBACK shows " +
+					"SET free_seats = free_seats - ? WHERE show_id = ?");
+			query.setInt(1, tickets);
+			query.setInt(2, id);
+			query.executeUpdate();
+		} finally {
+			if (query != null)
+				query.close();
+		}
 	}
 	
 	@Override

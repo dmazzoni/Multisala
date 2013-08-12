@@ -14,7 +14,6 @@ public final class Setup {
 		String groupPolicy = System.getProperty("multisala.policy");
 		String implCodebase = System.getProperty("multisala.codebase");
 		String path = System.getProperty("multisala.refLocation");
-		// LANCIO IL SECURITY MANAGER
 		System.setSecurityManager(new RMISecurityManager());
 		try {
 			Properties groupProperties = new Properties();
@@ -87,19 +86,15 @@ public final class Setup {
 										"title VARCHAR(30) NOT NULL," +
 										"show_date CHARACTER(10) NOT NULL," +
 										"show_time CHARACTER(5) NOT NULL" +
-										"theater_id INTEGER NOT NULL," +
-										"free_seats INTEGER NOT NULL CHECK (free_seats >= 0)," +
-										"FOREIGN KEY(theater_id) REFERENCES theaters(theater_id))");
+										"theater VARCHAR(5) NOT NULL," +
+										"free_seats INTEGER NOT NULL CHECK (free_seats >= 0) DEFAULT 150)");
 		dbStatement.executeUpdate("CREATE TABLE IF NOT EXISTS reservations (" +
 										"reservation_id INTEGER PRIMARY KEY," +
 										"user_id VARCHAR(30) NOT NULL," +
 										"show_id INTEGER NOT NULL," +
-										"seats INTEGER NOT NULL," +
+										"seats INTEGER NOT NULL CHECK (seats >= 0)," +
 										"FOREIGN KEY(user_id) REFERENCES users(user_id)" +
 										"FOREIGN KEY(show_id) REFERENCES shows(show_id)");
-		dbStatement.executeUpdate("CREATE TABLE IF NOT EXISTS theaters (" +
-										"theater_id INTEGER PRIMARY KEY," +
-										"seats INTEGER NOT NULL)");
 		dbConnection.close();
 	}
 }

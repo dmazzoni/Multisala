@@ -40,7 +40,7 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 			throws RemoteException, SQLException {
 		PreparedStatement query;
 		try {
-			query = dbConnection.prepareStatement("select password, type from users where name = ? and approved = TRUE");
+			query = dbConnection.prepareStatement("select password, type from users where user_id = ? and approved = 1");
 			query.setString(1, user);
 			ResultSet rs = query.executeQuery();
 			if (!rs.first())
@@ -51,10 +51,8 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 				throw new RemoteException("Login fallito.");
 			if(rsType.equals("user"))
 				return new UserMA(centralServer);
-			else {
-				AdminMS adMS = new AdminMS(centralServer);
-				return adMS;
-			}
+			else
+				return new AdminMS(centralServer);
 		} finally {
 			query.close();
 		}

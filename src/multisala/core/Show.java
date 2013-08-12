@@ -9,15 +9,16 @@ public class Show implements Serializable {
 	private String title;
 	private String date;
 	private String time;
-	private String theater;
+	private int theater;
+	private int freeSeats;
 	
-	public Show(int id, String title, String date, String time, String theater) 
-			throws ParseException {
+	public Show(int id, String title, String date, String time, int theater, int freeSeats) {
 		this.id = id;
 		this.title = title;
 		this.theater = theater;
 	    this.date = date;
 		this.time = time;
+		this.freeSeats = freeSeats;
 	}
 
 	public int getId() {
@@ -36,8 +37,12 @@ public class Show implements Serializable {
 		return time;
 	}
 
-	public String getTheater() {
+	public int getTheater() {
 		return theater;
+	}
+	
+	public int getFreeSeats() {
+		return freeSeats;
 	}
 	
 }

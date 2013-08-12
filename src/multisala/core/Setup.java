@@ -78,8 +78,7 @@ public final class Setup {
 		dbConnection = DriverManager.getConnection("jdbc:sqlite:multisala.db");
 		Statement dbStatement = dbConnection.createStatement();
 		dbStatement.executeUpdate("CREATE TABLE IF NOT EXISTS users (" +
-										"user_id INTEGER PRIMARY KEY" +
-										"name VARCHAR(30) UNIQUE NOT NULL," +
+										"user_id VARCHAR(30) PRIMARY KEY," +
 										"password VARCHAR(15) NOT NULL," +
 										"type VARCHAR(10) NOT NULL," +
 										"approved BOOLEAN NOT NULL)");
@@ -88,15 +87,19 @@ public final class Setup {
 										"title VARCHAR(30) NOT NULL," +
 										"show_date CHARACTER(10) NOT NULL," +
 										"show_time CHARACTER(5) NOT NULL" +
-										"theater VARCHAR(15) NOT NULL," +
-										"free_seats INTEGER NOT NULL)");
+										"theater_id INTEGER NOT NULL," +
+										"free_seats INTEGER NOT NULL CHECK (free_seats >= 0)," +
+										"FOREIGN KEY(theater_id) REFERENCES theaters(theater_id))");
 		dbStatement.executeUpdate("CREATE TABLE IF NOT EXISTS reservations (" +
 										"reservation_id INTEGER PRIMARY KEY," +
-										"user_id INTEGER NOT NULL," +
+										"user_id VARCHAR(30) NOT NULL," +
 										"show_id INTEGER NOT NULL," +
-										"seats INTEGER NOT NULL" +
+										"seats INTEGER NOT NULL," +
 										"FOREIGN KEY(user_id) REFERENCES users(user_id)" +
 										"FOREIGN KEY(show_id) REFERENCES shows(show_id)");
+		dbStatement.executeUpdate("CREATE TABLE IF NOT EXISTS theaters (" +
+										"theater_id INTEGER PRIMARY KEY," +
+										"seats INTEGER NOT NULL)");
 		dbConnection.close();
 	}
 }

@@ -8,11 +8,11 @@ import java.util.List;
 public interface ICentralServer extends Remote {
 
 	List<Show> getSchedule(String dt) throws RemoteException, SQLException;
-	void register(String user, String password) throws RemoteException;
+	void register(String user, String password) throws RemoteException, SQLException;
 	
-	List<Reservation> getReservations(String user) throws RemoteException;
-	void insertReservation(Reservation res) throws RemoteException;
-	void editReservation(int id, Reservation current) throws RemoteException;
+	List<Reservation> getReservations(String user) throws RemoteException, SQLException;
+	void insertReservation(Reservation res) throws RemoteException, SQLException;
+	void editReservation(Reservation updated) throws RemoteException, SQLException;
 	void deleteReservation(int id) throws RemoteException;
 	
 	void insertShow(Show sh) throws RemoteException;

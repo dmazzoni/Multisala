@@ -52,6 +52,7 @@ public class GuestUI extends JFrame implements Runnable {
 				LoginPanel loginPanel = new LoginPanel(GuestUI.this);
 				GuestUI.this.getContentPane().remove(tabbedView);
 				GuestUI.this.getContentPane().add(loginPanel, BorderLayout.CENTER);
+				GuestUI.this.validate();
             }                       
 		});
 		toolBar.add(loginButton);
@@ -59,8 +60,9 @@ public class GuestUI extends JFrame implements Runnable {
 	}
 	
 	private JTabbedPane createTabbedView() {
-		//TODO
-		return new JTabbedPane();
+		JTabbedPane tabbedView = new JTabbedPane();
+		tabbedView.setPreferredSize(new Dimension(600, 400));
+		return tabbedView;
 	}
 	
 	private JLabel createStatusBar() {

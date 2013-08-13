@@ -20,6 +20,7 @@ import java.sql.SQLException;
 
 import javax.rmi.ssl.SslRMIClientSocketFactory;
 import javax.rmi.ssl.SslRMIServerSocketFactory;
+import javax.security.auth.login.LoginException;
 
 public class AuthServer extends Activatable implements IAuthServer, Unreferenced {
 
@@ -37,18 +38,18 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 	
 	@Override
 	public GenericClient login(String user, String password) 
-			throws RemoteException, SQLException {
+			throws LoginException, RemoteException, SQLException {
 		PreparedStatement query;
 		try {
 			query = dbConnection.prepareStatement("select password, type from users where user_id = ? and approved = 1");
 			query.setString(1, user);
 			ResultSet rs = query.executeQuery();
 			if (!rs.first())
-				throw new RemoteException("Login fallito.");
+				throw new LoginException("Utente inesistente o non ancora approvato");
 			String rsPassword = rs.getString("password");
 			String rsType = rs.getString("type");
 			if(!rsPassword.equals(password))
-				throw new RemoteException("Login fallito.");
+				throw new LoginException("Password errata");
 			if(rsType.equals("user"))
 				return new UserMA(centralServer);
 			else

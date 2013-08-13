@@ -15,9 +15,11 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 
+import multisala.gui.GuestUI;
+
 public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 	
-	private GuestMA mobileAgent;
+	private IGuest mobileAgent;
 	
 	private InitialContext RMIRegistry;
 	private InitialContext COSNaming;

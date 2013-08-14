@@ -37,9 +37,9 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 	}
 	
 	@Override
-	public GenericClient login(String user, String password) 
+	public AbstractClient login(String user, String password) 
 			throws LoginException, RemoteException, SQLException {
-		PreparedStatement query;
+		PreparedStatement query = null;
 		try {
 			query = dbConnection.prepareStatement("select password, type from users where user_id = ? and approved = 1");
 			query.setString(1, user);
@@ -61,7 +61,8 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 	
 	@Override
 	public IGuest login() throws RemoteException {
-		return new GuestMA(centralServer);
+		return null;
+		//return new GuestMA(centralServer);
 	}
 
 	@Override

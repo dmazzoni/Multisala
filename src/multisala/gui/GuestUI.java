@@ -1,6 +1,7 @@
 package multisala.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -20,39 +21,52 @@ import multisala.core.IGuest;
 
 public class GuestUI extends JFrame implements Runnable {
 	
-	private IGuest guestMA;
+	protected IGuest agent;
 	
 	protected JToolBar toolBar;
-	protected JTabbedPane tabbedView;
-	protected JLabel statusLabel;
+	protected final JTabbedPane tabbedView;
+	protected final JLabel statusLabel;
 
 	public GuestUI(IGuest guestMA) {
-		super("Multisala");
-		this.guestMA = guestMA;
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this();
+		this.agent = guestMA;
 		this.toolBar = createToolBar();
+		this.getContentPane().add(toolBar, BorderLayout.PAGE_START);
+		this.pack();
+	}
+	
+	protected GuestUI() {
+		super("Multisala");
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.tabbedView = createTabbedView();
 		this.statusLabel = createStatusBar();
 		Container pane = this.getContentPane();
 		pane.setLayout(new BorderLayout());
-		pane.add(toolBar, BorderLayout.PAGE_START); 
 		pane.add(tabbedView, BorderLayout.CENTER);
 		pane.add(statusLabel.getParent(), BorderLayout.PAGE_END);
-		this.pack();
 	}
 	
 	private JToolBar createToolBar() {
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
-		final JButton loginButton = new JButton("Accedi");
+		JButton loginButton = new JButton("Accedi");
 		loginButton.addActionListener(new ActionListener() {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				LoginPanel loginPanel = new LoginPanel(GuestUI.this);
-				GuestUI.this.getContentPane().remove(tabbedView);
-				GuestUI.this.getContentPane().add(loginPanel, BorderLayout.CENTER);
-				GuestUI.this.validate();
+				BorderLayout layout = (BorderLayout) GuestUI.this.getContentPane().getLayout();
+				Component currentView = layout.getLayoutComponent(BorderLayout.CENTER);
+				if (currentView instanceof LoginPanel) {
+					GuestUI.this.getContentPane().remove(currentView);
+					GuestUI.this.getContentPane().add(tabbedView, BorderLayout.CENTER);
+					((JButton) GuestUI.this.toolBar.getComponentAtIndex(0)).setText("Accedi");
+				} else {
+					LoginPanel loginPanel = new LoginPanel(GuestUI.this);
+					GuestUI.this.getContentPane().remove(tabbedView);
+					GuestUI.this.getContentPane().add(loginPanel, BorderLayout.CENTER);
+					((JButton) GuestUI.this.toolBar.getComponentAtIndex(0)).setText("Indietro");	
+				}
+				GuestUI.this.repaint();
             }                       
 		});
 		toolBar.add(loginButton);
@@ -74,6 +88,10 @@ public class GuestUI extends JFrame implements Runnable {
 		statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		statusBar.add(statusLabel);
 		return statusLabel;
+	}
+
+	public IGuest getAgent() {
+		return agent;
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import javax.security.auth.login.LoginException;
 public interface IGuest {
 	
 	List<Show> getSchedule(Calendar dt);
-	AbstractClient login(String user, String password) throws LoginException;
+	AbstractAgent login(String user, String password) throws LoginException;
 	void register(String user, String password);
 
 }

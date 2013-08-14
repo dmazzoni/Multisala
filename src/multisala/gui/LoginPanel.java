@@ -22,7 +22,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import multisala.core.AbstractClient;
+import multisala.core.AbstractAgent;
 
 public class LoginPanel extends JPanel {
 	
@@ -40,7 +40,7 @@ public class LoginPanel extends JPanel {
 	private void submitAction() {
 		try {
 			String username = userField.getText();
-			AbstractClient loggedClient = parent.agent.login(username, new String(passField.getPassword()));
+			AbstractAgent loggedClient = parent.agent.login(username, new String(passField.getPassword()));
 			if (loggedClient instanceof UserMA) {
 				UserUI userUI = new UserUI(loggedClient, username);
 				parent.setVisible(false);

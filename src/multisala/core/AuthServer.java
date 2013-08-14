@@ -37,7 +37,7 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 	}
 	
 	@Override
-	public AbstractClient login(String user, String password) 
+	public AbstractAgent login(String user, String password) 
 			throws LoginException, RemoteException, SQLException {
 		PreparedStatement query = null;
 		try {

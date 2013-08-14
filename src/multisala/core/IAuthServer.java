@@ -8,7 +8,7 @@ import javax.security.auth.login.LoginException;
 
 public interface IAuthServer extends Remote {
 
-	AbstractClient login(String user, String password) throws LoginException, RemoteException, SQLException;
+	AbstractAgent login(String user, String password) throws LoginException, RemoteException, SQLException;
 	IGuest login() throws RemoteException;
 	
 }

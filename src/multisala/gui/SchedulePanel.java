@@ -8,6 +8,10 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Date;
+import java.util.List;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -16,12 +20,35 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.AbstractTableModel;
 
-public class SchedulePanel extends JPanel {
+import multisala.core.Show;
+
+public class SchedulePanel<T extends GuestUI> extends JPanel {
 	
 	private JTable schedule;
+	private T parent;
 	
-	public SchedulePanel() {
+	public SchedulePanel(T parent) {
+		this.parent = parent;
+		ScheduleTableModel stm = new ScheduleTableModel(parent.agent.getSchedule(new Date()));
+		schedule = new JTable(stm);
+		schedule.addMouseListener(new MouseAdapter() {
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(SwingUtilities.isRightMouseButton(e) && SchedulePanel.this.parent instanceof AdminUI) {
+					//TODO Mostrare menù contestuale
+					return;
+				}
+				if(SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2 && SchedulePanel.this.parent instanceof UserUI) {
+					//TODO Mostrare ReservationPanel (in nuova tab)
+				}
+			}
+		});
 		this.initView();
 	}
 
@@ -86,10 +113,41 @@ public class SchedulePanel extends JPanel {
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		panel.add(verticalStrut_2);
 		
-		schedule = new JTable();
 		panel.add(schedule);
 		
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		panel.add(verticalStrut_3);
+	}
+	
+	private class ScheduleTableModel extends AbstractTableModel {
+
+		private Show[] shows;
+		private final String[] colNames = {"Titolo", "Ora", "Sala", "Posti liberi"};
+		
+		public ScheduleTableModel(List<Show> shows) {
+			this.shows = (Show[]) shows.toArray();
+		}
+		
+		@Override
+		public int getColumnCount() {
+			return 4;
+		}
+
+		@Override
+		public int getRowCount() {
+			return shows.length;
+		}
+
+		@Override
+		public Object getValueAt(int row, int col) {
+			switch (col) {
+				case 0: return shows[row].getTitle();
+				case 1: return shows[row].getTime();
+				case 2: return shows[row].getTheater();
+				case 3: return shows[row].getFreeSeats();
+			}
+			throw new IllegalArgumentException();
+		}
+		
 	}
 }

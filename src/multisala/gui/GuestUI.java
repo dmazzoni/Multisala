@@ -19,13 +19,9 @@ import javax.swing.border.BevelBorder;
 
 import multisala.core.IGuest;
 
-public class GuestUI extends JFrame implements Runnable {
+public class GuestUI extends AbstractUI {
 	
 	protected IGuest agent;
-	
-	protected JToolBar toolBar;
-	protected final JTabbedPane tabbedView;
-	protected final JLabel statusLabel;
 
 	public GuestUI(IGuest guestMA) {
 		this();
@@ -36,7 +32,6 @@ public class GuestUI extends JFrame implements Runnable {
 	}
 	
 	protected GuestUI() {
-		super("Multisala");
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.tabbedView = createTabbedView();
 		this.statusLabel = createStatusBar();
@@ -76,6 +71,7 @@ public class GuestUI extends JFrame implements Runnable {
 	private JTabbedPane createTabbedView() {
 		JTabbedPane tabbedView = new JTabbedPane();
 		tabbedView.setPreferredSize(new Dimension(600, 400));
+		tabbedView.add(new SchedulePanel<GuestUI>(this));
 		return tabbedView;
 	}
 	
@@ -93,13 +89,9 @@ public class GuestUI extends JFrame implements Runnable {
 	public IGuest getAgent() {
 		return agent;
 	}
-
-	@Override
-	public void run() {
-		this.setVisible(true);
-	}
 	
 	public static void main(String[] args) {
 		new GuestUI(null).run();
 	}
+
 }

@@ -51,9 +51,9 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 			if(!rsPassword.equals(password))
 				throw new LoginException("Password errata");
 			if(rsType.equals("user"))
-				return new UserMA(centralServer);
+				return new UserMA(this, centralServer);
 			else
-				return new AdminMS(centralServer);
+				return new AdminMS(this, centralServer);
 		} finally {
 			query.close();
 		}
@@ -61,8 +61,7 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 	
 	@Override
 	public IGuest login() throws RemoteException {
-		return null;
-		//return new GuestMA(centralServer);
+		return new GuestMA(this, centralServer);
 	}
 
 	@Override

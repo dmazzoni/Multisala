@@ -45,12 +45,13 @@ public class LoginPanel extends JPanel {
 				UserUI userUI = new UserUI(loggedClient, username);
 				parent.setVisible(false);
 				userUI.run();
-			} else {
+			} else if (loggedClient instanceof AdminMS) {
 				AdminUI adminUI = new AdminUI(loggedClient, username);
 				parent.setVisible(false);
 				adminUI.run();
 			}
-			parent.dispose();
+			if (loggedClient != null)
+				parent.dispose();
 		} catch (LoginException e) {
 			messageLabel.setText(e.getMessage());
 		}

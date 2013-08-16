@@ -17,7 +17,9 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -25,6 +27,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
 
+import multisala.core.IAdmin;
 import multisala.core.Show;
 
 public class SchedulePanel<T extends GuestUI> extends JPanel {
@@ -41,11 +44,39 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if(SwingUtilities.isRightMouseButton(e) && SchedulePanel.this.parent instanceof AdminUI) {
-					//TODO Mostrare menù contestuale
+					JPopupMenu popupMenu = new JPopupMenu();
+					JMenuItem editMenuItem = new JMenuItem("Modifica");
+					editMenuItem.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							int[] selection = schedule.getSelectedRows();
+							for (int i = 0; i < selection.length; i++) {
+								selection[i] = schedule.convertRowIndexToModel(selection[i]);
+								Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection[i]);
+								SchedulePanel.this.parent.tabbedView.add(new ShowPanel(SchedulePanel.this.parent, sh));
+							}
+						}
+					});
+					JMenuItem deleteMenuItem = new JMenuItem("Elimina");
+					deleteMenuItem.addActionListener(new ActionListener() {
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							int[] selection = schedule.getSelectedRows();
+							for (int i = 0; i < selection.length; i++) {
+								selection[i] = schedule.convertRowIndexToModel(selection[i]);
+								Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection[i]);
+								((IAdmin) SchedulePanel.this.parent.agent).deleteShow(sh.getId());
+							}
+						}
+					});
 					return;
 				}
 				if(SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2 && SchedulePanel.this.parent instanceof UserUI) {
-					//TODO Mostrare ReservationPanel (in nuova tab)
+					int selection = schedule.convertRowIndexToModel(schedule.getSelectedRow());
+					Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection);
+					SchedulePanel.this.parent.tabbedView.add(new ReservationPanel(SchedulePanel.this.parent, sh));
 				}
 			}
 		});
@@ -149,5 +180,8 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 			throw new IllegalArgumentException();
 		}
 		
+		public Show getShowAtIndex(int i) {
+			return shows[i];
+		}
 	}
 }

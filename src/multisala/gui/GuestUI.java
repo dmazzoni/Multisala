@@ -49,20 +49,19 @@ public class GuestUI extends AbstractUI {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				BorderLayout layout = (BorderLayout) GuestUI.this.getContentPane().getLayout();
-				Component currentView = layout.getLayoutComponent(BorderLayout.CENTER);
-				if (currentView instanceof LoginPanel) {
-					GuestUI.this.getContentPane().remove(currentView);
-					GuestUI.this.getContentPane().add(tabbedView, BorderLayout.CENTER);
-					((JButton) GuestUI.this.toolBar.getComponentAtIndex(0)).setText("Accedi");
-				} else {
-					LoginPanel loginPanel = new LoginPanel(GuestUI.this);
-					GuestUI.this.getContentPane().remove(tabbedView);
-					GuestUI.this.getContentPane().add(loginPanel, BorderLayout.CENTER);
-					((JButton) GuestUI.this.toolBar.getComponentAtIndex(0)).setText("Indietro");	
-				}
+				GuestUI.this.tabbedView.add(new LoginPanel(GuestUI.this));
 				GuestUI.this.repaint();
             }                       
+		});
+		JButton regButton = new JButton("Registrati");
+		regButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				GuestUI.this.tabbedView.add(new RegistrationPanel(GuestUI.this));
+				GuestUI.this.repaint();
+			}
+			
 		});
 		toolBar.add(loginButton);
 		return toolBar;

@@ -10,7 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.swing.Box;
@@ -32,14 +34,20 @@ import multisala.core.Show;
 
 public class SchedulePanel<T extends GuestUI> extends JPanel {
 	
+	private Calendar currentDate;
 	private JTable schedule;
 	private T parent;
 	
+	private JLabel lblScheduleDate;
+	
 	public SchedulePanel(T parent) {
 		this.parent = parent;
-		ScheduleTableModel stm = new ScheduleTableModel(parent.agent.getSchedule(new Date()));
-		schedule = new JTable(stm);
-		schedule.addMouseListener(new MouseAdapter() {
+		this.currentDate = new GregorianCalendar();
+		this.lblScheduleDate = new JLabel();
+		this.schedule = new JTable();
+		updateSchedule(0);
+		
+		this.schedule.addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -80,9 +88,18 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 				}
 			}
 		});
-		this.initView();
+		initView();
 	}
 
+	private void updateSchedule(int offset) {
+		currentDate.add(Calendar.DAY_OF_MONTH, offset);
+		String dtString = new String("Programmazione del " + currentDate.get(Calendar.DAY_OF_MONTH) + "/" + 
+				currentDate.get(Calendar.MONTH) + "/" + currentDate.get(Calendar.YEAR));
+		lblScheduleDate.setText(dtString);
+		List<Show> shows = parent.agent.getSchedule(currentDate);
+		schedule.setModel(new ScheduleTableModel(shows));
+	}
+	
 	private void initView() {
 		setLayout(new BorderLayout(0, 0));
 		
@@ -112,6 +129,11 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 		panel_1.setLayout(gbl_panel_1);
 		
 		JButton btnPrevious = new JButton("Precedente");
+		btnPrevious.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				updateSchedule(-1);
+			}
+		});
 		GridBagConstraints gbc_btnPrevious = new GridBagConstraints();
 		gbc_btnPrevious.fill = GridBagConstraints.HORIZONTAL;
 		gbc_btnPrevious.insets = new Insets(0, 0, 0, 5);
@@ -119,7 +141,6 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 		gbc_btnPrevious.gridy = 0;
 		panel_1.add(btnPrevious, gbc_btnPrevious);
 		
-		JLabel lblScheduleDate = new JLabel("Programmazione del 01/01/1970");
 		lblScheduleDate.setHorizontalAlignment(SwingConstants.CENTER);
 		GridBagConstraints gbc_lblScheduleDate = new GridBagConstraints();
 		gbc_lblScheduleDate.fill = GridBagConstraints.HORIZONTAL;
@@ -131,7 +152,7 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 		JButton btnNext = new JButton("Successivo");
 		btnNext.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO
+				updateSchedule(1);
 			}
 		});
 		btnNext.setSize(new Dimension(130, 24));
@@ -164,6 +185,11 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 			return 4;
 		}
 
+		@Override
+		public String getColumnName(int columnIndex) {
+			return colNames[columnIndex];
+		}
+		
 		@Override
 		public int getRowCount() {
 			return shows.length;

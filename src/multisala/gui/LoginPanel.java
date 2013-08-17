@@ -26,18 +26,20 @@ import multisala.core.AbstractAgent;
 
 public class LoginPanel extends JPanel {
 	
-	private GuestUI parent;
+	protected GuestUI parent;
 	
-	private JTextField userField;
-	private JPasswordField passField;
-	private JLabel messageLabel;
+	protected JTextField userField;
+	protected JPasswordField passField;
+	protected JLabel messageLabel;
+	protected JLabel lblHeader;
+	protected JButton btnSubmit;
 
 	public LoginPanel(GuestUI parent) {
 		this.parent = parent;
 		this.initView();
 	}
 	
-	private void submitAction() {
+	protected void submitAction() {
 		try {
 			String username = userField.getText();
 			AbstractAgent loggedClient = parent.agent.login(username, new String(passField.getPassword()));
@@ -58,8 +60,8 @@ public class LoginPanel extends JPanel {
 	}
 	
 	private void cancelAction() {
-		userField.setText("");
-		passField.setText("");
+		parent.tabbedView.remove(this);
+		parent.repaint();
 	}
 
 	private void initView() {
@@ -82,10 +84,10 @@ public class LoginPanel extends JPanel {
 		add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
-		JLabel lblLogin = new JLabel("Login");
-		lblLogin.setFont(new Font("Dialog", Font.BOLD, 16));
-		lblLogin.setAlignmentX(0.5f);
-		panel.add(lblLogin);
+		lblHeader = new JLabel("Login");
+		lblHeader.setFont(new Font("Dialog", Font.BOLD, 16));
+		lblHeader.setAlignmentX(0.5f);
+		panel.add(lblHeader);
 		
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		panel.add(verticalStrut_2);
@@ -141,7 +143,7 @@ public class LoginPanel extends JPanel {
 		gbc_messageLabel.gridy = 0;
 		panel_3.add(messageLabel, gbc_messageLabel);
 		
-		JButton btnSubmit = new JButton("Accedi");
+		btnSubmit = new JButton("Accedi");
 		btnSubmit.setFont(new Font("Dialog", Font.BOLD, 14));
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

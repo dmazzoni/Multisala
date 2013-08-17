@@ -1,14 +1,15 @@
 package multisala.core;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
+import javax.security.auth.login.AccountException;
 import javax.security.auth.login.LoginException;
 
 public interface IGuest {
 	
-	List<Show> getSchedule(Date dt);
+	List<Show> getSchedule(Calendar dt);
 	AbstractAgent login(String user, String password) throws LoginException;
-	void register(String user, String password);
+	void register(String user, String password) throws AccountException;
 
 }

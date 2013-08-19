@@ -46,12 +46,12 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 		this.lblScheduleDate = new JLabel();
 		this.schedule = new JTable();
 		updateSchedule(0);
-		
+
 		this.schedule.addMouseListener(new MouseAdapter() {
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if(SwingUtilities.isRightMouseButton(e) && SchedulePanel.this.parent instanceof AdminUI) {
+				/*if(SwingUtilities.isRightMouseButton(e) && SchedulePanel.this.parent instanceof AdminUI) {
 					JPopupMenu popupMenu = new JPopupMenu();
 					JMenuItem editMenuItem = new JMenuItem("Modifica");
 					editMenuItem.addActionListener(new ActionListener() {
@@ -86,7 +86,7 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 					Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection);
 					SchedulePanel.this.parent.tabbedView.add(new ReservationPanel(SchedulePanel.this.parent, sh));
 				}
-			}
+			*/}
 		});
 		initView();
 	}
@@ -94,7 +94,7 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 	private void updateSchedule(int offset) {
 		currentDate.add(Calendar.DAY_OF_MONTH, offset);
 		String dtString = new String("Programmazione del " + currentDate.get(Calendar.DAY_OF_MONTH) + "/" + 
-				currentDate.get(Calendar.MONTH) + "/" + currentDate.get(Calendar.YEAR));
+				(currentDate.get(Calendar.MONTH) + 1) + "/" + currentDate.get(Calendar.YEAR));
 		lblScheduleDate.setText(dtString);
 		List<Show> shows = parent.agent.getSchedule(currentDate);
 		schedule.setModel(new ScheduleTableModel(shows));
@@ -177,7 +177,7 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 		private final String[] colNames = {"Titolo", "Ora", "Sala", "Posti liberi"};
 		
 		public ScheduleTableModel(List<Show> shows) {
-			this.shows = (Show[]) shows.toArray();
+			this.shows = shows.toArray(new Show[shows.size()]);
 		}
 		
 		@Override

@@ -1,5 +1,7 @@
 package multisala.gui;
 
+import java.awt.BorderLayout;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
@@ -21,6 +23,23 @@ public abstract class AbstractUI extends JFrame implements Runnable {
 	
 	@Override
 	public void run() {
-		this.setVisible(true);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		getContentPane().setLayout(new BorderLayout());
+		statusLabel = createStatusBar();
+		statusLabel = createStatusBar();
+		tabbedView = createTabbedView();
+		toolBar = createToolBar();
+		getContentPane().add(toolBar, BorderLayout.PAGE_START);
+		getContentPane().add(tabbedView, BorderLayout.CENTER);
+		getContentPane().add(statusLabel.getParent(), BorderLayout.PAGE_END);
+		pack();
+		setVisible(true);
 	}
+
+	protected abstract JLabel createStatusBar();
+
+	protected abstract JTabbedPane createTabbedView();
+
+	protected abstract JToolBar createToolBar();
+	
 }

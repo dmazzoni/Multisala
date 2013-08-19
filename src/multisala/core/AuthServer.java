@@ -44,16 +44,18 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 			query = dbConnection.prepareStatement("select password, type from users where user_id = ? and approved = 1");
 			query.setString(1, user);
 			ResultSet rs = query.executeQuery();
-			if (!rs.first())
+			if (!rs.next())
 				throw new LoginException("Utente inesistente o non ancora approvato");
 			String rsPassword = rs.getString("password");
 			String rsType = rs.getString("type");
 			if(!rsPassword.equals(password))
 				throw new LoginException("Password errata");
 			if(rsType.equals("user"))
-				return new UserMA(this, centralServer);
+				return null;
+				//return new UserMA(this, centralServer);
 			else
-				return new AdminMS(this, centralServer);
+				return null;
+				//return new AdminMS(this, centralServer);
 		} finally {
 			query.close();
 		}

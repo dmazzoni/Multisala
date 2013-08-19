@@ -1,5 +1,6 @@
 package multisala.core;
 
+import java.io.IOException;
 import java.rmi.RemoteException;
 import java.util.Properties;
 
@@ -17,7 +18,7 @@ public class ClientBootstrap {
 		InitialContext cxt;
 		Properties pr = new Properties();
 		if(args.length != 2)
-			throw new IllegalArgumentException("Utilizzo: multisala.core.ClientJRMP <hostName> <protocol>");
+			throw new IllegalArgumentException("Utilizzo: multisala.core.ClientBootstrap <hostName> <protocol>");
 		if(!args[1].equalsIgnoreCase("jrmp") && !args[1].equalsIgnoreCase("iiop"))
 			throw new IllegalArgumentException("Protocollo: jrmp o iiop");
 		if (System.getSecurityManager() == null) 
@@ -35,14 +36,17 @@ public class ClientBootstrap {
 			}
 
             Object ref = cxt.lookup("BootstrapServer");
-			BootstrapServer bServ = (BootstrapServer) PortableRemoteObject.narrow(ref, BootstrapServer.class);
-			Integer myID = bServ.gotReference();
-			bServ.getClient().run();
-			bServ.releaseReference(myID);
-		} catch (RemoteException | NamingException e) {
+			IBootstrapServer bootServer = (IBootstrapServer) PortableRemoteObject.narrow(ref, IBootstrapServer.class);
+			IGarbageCollection bootServerDGC = (IGarbageCollection) PortableRemoteObject.narrow(ref, IGarbageCollection.class);
+			Integer myID = bootServerDGC.gotReference();
+			System.out.println("Lancio finestra GuestUI...");
+			Runnable client = bootServer.getClient().get();
+			client.run();
+			System.out.println("Completato");
+			bootServerDGC.releaseReference(myID);
+		} catch (ClassNotFoundException | IOException | NamingException e) {
 			e.printStackTrace();
-		}
-
+		} 
 	}
 
 }

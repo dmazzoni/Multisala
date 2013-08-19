@@ -1,11 +1,11 @@
 package multisala.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Serializable;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -24,24 +24,25 @@ public class GuestUI extends AbstractUI {
 	protected IGuest agent;
 
 	public GuestUI(IGuest guestMA) {
-		this();
+		super();
 		this.agent = guestMA;
+		/*this.tabbedView = createTabbedView();
 		this.toolBar = createToolBar();
 		this.getContentPane().add(toolBar, BorderLayout.PAGE_START);
-		this.pack();
+		this.getContentPane().add(tabbedView, BorderLayout.CENTER);
+		this.pack();*/
 	}
 	
-	protected GuestUI() {
+	/*protected GuestUI() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.tabbedView = createTabbedView();
 		this.statusLabel = createStatusBar();
 		Container pane = this.getContentPane();
 		pane.setLayout(new BorderLayout());
-		pane.add(tabbedView, BorderLayout.CENTER);
 		pane.add(statusLabel.getParent(), BorderLayout.PAGE_END);
-	}
+	}*/
 	
-	private JToolBar createToolBar() {
+	@Override
+	protected JToolBar createToolBar() {
 		JToolBar toolBar = new JToolBar();
 		toolBar.setFloatable(false);
 		JButton loginButton = new JButton("Accedi");
@@ -49,7 +50,7 @@ public class GuestUI extends AbstractUI {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				GuestUI.this.tabbedView.add(new LoginPanel(GuestUI.this));
+				GuestUI.this.tabbedView.addTab("Accedi", new LoginPanel(GuestUI.this));
 				GuestUI.this.repaint();
             }                       
 		});
@@ -58,23 +59,26 @@ public class GuestUI extends AbstractUI {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				GuestUI.this.tabbedView.add(new RegistrationPanel(GuestUI.this));
+				GuestUI.this.tabbedView.addTab("Registrati", new RegistrationPanel(GuestUI.this));
 				GuestUI.this.repaint();
 			}
 			
 		});
 		toolBar.add(loginButton);
+		toolBar.add(regButton);
 		return toolBar;
 	}
 	
-	private JTabbedPane createTabbedView() {
+	@Override
+	protected JTabbedPane createTabbedView() {
 		JTabbedPane tabbedView = new JTabbedPane();
 		tabbedView.setPreferredSize(new Dimension(600, 400));
-		tabbedView.add(new SchedulePanel<GuestUI>(this));
+		tabbedView.addTab("Programmazione", new SchedulePanel<GuestUI>(this));
 		return tabbedView;
 	}
 	
-	private JLabel createStatusBar() {
+	@Override
+	protected JLabel createStatusBar() {
 		JPanel statusBar = new JPanel();
 		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
 		statusBar.setPreferredSize(new Dimension(this.getContentPane().getWidth(), 24));
@@ -87,10 +91,6 @@ public class GuestUI extends AbstractUI {
 
 	public IGuest getAgent() {
 		return agent;
-	}
-	
-	public static void main(String[] args) {
-		new GuestUI(null).run();
 	}
 
 }

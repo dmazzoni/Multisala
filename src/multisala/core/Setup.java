@@ -14,23 +14,34 @@ public final class Setup {
 		String groupPolicy = System.getProperty("multisala.policy");
 		String implCodebase = System.getProperty("multisala.codebase");
 		String path = System.getProperty("multisala.refLocation");
+		String certPath = System.getProperty("multisala.certLocation");
 		System.setSecurityManager(new RMISecurityManager());
 		try {
-			Properties groupProperties = new Properties();
-			groupProperties.put("java.security.policy", groupPolicy);
-			groupProperties.put("multisala.codebase", implCodebase);
-			groupProperties.put("java.class.path", "no_classpath");
+			Properties group2Properties = new Properties();
+			group2Properties.put("java.security.policy", groupPolicy);
+			group2Properties.put("multisala.codebase", implCodebase);
+			group2Properties.put("java.class.path", "no_classpath");
+			
+			Properties group1Properties = new Properties();
+			group1Properties.put("javax.net.ssl.debug", "all");
+			group1Properties.put("javax.net.ssl.keyStore", certPath + "serverKeys");
+			group1Properties.put("javax.net.ssl.keyStorePassword", "multisala");
+			group1Properties.put("javax.net.ssl.trustStore", certPath + "serverTrust");
+			group1Properties.put("javax.net.ssl.trustStorePassword", "multisala");
+			group1Properties.put("java.security.policy", groupPolicy);
+			group1Properties.put("multisala.codebase", implCodebase);
+			group1Properties.put("java.class.path", "no_classpath");
 
 			// Registrazione dei gruppi o recupero del loro ID
-			ActivationGroupID groupID1 = getGroupID("group1", groupProperties);
-			ActivationGroupID groupID2 = getGroupID("group2", groupProperties);
+			ActivationGroupID groupID1 = getGroupID("group1", group1Properties);
+			ActivationGroupID groupID2 = getGroupID("group2", group2Properties);
 			// Creazione dei descrittori e registrazione presso i gruppi
 			ActivationDesc centralDesc = new ActivationDesc(groupID2, "multisala.core.CentralServer", implCodebase, null);
 			ICentralServer centralStub = (ICentralServer) Activatable.register(centralDesc);
 			ActivationDesc authDesc = new ActivationDesc(groupID1, "multisala.core.AuthServer", implCodebase, new MarshalledObject<ICentralServer>(centralStub));
 			IAuthServer authStub = (IAuthServer) Activatable.register(authDesc);
 			// Binding del server di autenticazione
-			LocateRegistry.getRegistry(1098).bind("AuthServer", authStub);
+			LocateRegistry.getRegistry(1098).rebind("AuthServer", authStub);
 			// Backup su disco dello stub al server di autenticazione
 			saveObject(path + "AuthServer", authStub);
 			initDB();
@@ -85,7 +96,7 @@ public final class Setup {
 										"show_id INTEGER PRIMARY KEY," +
 										"title VARCHAR(30) NOT NULL," +
 										"show_date CHARACTER(10) NOT NULL," +
-										"show_time CHARACTER(5) NOT NULL" +
+										"show_time CHARACTER(5) NOT NULL," +
 										"theater VARCHAR(5) NOT NULL," +
 										"free_seats INTEGER NOT NULL CHECK (free_seats >= 0) DEFAULT 150)");
 		dbStatement.executeUpdate("CREATE TABLE IF NOT EXISTS reservations (" +
@@ -93,8 +104,8 @@ public final class Setup {
 										"user_id VARCHAR(30) NOT NULL," +
 										"show_id INTEGER NOT NULL," +
 										"seats INTEGER NOT NULL CHECK (seats >= 0)," +
-										"FOREIGN KEY(user_id) REFERENCES users(user_id)" +
-										"FOREIGN KEY(show_id) REFERENCES shows(show_id)");
+										"FOREIGN KEY(user_id) REFERENCES users(user_id)," +
+										"FOREIGN KEY(show_id) REFERENCES shows(show_id))");
 		dbConnection.close();
 	}
 }

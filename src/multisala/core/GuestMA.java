@@ -22,7 +22,7 @@ public class GuestMA extends AbstractAgent implements IGuest {
 	
 	@Override
 	public List<Show> getSchedule(Calendar dt) {
-		String dtString = new String(dt.get(Calendar.YEAR) + "-" + dt.get(Calendar.MONTH) + "-" +  dt.get(Calendar.DATE));		
+		String dtString = new String(dt.get(Calendar.YEAR) + "-" + (dt.get(Calendar.MONTH) + 1) + "-" +  dt.get(Calendar.DATE));		
 		List<Show> shows = new Vector<Show>();
 		try {
 			shows = centralServer.getSchedule(dtString);

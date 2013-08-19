@@ -1,6 +1,7 @@
 package multisala.core;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.Socket;
 import java.rmi.MarshalledObject;
 import java.rmi.NotBoundException;
@@ -278,7 +279,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		System.gc();
 	}
 
-	private static class ClientSocketFactory implements RMIClientSocketFactory {
+	private static class ClientSocketFactory implements RMIClientSocketFactory, Serializable {
 
 		int timeout;
 		

@@ -1,5 +1,7 @@
 package multisala.core;
 
+import java.io.IOException;
+import java.rmi.MarshalledObject;
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
@@ -31,6 +33,7 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 
 	public BootstrapServer(IAuthServer auth, InitialContext cxt1, InitialContext cxt2) throws RemoteException {
 		mobileAgent = auth.login();
+		System.out.println("Guest mobile agent: " + mobileAgent);
 		RMIRegistry = cxt1;
 		COSNaming = cxt2;
 		dgcTimer = new Timer();
@@ -56,6 +59,7 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 			prop2.put("java.naming.provider.url", "iiop://localhost:2098");
 			InitialContext cxt2 = new InitialContext(prop2);
 			
+			//TODO Recupero ref da codebase se lookup fallisce
 			IAuthServer auth = (IAuthServer) cxt1.lookup("AuthServer");
 			bootServer = new BootstrapServer(auth, cxt1, cxt2);
 			
@@ -67,8 +71,16 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 	}
 
 	@Override
-	public Runnable getClient() throws RemoteException {
-		return new GuestUI(mobileAgent);
+	public MarshalledObject<Runnable> getClient() throws RemoteException {
+		return wrap(new GuestUI(mobileAgent));
+	}
+	
+	private MarshalledObject<Runnable> wrap(Runnable obj) {
+		try {
+			return new MarshalledObject<Runnable>(obj);
+		} catch (IOException e) {
+			return null;
+		}
 	}
 
 	@Override
@@ -89,6 +101,7 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 		synchronized (refCount) {
 			refCount++;
 		}
+		System.out.println("Nuova referenza remota - ID=" + clientID + " [Totale: " + refCount + "]");
 		return clientID;
 	}
 
@@ -101,6 +114,7 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 		synchronized (refCount) {
 			count = --refCount;
 		}
+		System.out.println("Referenza remota non più in uso - ID=" + clientID + " [Restanti: " + refCount + "]");
 		if (count == 0)
 			unreferenced();
 	}
@@ -108,8 +122,10 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 	private void unreferenced() {
 		try {
 			dgcTimer.cancel();
+			System.out.println("Deregistrazione dai servizi di naming");
 			RMIRegistry.unbind("BootstrapServer");
 			COSNaming.unbind("BootstrapServer");
+			System.out.println("Deesportazione del server");
 			UnicastRemoteObject.unexportObject(this, false);
 			PortableRemoteObject.unexportObject(this);
 		} catch (NoSuchObjectException | NamingException e) {
@@ -129,6 +145,7 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 				DGCTask t = BootstrapServer.this.dgcTasks.get(i);
 				if (this.equals(t)) {
 					BootstrapServer.this.dgcTasks.remove(i);
+					System.out.println("Referenza remota scaduta - ID=" + i);
 					break;
 				}
 			}

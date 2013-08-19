@@ -43,7 +43,7 @@ public class LoginPanel extends JPanel {
 		try {
 			String username = userField.getText();
 			AbstractAgent loggedClient = parent.agent.login(username, new String(passField.getPassword()));
-			if (loggedClient instanceof UserMA) {
+			/*if (loggedClient instanceof UserMA) {
 				UserUI userUI = new UserUI(loggedClient, username);
 				parent.setVisible(false);
 				userUI.run();
@@ -51,7 +51,7 @@ public class LoginPanel extends JPanel {
 				AdminUI adminUI = new AdminUI(loggedClient, username);
 				parent.setVisible(false);
 				adminUI.run();
-			}
+			}*/
 			if (loggedClient != null)
 				parent.dispose();
 		} catch (LoginException e) {
@@ -65,7 +65,6 @@ public class LoginPanel extends JPanel {
 	}
 
 	private void initView() {
-		// Auto-generated code
 		setLayout(new BorderLayout(0, 0));
 		
 		Component verticalStrut = Box.createVerticalStrut(20);

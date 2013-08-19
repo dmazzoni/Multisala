@@ -23,6 +23,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
@@ -32,66 +33,31 @@ import javax.swing.table.AbstractTableModel;
 import multisala.core.IAdmin;
 import multisala.core.Show;
 
-public class SchedulePanel<T extends GuestUI> extends JPanel {
+public class GuestSchedulePanel extends JPanel {
 	
 	private Calendar currentDate;
-	private JTable schedule;
-	private T parent;
+	protected JTable schedule;
+	private GuestUI parent;
 	
 	private JLabel lblScheduleDate;
+	protected JPanel panel;
 	
-	public SchedulePanel(T parent) {
+	public GuestSchedulePanel(GuestUI parent) {
+		this();
 		this.parent = parent;
+		updateSchedule(0);
+	}
+	
+	protected GuestSchedulePanel() {
 		this.currentDate = new GregorianCalendar();
 		this.lblScheduleDate = new JLabel();
+		this.panel = new JPanel();
 		this.schedule = new JTable();
-		updateSchedule(0);
-
-		this.schedule.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				/*if(SwingUtilities.isRightMouseButton(e) && SchedulePanel.this.parent instanceof AdminUI) {
-					JPopupMenu popupMenu = new JPopupMenu();
-					JMenuItem editMenuItem = new JMenuItem("Modifica");
-					editMenuItem.addActionListener(new ActionListener() {
-
-						@Override
-						public void actionPerformed(ActionEvent arg0) {
-							int[] selection = schedule.getSelectedRows();
-							for (int i = 0; i < selection.length; i++) {
-								selection[i] = schedule.convertRowIndexToModel(selection[i]);
-								Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection[i]);
-								SchedulePanel.this.parent.tabbedView.add(new ShowPanel(SchedulePanel.this.parent, sh));
-							}
-						}
-					});
-					JMenuItem deleteMenuItem = new JMenuItem("Elimina");
-					deleteMenuItem.addActionListener(new ActionListener() {
-
-						@Override
-						public void actionPerformed(ActionEvent arg0) {
-							int[] selection = schedule.getSelectedRows();
-							for (int i = 0; i < selection.length; i++) {
-								selection[i] = schedule.convertRowIndexToModel(selection[i]);
-								Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection[i]);
-								((IAdmin) SchedulePanel.this.parent.agent).deleteShow(sh.getId());
-							}
-						}
-					});
-					return;
-				}
-				if(SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2 && SchedulePanel.this.parent instanceof UserUI) {
-					int selection = schedule.convertRowIndexToModel(schedule.getSelectedRow());
-					Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection);
-					SchedulePanel.this.parent.tabbedView.add(new ReservationPanel(SchedulePanel.this.parent, sh));
-				}
-			*/}
-		});
+		
 		initView();
 	}
 
-	private void updateSchedule(int offset) {
+	protected void updateSchedule(int offset) {
 		currentDate.add(Calendar.DAY_OF_MONTH, offset);
 		String dtString = new String("Programmazione del " + currentDate.get(Calendar.DAY_OF_MONTH) + "/" + 
 				(currentDate.get(Calendar.MONTH) + 1) + "/" + currentDate.get(Calendar.YEAR));
@@ -100,7 +66,7 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 		schedule.setModel(new ScheduleTableModel(shows));
 	}
 	
-	private void initView() {
+	protected void initView() {
 		setLayout(new BorderLayout(0, 0));
 		
 		Component horizontalStrut = Box.createHorizontalStrut(20);
@@ -115,7 +81,6 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 		Component verticalStrut_1 = Box.createVerticalStrut(20);
 		add(verticalStrut_1, BorderLayout.NORTH);
 		
-		JPanel panel = new JPanel();
 		add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
@@ -169,45 +134,5 @@ public class SchedulePanel<T extends GuestUI> extends JPanel {
 		
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		panel.add(verticalStrut_3);
-	}
-	
-	private class ScheduleTableModel extends AbstractTableModel {
-
-		private Show[] shows;
-		private final String[] colNames = {"Titolo", "Ora", "Sala", "Posti liberi"};
-		
-		public ScheduleTableModel(List<Show> shows) {
-			this.shows = shows.toArray(new Show[shows.size()]);
-		}
-		
-		@Override
-		public int getColumnCount() {
-			return 4;
-		}
-
-		@Override
-		public String getColumnName(int columnIndex) {
-			return colNames[columnIndex];
-		}
-		
-		@Override
-		public int getRowCount() {
-			return shows.length;
-		}
-
-		@Override
-		public Object getValueAt(int row, int col) {
-			switch (col) {
-				case 0: return shows[row].getTitle();
-				case 1: return shows[row].getTime();
-				case 2: return shows[row].getTheater();
-				case 3: return shows[row].getFreeSeats();
-			}
-			throw new IllegalArgumentException();
-		}
-		
-		public Show getShowAtIndex(int i) {
-			return shows[i];
-		}
-	}
+	}	
 }

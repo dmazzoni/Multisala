@@ -52,4 +52,7 @@ public class GuestMA extends AbstractAgent implements IGuest {
 		}
 	}
 
+	public void setWindow(AbstractUI window) {
+		this.window = window;
+	}
 }

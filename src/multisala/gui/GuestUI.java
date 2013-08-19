@@ -26,11 +26,7 @@ public class GuestUI extends AbstractUI {
 	public GuestUI(IGuest guestMA) {
 		super();
 		this.agent = guestMA;
-		/*this.tabbedView = createTabbedView();
-		this.toolBar = createToolBar();
-		this.getContentPane().add(toolBar, BorderLayout.PAGE_START);
-		this.getContentPane().add(tabbedView, BorderLayout.CENTER);
-		this.pack();*/
+		this.agent.setWindow(this);
 	}
 	
 	/*protected GuestUI() {
@@ -73,7 +69,7 @@ public class GuestUI extends AbstractUI {
 	protected JTabbedPane createTabbedView() {
 		JTabbedPane tabbedView = new JTabbedPane();
 		tabbedView.setPreferredSize(new Dimension(600, 400));
-		tabbedView.addTab("Programmazione", new SchedulePanel<GuestUI>(this));
+		tabbedView.addTab("Programmazione", new GuestSchedulePanel(this));
 		return tabbedView;
 	}
 	

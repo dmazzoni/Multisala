@@ -49,9 +49,6 @@ public class GuestSchedulePanel extends JPanel {
 		this.lblScheduleDate = new JLabel();
 		this.panel = new JPanel();
 		this.schedule = new JTable();
-		schedule.setBackground(new Color(238, 238, 238));
-		schedule.setMaximumSize(new Dimension(32767, 32767));
-		schedule.setPreferredSize(new Dimension(450, 400));
 		updateSchedule(0);
 		initView();
 	}
@@ -61,7 +58,7 @@ public class GuestSchedulePanel extends JPanel {
 		String dtString = new String("Programmazione del " + currentDate.get(Calendar.DAY_OF_MONTH) + "/" + 
 				(currentDate.get(Calendar.MONTH) + 1) + "/" + currentDate.get(Calendar.YEAR));
 		lblScheduleDate.setText(dtString);
-		List<Show> shows = parent.agent.getSchedule(currentDate);
+		List<Show> shows = parent.getAgent().getSchedule(currentDate);
 		schedule.setModel(new ScheduleTableModel(shows));
 	}
 	
@@ -85,7 +82,6 @@ public class GuestSchedulePanel extends JPanel {
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setMaximumSize(new Dimension(32767, 30));
-		panel_1.setPreferredSize(new Dimension(10, 30));
 		panel.add(panel_1);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[]{116, 222, 111, 0};
@@ -131,6 +127,8 @@ public class GuestSchedulePanel extends JPanel {
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		panel.add(verticalStrut_2);
 		
+		schedule.setBackground(new Color(238, 238, 238));
+		schedule.setMaximumSize(new Dimension(32767, 32767));
 		panel.add(schedule);
 		
 		Component verticalStrut_3 = Box.createVerticalStrut(20);

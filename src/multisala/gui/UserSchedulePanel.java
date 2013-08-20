@@ -21,7 +21,6 @@ public class UserSchedulePanel extends GuestSchedulePanel {
 					handleClick(e);
 			}
 		});
-		updateSchedule(0);
 	}
 	
 	protected void handleClick(MouseEvent e) {

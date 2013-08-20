@@ -22,11 +22,10 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 	private JTextField seatsField;
 	
 	public AdminSchedulePanel(AdminUI parent) {
-		super();
+		super(parent);
 		this.parent = parent;
 		popupMenu = createPopupMenu();
 		seatsField = new JTextField();
-		updateSchedule(0);
 	}
 	
 	@Override
@@ -57,7 +56,7 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 			}
 			
 		});
-		
+		panel.add(lowerToolbar);
 	}
 	
 	private JPopupMenu createPopupMenu() {

@@ -12,7 +12,7 @@ import multisala.core.IGuest;
 
 public class GuestUI extends AbstractUI {
 	
-	protected IGuest agent;
+	private IGuest agent;
 
 	public GuestUI(IGuest guestMA) {
 		super();
@@ -20,6 +20,10 @@ public class GuestUI extends AbstractUI {
 		this.agent.setWindow(this);
 	}
 	
+	public IGuest getAgent() {
+		return agent;
+	}
+
 	@Override
 	protected JToolBar createToolBar() {
 		JToolBar toolBar = new JToolBar();

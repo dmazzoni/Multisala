@@ -18,7 +18,7 @@ public class ScheduleTableModel extends AbstractTableModel implements Serializab
 	
 	@Override
 	public int getColumnCount() {
-		return 3;
+		return colNames.length;
 	}
 
 	@Override

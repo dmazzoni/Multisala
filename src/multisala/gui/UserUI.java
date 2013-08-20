@@ -13,7 +13,7 @@ import multisala.core.IUser;
 
 public class UserUI extends GuestUI {
 
-	protected IUser agent;
+	private IUser agent;
 	private String username;
 
 	public UserUI(IUser agent, String username) {
@@ -23,6 +23,15 @@ public class UserUI extends GuestUI {
 		this.userLabel.setText("Benvenuto, " + username);
 	}
 	
+	@Override
+	public IUser getAgent() {
+		return agent;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
 	@Override
 	protected JTabbedPane createTabbedView() {
 		JTabbedPane tabbedView = new JTabbedPane();
@@ -41,7 +50,7 @@ public class UserUI extends GuestUI {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				//UserUI.this.tabbedView.addTab("Prenotazioni", new ReservationPanel(UserUI.this));
+				UserUI.this.tabbedView.addTab("Prenotazioni", new ReservationPanel(UserUI.this));
 				UserUI.this.repaint();
             }                       
 		});

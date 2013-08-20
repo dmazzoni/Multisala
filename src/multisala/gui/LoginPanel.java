@@ -41,7 +41,7 @@ public class LoginPanel extends JPanel {
 	protected void submitAction() {
 		try {
 			String username = userField.getText();
-			AbstractAgent loggedClient = parent.agent.login(username, new String(passField.getPassword()));
+			AbstractAgent loggedClient = parent.getAgent().login(username, new String(passField.getPassword()));
 			if (loggedClient instanceof IUser) {
 				UserUI userUI = new UserUI((IUser) loggedClient, username);
 				parent.setVisible(false);

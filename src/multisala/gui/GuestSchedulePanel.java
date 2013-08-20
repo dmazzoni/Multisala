@@ -32,6 +32,7 @@ import javax.swing.table.AbstractTableModel;
 
 import multisala.core.IAdmin;
 import multisala.core.Show;
+import java.awt.Color;
 
 public class GuestSchedulePanel extends JPanel {
 	
@@ -43,17 +44,15 @@ public class GuestSchedulePanel extends JPanel {
 	protected JPanel panel;
 	
 	public GuestSchedulePanel(GuestUI parent) {
-		this();
 		this.parent = parent;
-		updateSchedule(0);
-	}
-	
-	protected GuestSchedulePanel() {
 		this.currentDate = new GregorianCalendar();
 		this.lblScheduleDate = new JLabel();
 		this.panel = new JPanel();
 		this.schedule = new JTable();
-		
+		schedule.setBackground(new Color(238, 238, 238));
+		schedule.setMaximumSize(new Dimension(32767, 32767));
+		schedule.setPreferredSize(new Dimension(450, 400));
+		updateSchedule(0);
 		initView();
 	}
 
@@ -85,6 +84,8 @@ public class GuestSchedulePanel extends JPanel {
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
 		JPanel panel_1 = new JPanel();
+		panel_1.setMaximumSize(new Dimension(32767, 30));
+		panel_1.setPreferredSize(new Dimension(10, 30));
 		panel.add(panel_1);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[]{116, 222, 111, 0};

@@ -2,8 +2,6 @@ package multisala.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -23,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import multisala.core.AbstractAgent;
+import multisala.core.IUser;
 
 public class LoginPanel extends JPanel {
 	
@@ -43,12 +42,12 @@ public class LoginPanel extends JPanel {
 		try {
 			String username = userField.getText();
 			AbstractAgent loggedClient = parent.agent.login(username, new String(passField.getPassword()));
-			/*if (loggedClient instanceof UserMA) {
-				UserUI userUI = new UserUI(loggedClient, username);
+			if (loggedClient instanceof IUser) {
+				UserUI userUI = new UserUI((IUser) loggedClient, username);
 				parent.setVisible(false);
 				userUI.run();
-			} else if (loggedClient instanceof AdminMS) {
-				AdminUI adminUI = new AdminUI(loggedClient, username);
+			}/* else if (loggedClient instanceof IAdmin) {
+				AdminUI adminUI = new AdminUI((IAdmin) loggedClient, username);
 				parent.setVisible(false);
 				adminUI.run();
 			}*/

@@ -106,6 +106,8 @@ public final class Setup {
 										"seats INTEGER NOT NULL CHECK (seats >= 0)," +
 										"FOREIGN KEY(user_id) REFERENCES users(user_id)," +
 										"FOREIGN KEY(show_id) REFERENCES shows(show_id))");
+		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (NULL, 'Skyfall', '2013-08-20', '21:15', '3', 150)");
+		dbStatement.executeUpdate("INSERT OR IGNORE INTO users values ('massimo', 'merro', 'user', 1)");
 		dbConnection.close();
 	}
 }

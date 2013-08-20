@@ -44,7 +44,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			while (rs.next()) {
 				int id = rs.getInt("show_id");
 				String title = rs.getString("title");
-				String theater = rs.getString("theater_id");
+				String theater = rs.getString("theater");
 				String date = rs.getString("show_date");
 				String time = rs.getString("show_time");
 				int seats = rs.getInt("free_seats");

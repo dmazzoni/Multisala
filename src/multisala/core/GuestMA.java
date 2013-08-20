@@ -13,8 +13,6 @@ import javax.swing.JOptionPane;
 import multisala.gui.AbstractUI;
 
 public class GuestMA extends AbstractAgent implements IGuest {
-
-	protected AbstractUI window;
 	
 	public GuestMA(IAuthServer authServer, ICentralServer centralServer) {
 		super(authServer, centralServer);
@@ -22,7 +20,11 @@ public class GuestMA extends AbstractAgent implements IGuest {
 	
 	@Override
 	public List<Show> getSchedule(Calendar dt) {
-		String dtString = new String(dt.get(Calendar.YEAR) + "-" + (dt.get(Calendar.MONTH) + 1) + "-" +  dt.get(Calendar.DATE));		
+		int month = dt.get(Calendar.MONTH) + 1;
+		String monthString = new String((month < 10 ? "0" : "") + month);
+		int day = dt.get(Calendar.DATE);
+		String dayString = new String((day < 10 ? "0" : "") + day);
+		String dtString = new String(dt.get(Calendar.YEAR) + "-" + monthString + "-" +  dayString);		
 		List<Show> shows = new Vector<Show>();
 		try {
 			shows = centralServer.getSchedule(dtString);
@@ -51,8 +53,5 @@ public class GuestMA extends AbstractAgent implements IGuest {
 			JOptionPane.showMessageDialog(window, e);
 		}
 	}
-
-	public void setWindow(AbstractUI window) {
-		this.window = window;
-	}
+	
 }

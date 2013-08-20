@@ -6,7 +6,8 @@ public interface IUser extends IGuest {
 
 	List<Reservation> getReservations(String user);
 	void insertReservation(Reservation res);
-	void editReservation(int id, Reservation current);
+	void editReservation(Reservation updated);
 	void deleteReservation(int id);
+	IGuest logout();
 	
 }

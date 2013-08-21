@@ -16,7 +16,7 @@ import multisala.core.Show;
 
 public class AdminSchedulePanel extends UserSchedulePanel {
 
-	/*private AdminUI parent;
+	private AdminUI parent;
 	
 	private JPopupMenu popupMenu;
 	private JTextField seatsField;
@@ -51,7 +51,7 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 				int selection = schedule.convertRowIndexToModel(schedule.getSelectedRow());
 				Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection);
 				int seats = Integer.parseInt(seatsField.getText());
-				parent.agent.sellTickets(sh, seats);
+				parent.getAgent().sellTickets(sh, seats);
 				seatsField.setText("");
 			}
 			
@@ -83,12 +83,12 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 				for (int i = 0; i < selection.length; i++) {
 					selection[i] = schedule.convertRowIndexToModel(selection[i]);
 					Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection[i]);
-					parent.agent.deleteShow(sh.getId());
+					parent.getAgent().deleteShow(sh.getId());
 				}
 			}
 		});
 		menu.add(editMenuItem);
 		menu.add(deleteMenuItem);
 		return menu;
-	}*/
+	}
 }

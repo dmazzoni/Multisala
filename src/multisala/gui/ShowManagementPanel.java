@@ -9,65 +9,67 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.rmi.RemoteException;
 
-import javax.security.auth.login.LoginException;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import multisala.core.AbstractAgent;
-import multisala.core.AdminMS;
-import multisala.core.IUser;
+import multisala.core.Reservation;
+import multisala.core.Show;
+import javax.swing.JFormattedTextField;
 
-public class LoginPanel extends JPanel {
-	
-	protected GuestUI parent;
-	
-	protected JTextField userField;
-	protected JPasswordField passField;
-	protected JLabel messageLabel;
-	protected JLabel lblHeader;
-	protected JButton btnSubmit;
+public class ShowManagementPanel extends JPanel {
 
-	public LoginPanel(GuestUI parent) {
+	private AdminUI parent;
+	private Show sh;
+	
+	private JTextField titleField;
+	private JTextField dateField;
+	private JTextField timeField;
+	private JTextField theaterField;
+	private JTextField seatsField;
+	private JLabel messageLabel;
+	private JButton btnSubmit;
+	
+	public ShowManagementPanel(AdminUI parent) {
 		this.parent = parent;
-		this.initView();
+		initView();
 	}
 	
-	protected void submitAction() {
+	public ShowManagementPanel(AdminUI parent, Show sh) {
+		this(parent);
+		this.sh = sh;
+	}
+	
+	private void submitShow() {
 		try {
-			String username = userField.getText();
-			AbstractAgent loggedClient = parent.getAgent().login(username, new String(passField.getPassword()));
-			if (loggedClient instanceof IUser) {
-				UserUI userUI = new UserUI((IUser) loggedClient, username);
-				parent.setVisible(false);
-				userUI.run();
-			} else if (loggedClient instanceof AdminMS) {
-				AdminUI adminUI = new AdminUI((AdminMS) loggedClient, username);
-				parent.setVisible(false);
-				adminUI.run();
+			int seats = Integer.parseInt(seatsField.getText());
+			if (sh == null) {
+				sh = new Show(0, titleField.getText(), dateField.getText(), timeField.getText(), theaterField.getText(), seats);
+				parent.getAgent().insertShow(sh);
+				parent.statusLabel.setText("Spettacolo inserito con successo");
+			} else {
+				int id = sh.getId();
+				sh = new Show(id, titleField.getText(), dateField.getText(), timeField.getText(), theaterField.getText(), seats);
+				parent.getAgent().editShow(sh);
+				parent.statusLabel.setText("Spettacolo aggiornato con successo");
 			}
-			if (loggedClient != null)
-				parent.dispose();
-		} catch (LoginException e) {
-			messageLabel.setText(e.getMessage());
-		} catch (RemoteException e) {
-			JOptionPane.showMessageDialog(parent, e);
+			parent.tabbedView.setSelectedIndex(0);
+			parent.tabbedView.remove(this);
+		} catch (NumberFormatException e) {
+			messageLabel.setText("Numero posti non valido");
 		}
 	}
 	
-	private void cancelAction() {
+	private void cancel() {
+		parent.tabbedView.setSelectedIndex(0);
 		parent.tabbedView.remove(this);
-		parent.repaint();
 	}
-
+	
 	private void initView() {
 		setLayout(new BorderLayout(0, 0));
 		
@@ -87,7 +89,7 @@ public class LoginPanel extends JPanel {
 		add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
-		lblHeader = new JLabel("Login");
+		JLabel lblHeader = new JLabel("Spettacolo");
 		lblHeader.setFont(new Font("Dialog", Font.BOLD, 16));
 		lblHeader.setAlignmentX(0.5f);
 		panel.add(lblHeader);
@@ -99,29 +101,66 @@ public class LoginPanel extends JPanel {
 		panel.add(panel_1);
 		panel_1.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JLabel lblUsername = new JLabel("Username");
-		lblUsername.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblUsername.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_1.add(lblUsername);
+		JLabel lblTitle = new JLabel("Titolo");
+		lblTitle.setFont(new Font("Dialog", Font.BOLD, 14));
+		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_1.add(lblTitle);
 		
-		userField = new JTextField();
-		userField.setFont(new Font("Dialog", Font.PLAIN, 14));
-		panel_1.add(userField);
-		userField.setColumns(10);
+		titleField = new JTextField();
+		titleField.setFont(new Font("Dialog", Font.PLAIN, 14));
+		panel_1.add(titleField);
 		
 		JPanel panel_2 = new JPanel();
 		panel.add(panel_2);
 		panel_2.setLayout(new GridLayout(0, 2, 0, 0));
 		
-		JLabel lblPassword = new JLabel("Password");
-		lblPassword.setFont(new Font("Dialog", Font.BOLD, 14));
-		lblPassword.setHorizontalAlignment(SwingConstants.CENTER);
-		panel_2.add(lblPassword);
+		JLabel lblDate = new JLabel("Data");
+		lblDate.setFont(new Font("Dialog", Font.BOLD, 14));
+		lblDate.setHorizontalAlignment(SwingConstants.CENTER);
+		panel_2.add(lblDate);
 		
-		passField = new JPasswordField();
-		passField.setFont(new Font("Dialog", Font.PLAIN, 14));
-		passField.setColumns(10);
-		panel_2.add(passField);
+		dateField = new JTextField();
+		dateField.setFont(new Font("Dialog", Font.PLAIN, 14));
+		panel_2.add(dateField);
+		
+		JPanel panel_4 = new JPanel();
+		panel.add(panel_4);
+		panel_4.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		JLabel lblTime = new JLabel("Ora");
+		lblTime.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTime.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel_4.add(lblTime);
+		
+		timeField = new JTextField();
+		timeField.setFont(new Font("Dialog", Font.PLAIN, 14));
+		panel_4.add(timeField);
+		
+		JPanel panel_7 = new JPanel();
+		panel.add(panel_7);
+		panel_7.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		JLabel lblTheater = new JLabel("Sala");
+		lblTheater.setHorizontalAlignment(SwingConstants.CENTER);
+		lblTheater.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel_7.add(lblTheater);
+		
+		theaterField = new JTextField();
+		theaterField.setFont(new Font("Dialog", Font.PLAIN, 14));
+		panel_7.add(theaterField);
+		
+		JPanel panel_5 = new JPanel();
+		panel.add(panel_5);
+		panel_5.setLayout(new GridLayout(0, 2, 0, 0));
+		
+		JLabel lblSeats = new JLabel("Posti");
+		lblSeats.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSeats.setFont(new Font("Dialog", Font.BOLD, 14));
+		panel_5.add(lblSeats);
+		
+		seatsField = new JTextField();
+		seatsField.setFont(new Font("Dialog", Font.PLAIN, 14));
+		panel_5.add(seatsField);
 		
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		panel.add(verticalStrut_3);
@@ -146,11 +185,11 @@ public class LoginPanel extends JPanel {
 		gbc_messageLabel.gridy = 0;
 		panel_3.add(messageLabel, gbc_messageLabel);
 		
-		btnSubmit = new JButton("Accedi");
+		btnSubmit = new JButton("Salva");
 		btnSubmit.setFont(new Font("Dialog", Font.BOLD, 14));
 		btnSubmit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LoginPanel.this.submitAction();
+				submitShow();
 			}
 		});
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
@@ -163,7 +202,7 @@ public class LoginPanel extends JPanel {
 		btnCancel.setFont(new Font("Dialog", Font.BOLD, 14));
 		btnCancel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				LoginPanel.this.cancelAction();
+				cancel();
 			}
 		});
 		GridBagConstraints gbc_btnCancel = new GridBagConstraints();
@@ -171,5 +210,4 @@ public class LoginPanel extends JPanel {
 		gbc_btnCancel.gridy = 1;
 		panel_3.add(btnCancel, gbc_btnCancel);
 	}
-	
 }

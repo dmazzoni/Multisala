@@ -23,7 +23,7 @@ import javax.swing.SwingUtilities;
 import multisala.core.Reservation;
 import multisala.core.Show;
 
-public class ReservationPanel extends JPanel {
+public class ReservationPanel extends AbstractListPanel {
 	
 	private UserUI parent;
 	protected JTable reservations;
@@ -41,11 +41,12 @@ public class ReservationPanel extends JPanel {
 					handleClick(e);
 			}
 		});
-		updateReservations();
+		updateView();
 		initView();
 	}
 	
-	protected void updateReservations() {
+	@Override
+	protected void updateView() {
 		List<Reservation> res = parent.getAgent().getReservations(parent.getUsername());
 		reservations.setModel(new ReservationTableModel(res));
 	}
@@ -67,7 +68,7 @@ public class ReservationPanel extends JPanel {
 				for (int i = 0; i < selection.length; i++) {
 					selection[i] = reservations.convertRowIndexToModel(selection[i]);
 					Reservation res = ((ReservationTableModel) reservations.getModel()).getReservationAtIndex(selection[i]);
-					parent.tabbedView.addTab("Modifica prenotazione", new ReservationManagementPanel(parent, res));
+					parent.tabbedView.addTab("Modifica prenotazione", new ReservationManagementPanel(parent, ReservationPanel.this, res));
 				}
 			}
 		});
@@ -82,7 +83,7 @@ public class ReservationPanel extends JPanel {
 					Reservation res = ((ReservationTableModel) reservations.getModel()).getReservationAtIndex(selection[i]);
 					parent.getAgent().deleteReservation(res.getId());
 				}
-				updateReservations();
+				updateView();
 			}
 		});
 		menu.add(editMenuItem);

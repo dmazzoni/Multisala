@@ -27,7 +27,7 @@ public class UserSchedulePanel extends GuestSchedulePanel {
 		if(SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
 			int selection = schedule.convertRowIndexToModel(schedule.getSelectedRow());
 			Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection);
-			parent.tabbedView.add(new ReservationManagementPanel(parent, sh));
+			parent.tabbedView.addTab("Nuova prenotazione", new ReservationManagementPanel(parent, this, sh));
 		}
 	}
 }

@@ -7,6 +7,8 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import multisala.exceptions.ReservationException;
+
 public class UserMA extends GuestMA implements IUser {
 	
 	public UserMA(IAuthServer authServer, ICentralServer centralServer) {
@@ -25,7 +27,7 @@ public class UserMA extends GuestMA implements IUser {
 	}
 
 	@Override
-	public void insertReservation(Reservation res) {
+	public void insertReservation(Reservation res) throws ReservationException {
 		try {
 			centralServer.insertReservation(res);
 		} catch (RemoteException | SQLException e) {
@@ -34,7 +36,7 @@ public class UserMA extends GuestMA implements IUser {
 	}
 
 	@Override
-	public void editReservation(Reservation updated) {
+	public void editReservation(Reservation updated) throws ReservationException {
 		try {
 			centralServer.editReservation(updated);
 		} catch (RemoteException | SQLException e) {

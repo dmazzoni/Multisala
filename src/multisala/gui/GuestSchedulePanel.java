@@ -34,7 +34,7 @@ import multisala.core.IAdmin;
 import multisala.core.Show;
 import java.awt.Color;
 
-public class GuestSchedulePanel extends JPanel {
+public class GuestSchedulePanel extends AbstractListPanel {
 	
 	private Calendar currentDate;
 	protected JTable schedule;
@@ -49,9 +49,14 @@ public class GuestSchedulePanel extends JPanel {
 		this.lblScheduleDate = new JLabel();
 		this.panel = new JPanel();
 		this.schedule = new JTable();
-		updateSchedule(0);
+		updateView();
 		initView();
 	}
+	
+	@Override
+	protected void updateView() {
+		updateSchedule(0);
+	}	
 
 	protected void updateSchedule(int offset) {
 		currentDate.add(Calendar.DAY_OF_MONTH, offset);
@@ -133,5 +138,6 @@ public class GuestSchedulePanel extends JPanel {
 		
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		panel.add(verticalStrut_3);
-	}	
+	}
+	
 }

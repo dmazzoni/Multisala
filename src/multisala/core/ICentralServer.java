@@ -5,6 +5,8 @@ import java.rmi.RemoteException;
 import java.sql.SQLException;
 import java.util.List;
 
+import multisala.exceptions.ReservationException;
+
 public interface ICentralServer extends Remote {
 
 	List<Show> getSchedule(String dt) throws RemoteException, SQLException;
@@ -12,8 +14,8 @@ public interface ICentralServer extends Remote {
 	
 	List<Reservation> getReservations() throws RemoteException, SQLException;
 	List<Reservation> getReservations(String user) throws RemoteException, SQLException;
-	void insertReservation(Reservation res) throws RemoteException, SQLException;
-	void editReservation(Reservation updated) throws RemoteException, SQLException;
+	void insertReservation(Reservation res) throws RemoteException, ReservationException, SQLException;
+	void editReservation(Reservation updated) throws RemoteException, ReservationException, SQLException;
 	void deleteReservation(int id) throws RemoteException, SQLException;
 	
 	void insertShow(Show sh) throws RemoteException, SQLException;

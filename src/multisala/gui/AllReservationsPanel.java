@@ -11,11 +11,11 @@ public class AllReservationsPanel extends ReservationPanel {
 	public AllReservationsPanel(AdminUI parent) {
 		super(parent);
 		this.parent = parent;
-		updateReservations();
+		updateView();
 	}
 	
 	@Override
-	protected void updateReservations() {
+	protected void updateView() {
 		List<Reservation> res = parent.getAgent().getReservations();
 		reservations.setModel(new ReservationTableModel(res));
 	}

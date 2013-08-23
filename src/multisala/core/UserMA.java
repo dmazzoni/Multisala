@@ -11,15 +11,23 @@ import multisala.exceptions.ReservationException;
 
 public class UserMA extends GuestMA implements IUser {
 	
-	public UserMA(IAuthServer authServer, ICentralServer centralServer) {
+	protected String username;
+	
+	public UserMA(IAuthServer authServer, ICentralServer centralServer, String username) {
 		super(authServer, centralServer);
+		this.username = username;
 	}
 
 	@Override
-	public List<Reservation> getReservations(String user) {
+	public String getUsername() {
+		return username;
+	}
+	
+	@Override
+	public List<Reservation> getReservations() {
 		List<Reservation> reservations = new Vector<Reservation>();
 		try {
-			reservations = centralServer.getReservations(user);
+			reservations = centralServer.getReservations(username);
 		} catch (RemoteException | SQLException e) {
 			JOptionPane.showMessageDialog(window, e);
 		}

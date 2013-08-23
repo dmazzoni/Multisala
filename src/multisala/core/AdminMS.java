@@ -11,8 +11,8 @@ import multisala.gui.ConfirmUsersPanel;
 
 public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	
-	public AdminMS(IAuthServer authServer, ICentralServer centralServer) {
-		super(authServer, centralServer);
+	public AdminMS(IAuthServer authServer, ICentralServer centralServer, String username) {
+		super(authServer, centralServer, username);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 
 	@Override
-	public List<Reservation> getReservations() {
+	public List<Reservation> getAllReservations() {
 		List<Reservation> reservations = new Vector<Reservation>();
 		try {
 			reservations = centralServer.getReservations();
@@ -63,10 +63,39 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 
 	@Override
+	public IGuest logout() {
+		try {
+			centralServer.adminDisconnected(this);
+		} catch (RemoteException e) {
+			JOptionPane.showMessageDialog(window, e);
+		}
+		return super.logout();
+	}
+	
+	@Override
+	public void adminConnected() {
+		try {
+			centralServer.adminConnected(this);
+		} catch (RemoteException e) {
+			JOptionPane.showMessageDialog(window, e);
+		}
+	}
+	
+	@Override
 	public List<String> confirmUsers(List<String> users) {
 		ConfirmUsersPanel confirmationPanel = new ConfirmUsersPanel(users);
 		JOptionPane.showConfirmDialog(window, confirmationPanel, "Conferma utenti", JOptionPane.OK_OPTION);
 		return confirmationPanel.getConfirmedUsers();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		return (obj instanceof AdminMS && ((AdminMS) obj).username.equals(this.username));
+	}
+	
+	@Override
+	public int hashCode() {
+		return username.hashCode();
 	}
 
 }

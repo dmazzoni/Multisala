@@ -18,10 +18,11 @@ public class AdminUI extends UserUI {
 
 	private AdminMS agent;
 	
-	public AdminUI(AdminMS agent, String username) throws RemoteException {
-		super(agent, username);
+	public AdminUI(AdminMS agent) throws RemoteException {
+		super(agent);
 		this.agent = agent;
 		UnicastRemoteObject.exportObject(agent, 6000);
+		
 	}
 	
 	@Override

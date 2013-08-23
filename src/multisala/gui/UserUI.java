@@ -14,22 +14,16 @@ import multisala.core.IUser;
 public class UserUI extends GuestUI {
 
 	private IUser agent;
-	private String username;
 
-	public UserUI(IUser agent, String username) {
+	public UserUI(IUser agent) {
 		super(agent);
 		this.agent = agent;
-		this.username = username;
-		this.userLabel.setText("Benvenuto, " + username);
+		this.userLabel.setText("Benvenuto, " + agent.getUsername());
 	}
 	
 	@Override
 	public IUser getAgent() {
 		return agent;
-	}
-
-	public String getUsername() {
-		return username;
 	}
 
 	@Override

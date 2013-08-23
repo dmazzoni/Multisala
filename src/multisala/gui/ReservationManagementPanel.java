@@ -30,8 +30,8 @@ public class ReservationManagementPanel extends JPanel {
 	private Reservation res;
 	private Show sh;
 	
-	private JLabel TitleValue;
-	private JLabel DateValue;
+	private JLabel titleValue;
+	private JLabel dateValue;
 	private JTextField seatsField;
 	private JLabel messageLabel;
 	private JButton btnSubmit;
@@ -39,6 +39,7 @@ public class ReservationManagementPanel extends JPanel {
 	public ReservationManagementPanel(UserUI parentWindow, AbstractListPanel parentTab, Reservation res) {
 		this(parentWindow, parentTab, res.getShow());
 		this.res = res;
+		seatsField.setText(res.getSeats() + "");
 	}
 	
 	public ReservationManagementPanel(UserUI parentWindow, AbstractListPanel parentTab, Show sh) {
@@ -46,13 +47,15 @@ public class ReservationManagementPanel extends JPanel {
 		this.parentTab = parentTab;
 		this.sh = sh;
 		initView();
+		titleValue.setText(sh.getTitle());
+		dateValue.setText(sh.getDate() + " " + sh.getTime());
 	}
 	
 	private void submitReservation() {
 		try {
 			int seats = Integer.parseInt(seatsField.getText());
 			if (res == null) {
-				res = new Reservation(0, sh, parentWindow.getUsername(), seats);
+				res = new Reservation(0, sh, parentWindow.getAgent().getUsername(), seats);
 				parentWindow.getAgent().insertReservation(res);
 				parentWindow.statusLabel.setText("Prenotazione effettuata con successo");
 			} else {
@@ -110,9 +113,9 @@ public class ReservationManagementPanel extends JPanel {
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_1.add(lblTitle);
 		
-		TitleValue = new JLabel();
-		TitleValue.setFont(new Font("Dialog", Font.PLAIN, 14));
-		panel_1.add(TitleValue);
+		titleValue = new JLabel();
+		titleValue.setFont(new Font("Dialog", Font.PLAIN, 14));
+		panel_1.add(titleValue);
 		
 		JPanel panel_2 = new JPanel();
 		panel.add(panel_2);
@@ -123,9 +126,9 @@ public class ReservationManagementPanel extends JPanel {
 		lblDate.setHorizontalAlignment(SwingConstants.CENTER);
 		panel_2.add(lblDate);
 		
-		DateValue = new JLabel();
-		DateValue.setFont(new Font("Dialog", Font.PLAIN, 14));
-		panel_2.add(DateValue);
+		dateValue = new JLabel();
+		dateValue.setFont(new Font("Dialog", Font.PLAIN, 14));
+		panel_2.add(dateValue);
 		
 		JPanel panel_4 = new JPanel();
 		panel.add(panel_4);

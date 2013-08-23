@@ -46,11 +46,11 @@ public class LoginPanel extends JPanel {
 			String username = userField.getText();
 			AbstractAgent loggedClient = parent.getAgent().login(username, new String(passField.getPassword()));
 			if (loggedClient instanceof IUser) {
-				UserUI userUI = new UserUI((IUser) loggedClient, username);
+				UserUI userUI = new UserUI((IUser) loggedClient);
 				parent.setVisible(false);
 				userUI.run();
 			} else if (loggedClient instanceof AdminMS) {
-				AdminUI adminUI = new AdminUI((AdminMS) loggedClient, username);
+				AdminUI adminUI = new AdminUI((AdminMS) loggedClient);
 				parent.setVisible(false);
 				adminUI.run();
 			}

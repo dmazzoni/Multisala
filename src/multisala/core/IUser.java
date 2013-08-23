@@ -6,7 +6,8 @@ import multisala.exceptions.ReservationException;
 
 public interface IUser extends IGuest {
 
-	List<Reservation> getReservations(String user);
+	String getUsername();
+	List<Reservation> getReservations();
 	void insertReservation(Reservation res) throws ReservationException;
 	void editReservation(Reservation updated) throws ReservationException;
 	void deleteReservation(int id);

@@ -18,19 +18,26 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.Vector;
+
+import javax.swing.JOptionPane;
 
 public class CentralServer extends Activatable implements ICentralServer, Unreferenced {
 
 	private Connection dbConnection;
+	private Set<IAdminMS> administrators;
+	private List<String> pendingUsers;
 	
 	public CentralServer(ActivationID id, MarshalledObject<?> obj) 
 			throws ClassNotFoundException, IOException, RemoteException, SQLException {
 		super(id, 12001, new ClientSocketFactory(30000), null);
 		Class.forName("org.sqlite.JDBC");
 		dbConnection = DriverManager.getConnection("jdbc:sqlite:multisala.db");
-		LocateRegistry.getRegistry(1098).rebind("CentralServer", this);
+		administrators = new HashSet<IAdminMS>();
+		pendingUsers = new Vector<String>();
 	}
 	
 	@Override
@@ -268,6 +275,23 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 	}
 	
 	@Override
+	public void adminConnected(IAdminMS admin) {
+		synchronized(administrators) {
+			administrators.add(admin);
+		}
+		try {
+			notifyAdmins();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
+	public synchronized void adminDisconnected(IAdminMS admin) {
+		administrators.remove(admin);
+	}
+	
+	@Override
 	public void unreferenced() {
 		try {
 			LocateRegistry.getRegistry(1098).unbind("CentralServer");
@@ -279,6 +303,31 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		System.gc();
 	}
 
+	private synchronized void notifyAdmins() throws SQLException {
+		List<String> confirmedUsers = new Vector<String>();
+		PreparedStatement query = null;
+		for(IAdminMS admin : administrators) {
+			try {
+				confirmedUsers = admin.confirmUsers(pendingUsers);
+				break;
+			} catch (RemoteException e) {
+				administrators.remove(admin);
+			}
+		}
+		for(String user : confirmedUsers) {
+			try {
+				query = dbConnection.prepareStatement("UPDATE OR ROLLBACK users SET approved = 1 " +
+						"WHERE user_id = ?");
+				query.setString(1, user);
+				query.executeUpdate();
+				pendingUsers.remove(user);
+			} finally {
+				if(query != null)
+					query.close();
+			}
+		}
+	}
+	
 	private static class ClientSocketFactory implements RMIClientSocketFactory, Serializable {
 
 		int timeout;
@@ -305,4 +354,5 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 		
 	}
+
 }

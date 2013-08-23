@@ -51,10 +51,9 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 			if(!rsPassword.equals(password))
 				throw new LoginException("Password errata");
 			if(rsType.equals("user"))
-				return new UserMA(this, centralServer);
+				return new UserMA(this, centralServer, user);
 			else
-				return null;
-				//return new AdminMS(this, centralServer);
+				return new AdminMS(this, centralServer, user);
 		} finally {
 			query.close();
 		}

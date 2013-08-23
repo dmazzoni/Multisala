@@ -40,7 +40,7 @@ public class ScheduleTableModel extends AbstractTableModel implements Serializab
 		}
 		throw new IllegalArgumentException();
 	}
-	
+
 	public Show getShowAtIndex(int i) {
 		return shows[i];
 	}

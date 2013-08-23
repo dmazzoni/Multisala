@@ -17,7 +17,6 @@ public class ConfirmUsersPanel extends JPanel {
 	}
 
 	public List<String> getConfirmedUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		return confirmationList.getSelectedValuesList();
 	}
 }

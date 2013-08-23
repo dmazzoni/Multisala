@@ -1,10 +1,11 @@
 package multisala.core;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 import java.util.List;
 
 public interface IAdminMS extends Remote {
 	
-	List<String> confirmUsers(List<String> users);
+	List<String> confirmUsers(List<String> users) throws RemoteException;
 
 }

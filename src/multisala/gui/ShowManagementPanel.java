@@ -43,6 +43,11 @@ public class ShowManagementPanel extends JPanel {
 	public ShowManagementPanel(AdminUI parent, Show sh) {
 		this(parent);
 		this.sh = sh;
+		titleField.setText(sh.getTitle());
+		dateField.setText(sh.getDate());
+		timeField.setText(sh.getTime());
+		theaterField.setText(sh.getTheater());
+		seatsField.setText(sh.getFreeSeats() + "");
 	}
 	
 	private void submitShow() {

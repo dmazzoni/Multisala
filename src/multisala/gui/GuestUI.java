@@ -33,7 +33,9 @@ public class GuestUI extends AbstractUI {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				GuestUI.this.tabbedView.addTab("Accedi", new LoginPanel(GuestUI.this));
+				LoginPanel lPanel = new LoginPanel(GuestUI.this);
+				GuestUI.this.tabbedView.addTab("Accedi", lPanel);
+				GuestUI.this.tabbedView.setSelectedComponent(lPanel);
 				GuestUI.this.repaint();
             }                       
 		});
@@ -42,7 +44,9 @@ public class GuestUI extends AbstractUI {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				GuestUI.this.tabbedView.addTab("Registrati", new RegistrationPanel(GuestUI.this));
+				RegistrationPanel rPanel = new RegistrationPanel(GuestUI.this);
+				GuestUI.this.tabbedView.addTab("Registrati", rPanel);
+				GuestUI.this.tabbedView.setSelectedComponent(rPanel);
 				GuestUI.this.repaint();
 			}
 			

@@ -8,6 +8,8 @@ public interface IAdmin extends IUser {
 	void editShow(Show updated);
 	void deleteShow(int id);
 	void sellTickets(Show sh, int tickets);
-	List<Reservation> getReservations();
+	List<Reservation> getAllReservations();
+	
+	void adminConnected();
 	
 }

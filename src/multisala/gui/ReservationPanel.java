@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 
@@ -39,7 +40,7 @@ public class ReservationPanel extends AbstractListPanel {
 	
 	@Override
 	protected void updateView() {
-		List<Reservation> res = parent.getAgent().getReservations(parent.getUsername());
+		List<Reservation> res = parent.getAgent().getReservations();
 		list.setModel(new ReservationTableModel(res));
 	}
 	
@@ -113,9 +114,7 @@ public class ReservationPanel extends AbstractListPanel {
 		
 		list.setBackground(new Color(238, 238, 238));
 		list.setMaximumSize(new Dimension(32767, 32767));
-		panel.add(list);
+		panel.add(new JScrollPane(list));
 	}
-	
-	
 
 }

@@ -26,21 +26,13 @@ import multisala.core.Show;
 public class ReservationPanel extends AbstractListPanel {
 	
 	private UserUI parent;
-	protected JTable reservations;
 	
 	private JPopupMenu popupMenu;
 
 	public ReservationPanel(UserUI parent) {
 		this.parent = parent;
-		this.reservations = new JTable();
 		this.popupMenu = createPopupMenu();
-		reservations.addMouseListener(new MouseAdapter() {
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-					handleClick(e);
-			}
-		});
+		this.list.setComponentPopupMenu(popupMenu);
 		updateView();
 		initView();
 	}
@@ -48,13 +40,7 @@ public class ReservationPanel extends AbstractListPanel {
 	@Override
 	protected void updateView() {
 		List<Reservation> res = parent.getAgent().getReservations(parent.getUsername());
-		reservations.setModel(new ReservationTableModel(res));
-	}
-	
-	private void handleClick(MouseEvent e) {
-		if(SwingUtilities.isRightMouseButton(e)) {
-			popupMenu.setVisible(true);
-		}
+		list.setModel(new ReservationTableModel(res));
 	}
 	
 	private JPopupMenu createPopupMenu() {
@@ -64,10 +50,10 @@ public class ReservationPanel extends AbstractListPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int[] selection = reservations.getSelectedRows();
+				int[] selection = list.getSelectedRows();
 				for (int i = 0; i < selection.length; i++) {
-					selection[i] = reservations.convertRowIndexToModel(selection[i]);
-					Reservation res = ((ReservationTableModel) reservations.getModel()).getReservationAtIndex(selection[i]);
+					selection[i] = list.convertRowIndexToModel(selection[i]);
+					Reservation res = ((ReservationTableModel) list.getModel()).getReservationAtIndex(selection[i]);
 					parent.tabbedView.addTab("Modifica prenotazione", new ReservationManagementPanel(parent, ReservationPanel.this, res));
 				}
 			}
@@ -77,10 +63,10 @@ public class ReservationPanel extends AbstractListPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int[] selection = reservations.getSelectedRows();
+				int[] selection = list.getSelectedRows();
 				for (int i = 0; i < selection.length; i++) {
-					selection[i] = reservations.convertRowIndexToModel(selection[i]);
-					Reservation res = ((ReservationTableModel) reservations.getModel()).getReservationAtIndex(selection[i]);
+					selection[i] = list.convertRowIndexToModel(selection[i]);
+					Reservation res = ((ReservationTableModel) list.getModel()).getReservationAtIndex(selection[i]);
 					parent.getAgent().deleteReservation(res.getId());
 				}
 				updateView();
@@ -125,9 +111,9 @@ public class ReservationPanel extends AbstractListPanel {
 		
 		panel_1.add(btnCloseTab);
 		
-		reservations.setBackground(new Color(238, 238, 238));
-		reservations.setMaximumSize(new Dimension(32767, 32767));
-		panel.add(reservations);
+		list.setBackground(new Color(238, 238, 238));
+		list.setMaximumSize(new Dimension(32767, 32767));
+		panel.add(list);
 	}
 	
 	

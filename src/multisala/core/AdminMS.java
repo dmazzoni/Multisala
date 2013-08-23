@@ -7,6 +7,8 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import multisala.gui.ConfirmUsersPanel;
+
 public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	
 	public AdminMS(IAuthServer authServer, ICentralServer centralServer) {
@@ -58,6 +60,13 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 			JOptionPane.showMessageDialog(window, e);
 		}
 		return reservations;
+	}
+
+	@Override
+	public List<String> confirmUsers(List<String> users) {
+		ConfirmUsersPanel confirmationPanel = new ConfirmUsersPanel(users);
+		JOptionPane.showConfirmDialog(window, confirmationPanel, "Conferma utenti", JOptionPane.OK_OPTION);
+		return confirmationPanel.getConfirmedUsers();
 	}
 
 }

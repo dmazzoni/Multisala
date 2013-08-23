@@ -17,7 +17,7 @@ public class AllReservationsPanel extends ReservationPanel {
 	@Override
 	protected void updateView() {
 		List<Reservation> res = parent.getAgent().getReservations();
-		reservations.setModel(new ReservationTableModel(res));
+		list.setModel(new ReservationTableModel(res));
 	}
 
 }

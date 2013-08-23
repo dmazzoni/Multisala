@@ -37,7 +37,6 @@ import java.awt.Color;
 public class GuestSchedulePanel extends AbstractListPanel {
 	
 	private Calendar currentDate;
-	protected JTable schedule;
 	private GuestUI parent;
 	
 	private JLabel lblScheduleDate;
@@ -48,7 +47,6 @@ public class GuestSchedulePanel extends AbstractListPanel {
 		this.currentDate = new GregorianCalendar();
 		this.lblScheduleDate = new JLabel();
 		this.panel = new JPanel();
-		this.schedule = new JTable();
 		updateView();
 		initView();
 	}
@@ -64,7 +62,7 @@ public class GuestSchedulePanel extends AbstractListPanel {
 				(currentDate.get(Calendar.MONTH) + 1) + "/" + currentDate.get(Calendar.YEAR));
 		lblScheduleDate.setText(dtString);
 		List<Show> shows = parent.getAgent().getSchedule(currentDate);
-		schedule.setModel(new ScheduleTableModel(shows));
+		list.setModel(new ScheduleTableModel(shows));
 	}
 	
 	protected void initView() {
@@ -132,9 +130,9 @@ public class GuestSchedulePanel extends AbstractListPanel {
 		Component verticalStrut_2 = Box.createVerticalStrut(20);
 		panel.add(verticalStrut_2);
 		
-		schedule.setBackground(new Color(238, 238, 238));
-		schedule.setMaximumSize(new Dimension(32767, 32767));
-		panel.add(schedule);
+		list.setBackground(new Color(238, 238, 238));
+		list.setMaximumSize(new Dimension(32767, 32767));
+		panel.add(list);
 		
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		panel.add(verticalStrut_3);

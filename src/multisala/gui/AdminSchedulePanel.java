@@ -24,16 +24,9 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 	public AdminSchedulePanel(AdminUI parent) {
 		super(parent);
 		this.parent = parent;
-		popupMenu = createPopupMenu();
-		seatsField = new JTextField();
-	}
-	
-	@Override
-	protected void handleClick(MouseEvent e) {
-		super.handleClick(e);
-		if(SwingUtilities.isRightMouseButton(e)) {
-			popupMenu.setVisible(true);
-		}
+		this.popupMenu = createPopupMenu();
+		this.list.setComponentPopupMenu(popupMenu);
+		this.seatsField = new JTextField();
 	}
 	
 	@Override
@@ -48,8 +41,8 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int selection = schedule.convertRowIndexToModel(schedule.getSelectedRow());
-				Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection);
+				int selection = list.convertRowIndexToModel(list.getSelectedRow());
+				Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection);
 				int seats = Integer.parseInt(seatsField.getText());
 				parent.getAgent().sellTickets(sh, seats);
 				seatsField.setText("");
@@ -66,10 +59,10 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int[] selection = schedule.getSelectedRows();
+				int[] selection = list.getSelectedRows();
 				for (int i = 0; i < selection.length; i++) {
-					selection[i] = schedule.convertRowIndexToModel(selection[i]);
-					Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection[i]);
+					selection[i] = list.convertRowIndexToModel(selection[i]);
+					Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection[i]);
 					parent.tabbedView.add(new ShowManagementPanel(parent, sh));
 				}
 			}
@@ -79,10 +72,10 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int[] selection = schedule.getSelectedRows();
+				int[] selection = list.getSelectedRows();
 				for (int i = 0; i < selection.length; i++) {
-					selection[i] = schedule.convertRowIndexToModel(selection[i]);
-					Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection[i]);
+					selection[i] = list.convertRowIndexToModel(selection[i]);
+					Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection[i]);
 					parent.getAgent().deleteShow(sh.getId());
 				}
 			}

@@ -100,15 +100,15 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setString(1, user);
 			ResultSet rs = query.executeQuery();
 			while (rs.next()) {
-				int id = rs.getInt("b.show_id");
-				String title = rs.getString("b.title");
-				String date = rs.getString("b.show_date");
-				String time = rs.getString("b.show_time");
-				String theater = rs.getString("b.theater");
-				int seats = rs.getInt("b.free_seats");
+				int id = rs.getInt("show_id");
+				String title = rs.getString("title");
+				String date = rs.getString("show_date");
+				String time = rs.getString("show_time");
+				String theater = rs.getString("theater");
+				int seats = rs.getInt("free_seats");
 				Show s = new Show(id, title, date, time, theater, seats);
-				id = rs.getInt("a.reservation_id");
-				seats = rs.getInt("a.seats");
+				id = rs.getInt("reservation_id");
+				seats = rs.getInt("seats");
 				reservations.add(new Reservation(id, s, user, seats));
 			}
 			return reservations;

@@ -14,7 +14,7 @@ public class UserSchedulePanel extends GuestSchedulePanel {
 	public UserSchedulePanel(UserUI parent) {
 		super(parent);
 		this.parent = parent;
-		schedule.addMouseListener(new MouseAdapter() {
+		list.addMouseListener(new MouseAdapter() {
 			
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -25,9 +25,11 @@ public class UserSchedulePanel extends GuestSchedulePanel {
 	
 	protected void handleClick(MouseEvent e) {
 		if(SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-			int selection = schedule.convertRowIndexToModel(schedule.getSelectedRow());
-			Show sh = ((ScheduleTableModel) schedule.getModel()).getShowAtIndex(selection);
-			parent.tabbedView.addTab("Nuova prenotazione", new ReservationManagementPanel(parent, this, sh));
+			int selection = list.convertRowIndexToModel(list.getSelectedRow());
+			if (selection >= 0) {
+				Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection);
+				parent.tabbedView.addTab("Nuova prenotazione", new ReservationManagementPanel(parent, this, sh));
+			}
 		}
 	}
 }

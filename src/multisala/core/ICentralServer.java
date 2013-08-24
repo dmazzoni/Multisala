@@ -21,7 +21,7 @@ public interface ICentralServer extends Remote {
 	void insertShow(Show sh) throws RemoteException, SQLException;
 	void editShow(Show updated) throws RemoteException, SQLException;
 	void deleteShow(int id) throws RemoteException, SQLException;
-	void sellTickets(int id, int tickets) throws RemoteException, SQLException;
+	void sellTickets(Show sh, int tickets) throws RemoteException, SQLException;
 	
 	void adminConnected(IAdminMS admin) throws RemoteException;
 	void adminDisconnected(IAdminMS admin) throws RemoteException;

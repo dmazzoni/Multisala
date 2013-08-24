@@ -143,6 +143,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query2.setInt(2, res.getShow().getId());
 			query2.executeUpdate();
 			dbConnection.commit();
+			checkFreeSeats(res.getShow());
 		} catch (SQLException e) {
 			dbConnection.rollback();
 			throw e;
@@ -171,6 +172,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query2.setInt(2, updated.getId());
 			query2.executeUpdate();
 			dbConnection.commit();
+			checkFreeSeats(updated.getShow());
 		} catch (SQLException e) { 
 			dbConnection.rollback();
 			throw e;
@@ -260,14 +262,15 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 	}
 
 	@Override
-	public synchronized void sellTickets(int id, int tickets) throws RemoteException, SQLException {
+	public synchronized void sellTickets(Show sh, int tickets) throws RemoteException, SQLException {
 		PreparedStatement query = null;
 		try {
 			query = dbConnection.prepareStatement("UPDATE OR ROLLBACK shows " +
 					"SET free_seats = free_seats - ? WHERE show_id = ?");
 			query.setInt(1, tickets);
-			query.setInt(2, id);
+			query.setInt(2, sh.getId());
 			query.executeUpdate();
+			checkFreeSeats(sh);
 		} finally {
 			if (query != null)
 				query.close();
@@ -275,10 +278,8 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 	}
 	
 	@Override
-	public void adminConnected(IAdminMS admin) {
-		synchronized(administrators) {
-			administrators.add(admin);
-		}
+	public synchronized void adminConnected(IAdminMS admin) {
+		administrators.add(admin);
 		try {
 			notifyAdmins();
 		} catch (SQLException e) {
@@ -303,9 +304,8 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		System.gc();
 	}
 
-	private synchronized void notifyAdmins() throws SQLException {
+	private void notifyAdmins() throws SQLException {
 		List<String> confirmedUsers = new Vector<String>();
-		PreparedStatement query = null;
 		for(IAdminMS admin : administrators) {
 			try {
 				confirmedUsers = admin.confirmUsers(pendingUsers);
@@ -314,17 +314,43 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 				administrators.remove(admin);
 			}
 		}
-		for(String user : confirmedUsers) {
-			try {
-				query = dbConnection.prepareStatement("UPDATE OR ROLLBACK users SET approved = 1 " +
-						"WHERE user_id = ?");
+		updateUsers(confirmedUsers);
+	}
+	
+	private void updateUsers(List<String> confirmedUsers) throws SQLException {
+		PreparedStatement query = dbConnection.prepareStatement("UPDATE OR ROLLBACK users SET approved = 1 " +
+				"WHERE user_id = ?");
+		try {
+			for(String user : confirmedUsers) {
 				query.setString(1, user);
 				query.executeUpdate();
 				pendingUsers.remove(user);
-			} finally {
-				if(query != null)
-					query.close();
 			}
+			query = dbConnection.prepareStatement("DELETE FROM users WHERE approved = 0");
+			query.executeUpdate();
+		} finally {
+			if (query != null)
+				query.close();
+		}
+	}
+	
+	private void checkFreeSeats(Show sh) throws SQLException {
+		PreparedStatement query = null;
+		try {
+			query = dbConnection.prepareStatement("SELECT free_seats FROM shows WHERE show_id = ?");
+			query.setInt(1, sh.getId());
+			ResultSet rs = query.executeQuery();
+			if (rs.next() && rs.getInt("free_seats") == 0)
+				for (IAdminMS admin : administrators) {
+					try {
+						admin.showSoldOut(sh);
+					} catch (RemoteException e) {
+						administrators.remove(admin);
+					}
+				}
+		} finally {
+			if (query != null)
+				query.close();
 		}
 	}
 	

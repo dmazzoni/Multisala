@@ -50,6 +50,11 @@ public class ShowManagementPanel extends JPanel {
 		seatsField.setText(sh.getFreeSeats() + "");
 	}
 	
+	public ShowManagementPanel(AdminUI parent, String showTitle) {
+		this(parent);
+		titleField.setText(showTitle);
+	}
+
 	private void submitShow() {
 		try {
 			int seats = Integer.parseInt(seatsField.getText());

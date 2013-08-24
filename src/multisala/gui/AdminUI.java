@@ -22,7 +22,6 @@ public class AdminUI extends UserUI {
 		super(agent);
 		this.agent = agent;
 		UnicastRemoteObject.exportObject(agent, 6000);
-		
 	}
 	
 	@Override
@@ -48,7 +47,9 @@ public class AdminUI extends UserUI {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				AdminUI.this.tabbedView.addTab("Prenotazioni", new ReservationPanel(AdminUI.this));
+				ReservationPanel rPanel = new ReservationPanel(AdminUI.this);
+				AdminUI.this.tabbedView.addTab("Prenotazioni", rPanel);
+				AdminUI.this.tabbedView.setSelectedComponent(rPanel);
 				AdminUI.this.repaint();
             }                       
 		});
@@ -57,7 +58,9 @@ public class AdminUI extends UserUI {
 			
 			@Override
             public void actionPerformed(ActionEvent e) {
-				AdminUI.this.tabbedView.addTab("Prenotazioni", new AllReservationsPanel(AdminUI.this));
+				AllReservationsPanel rPanel = new AllReservationsPanel(AdminUI.this);
+				AdminUI.this.tabbedView.addTab("Prenotazioni", rPanel);
+				AdminUI.this.tabbedView.setSelectedComponent(rPanel);
 				AdminUI.this.repaint();
             }            
 		});
@@ -66,7 +69,9 @@ public class AdminUI extends UserUI {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AdminUI.this.tabbedView.addTab("Nuovo spettacolo", new ShowManagementPanel(AdminUI.this));
+				ShowManagementPanel sPanel = new ShowManagementPanel(AdminUI.this);
+				AdminUI.this.tabbedView.addTab("Nuovo spettacolo", sPanel);
+				AdminUI.this.tabbedView.setSelectedComponent(sPanel);
 				AdminUI.this.repaint();
 			}
 			

@@ -50,12 +50,14 @@ public class ReservationPanel extends AbstractListPanel {
 		editMenuItem.addActionListener(new ActionListener() {
 
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent e) {
 				int[] selection = list.getSelectedRows();
 				for (int i = 0; i < selection.length; i++) {
 					selection[i] = list.convertRowIndexToModel(selection[i]);
 					Reservation res = ((ReservationTableModel) list.getModel()).getReservationAtIndex(selection[i]);
-					parent.tabbedView.addTab("Modifica prenotazione", new ReservationManagementPanel(parent, ReservationPanel.this, res));
+					ReservationManagementPanel rPanel = new ReservationManagementPanel(parent, ReservationPanel.this, res);
+					parent.tabbedView.addTab("Modifica prenotazione", rPanel);
+					parent.tabbedView.setSelectedComponent(rPanel);
 				}
 			}
 		});

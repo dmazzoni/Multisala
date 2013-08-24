@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -30,6 +29,10 @@ public abstract class AbstractUI extends JFrame implements Runnable {
 	
 	public void setStatus(String message) {
 		statusLabel.setText(message);
+	}
+	
+	public JTabbedPane getTabbedView() {
+		return tabbedView;
 	}
 	
 	@Override

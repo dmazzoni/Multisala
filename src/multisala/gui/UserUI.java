@@ -44,7 +44,9 @@ public class UserUI extends GuestUI {
 
 			@Override
             public void actionPerformed(ActionEvent e) {
-				UserUI.this.tabbedView.addTab("Prenotazioni", new ReservationPanel(UserUI.this));
+				ReservationPanel rPanel = new ReservationPanel(UserUI.this);
+				UserUI.this.tabbedView.addTab("Prenotazioni", rPanel);
+				UserUI.this.tabbedView.setSelectedComponent(rPanel);
 				UserUI.this.repaint();
             }                       
 		});

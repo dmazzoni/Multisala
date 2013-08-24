@@ -10,7 +10,7 @@ import multisala.core.Show;
 public class ScheduleTableModel extends AbstractTableModel implements Serializable {
 
 	private Show[] shows;
-	private final String[] colNames = {"Titolo", "Ora", "Sala"};
+	private final String[] colNames = {"Titolo", "Ora", "Sala", "Posti liberi"};
 	
 	public ScheduleTableModel(List<Show> shows) {
 		this.shows = shows.toArray(new Show[shows.size()]);
@@ -37,6 +37,7 @@ public class ScheduleTableModel extends AbstractTableModel implements Serializab
 			case 0: return shows[row].getTitle();
 			case 1: return shows[row].getTime();
 			case 2: return shows[row].getTheater();
+			case 3: return shows[row].getFreeSeats();
 		}
 		throw new IllegalArgumentException();
 	}

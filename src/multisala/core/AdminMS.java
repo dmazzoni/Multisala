@@ -7,7 +7,9 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import multisala.gui.AdminUI;
 import multisala.gui.ConfirmUsersPanel;
+import multisala.gui.ShowManagementPanel;
 
 public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	
@@ -45,7 +47,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	@Override
 	public void sellTickets(Show sh, int tickets) {
 		try {
-			centralServer.sellTickets(sh.getId(), tickets);
+			centralServer.sellTickets(sh, tickets);
 		} catch (RemoteException | SQLException e) {
 			JOptionPane.showMessageDialog(window, e);
 		}
@@ -82,10 +84,22 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 	
 	@Override
-	public List<String> confirmUsers(List<String> users) {
+	public List<String> confirmUsers(List<String> users) throws RemoteException {
 		ConfirmUsersPanel confirmationPanel = new ConfirmUsersPanel(users);
 		JOptionPane.showConfirmDialog(window, confirmationPanel, "Conferma utenti", JOptionPane.OK_OPTION);
 		return confirmationPanel.getConfirmedUsers();
+	}
+	
+	@Override
+	public void showSoldOut(Show sh) throws RemoteException {
+		String message = "Posti esauriti per lo spettacolo " + sh.getTitle() + " del " + sh.getDate() + " " + sh.getTime() + 
+				". Inserire un nuovo spettacolo?";
+		int result = JOptionPane.showConfirmDialog(window, message, "Posti esauriti", JOptionPane.YES_NO_OPTION);
+		if (result == JOptionPane.YES_OPTION) {
+			ShowManagementPanel sPanel = new ShowManagementPanel((AdminUI) window, sh.getTitle());
+			window.getTabbedView().addTab("Nuovo spettacolo", sPanel);
+			window.getTabbedView().setSelectedComponent(sPanel);
+		}
 	}
 	
 	@Override

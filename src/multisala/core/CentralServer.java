@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
-import javax.swing.JOptionPane;
-
 public class CentralServer extends Activatable implements ICentralServer, Unreferenced {
 
 	private Connection dbConnection;

@@ -1,7 +1,6 @@
 package multisala.core;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.Properties;
 
 import javax.naming.Context;

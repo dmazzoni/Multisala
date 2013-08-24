@@ -10,8 +10,6 @@ import javax.security.auth.login.AccountException;
 import javax.security.auth.login.LoginException;
 import javax.swing.JOptionPane;
 
-import multisala.gui.AbstractUI;
-
 public class GuestMA extends AbstractAgent implements IGuest {
 	
 	public GuestMA(IAuthServer authServer, ICentralServer centralServer) {

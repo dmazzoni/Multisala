@@ -18,9 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import multisala.core.Reservation;
 import multisala.core.Show;
-import javax.swing.JFormattedTextField;
 
 public class ShowManagementPanel extends JPanel {
 

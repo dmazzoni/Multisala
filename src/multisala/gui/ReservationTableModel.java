@@ -6,7 +6,6 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import multisala.core.Reservation;
-import multisala.core.Show;
 
 public class ReservationTableModel extends AbstractTableModel implements Serializable {
 

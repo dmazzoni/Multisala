@@ -24,15 +24,16 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 		this.parent = parent;
 		this.popupMenu = createPopupMenu();
 		this.list.setComponentPopupMenu(popupMenu);
-		this.seatsField = new JTextField();
 	}
 	
 	@Override
 	protected void initView() {
 		super.initView();
 		JToolBar lowerToolbar = new JToolBar();
+		lowerToolbar.setFloatable(false);
 		lowerToolbar.add(new JLabel("Numero biglietti per lo spettacolo selezionato:"));
 		lowerToolbar.addSeparator();
+		seatsField = new JTextField();
 		lowerToolbar.add(seatsField);
 		JButton confirmSale = new JButton("Vendi");
 		confirmSale.addActionListener(new ActionListener() {
@@ -47,6 +48,7 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 			}
 			
 		});
+		lowerToolbar.add(confirmSale);
 		panel.add(lowerToolbar);
 	}
 	
@@ -61,7 +63,9 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 				for (int i = 0; i < selection.length; i++) {
 					selection[i] = list.convertRowIndexToModel(selection[i]);
 					Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection[i]);
-					parent.tabbedView.add(new ShowManagementPanel(parent, sh));
+					ShowManagementPanel sPanel = new ShowManagementPanel(parent, sh);
+					parent.tabbedView.addTab("Modifica spettacolo", sPanel);
+					parent.tabbedView.setSelectedComponent(sPanel);
 				}
 			}
 		});

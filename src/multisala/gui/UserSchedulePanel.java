@@ -28,7 +28,9 @@ public class UserSchedulePanel extends GuestSchedulePanel {
 			int selection = list.convertRowIndexToModel(list.getSelectedRow());
 			if (selection >= 0) {
 				Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection);
-				parent.tabbedView.addTab("Nuova prenotazione", new ReservationManagementPanel(parent, this, sh));
+				ReservationManagementPanel rPanel = new ReservationManagementPanel(parent, this, sh);
+				parent.tabbedView.addTab("Nuova prenotazione", rPanel);
+				parent.tabbedView.setSelectedComponent(rPanel);
 			}
 		}
 	}

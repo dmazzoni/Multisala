@@ -92,6 +92,8 @@ public class AdminUI extends UserUI {
 		resButton.setAlignmentX(LEFT_ALIGNMENT);
 		logoutButton.setAlignmentX(RIGHT_ALIGNMENT);
 		toolBar.add(resButton);
+		toolBar.add(allResButton);
+		toolBar.add(insertShowButton);
 		toolBar.add(logoutButton);
 		return toolBar;
 	}

@@ -249,8 +249,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 	public synchronized void deleteShow(int id) throws RemoteException, SQLException {
 		PreparedStatement query = null;
 		try {
-			query = dbConnection.prepareStatement("DELETE OR ROLLBACK FROM shows " +
-					"WHERE show_id = ?");
+			query = dbConnection.prepareStatement("DELETE FROM shows WHERE show_id = ?");
 			query.setInt(1, id);
 			query.executeUpdate();
 		} finally {

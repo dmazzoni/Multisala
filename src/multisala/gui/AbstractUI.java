@@ -61,7 +61,7 @@ public abstract class AbstractUI extends JFrame implements Runnable {
 	
 	/**
 	 * Restituisce il componente a schede della finestra.
-	 * @return Il pannello a schede della finestra
+	 * @return Il pannello a schede della finestra.
 	 */
 	public JTabbedPane getTabbedView() {
 		return tabbedView;

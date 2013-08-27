@@ -39,22 +39,27 @@ public class LoginPanel extends JPanel {
 	 */
 	protected GuestUI parent;
 	
+	
 	/**
 	 * Il campo dove viene inserito il nome utente.
 	 */
 	protected JTextField userField;
+	
 	/**
 	 * Il campo dove viene inserita la password.
 	 */
 	protected JPasswordField passField;
+	
 	/**
 	 * Messaggio di avvertimento del fallimento del login.
 	 */
 	protected JLabel messageLabel;
+	
 	/**
 	 * L'intestazione del form.
 	 */
 	protected JLabel lblHeader;
+	
 	/**
 	 * Il pulsante di conferma.
 	 */

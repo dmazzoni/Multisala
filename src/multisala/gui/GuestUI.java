@@ -30,14 +30,15 @@ public class GuestUI extends AbstractUI {
 	
 	/**
 	 * Restituisce l'agente mobile collegato alla vista grafica.
-	 * @return L'agente mobile
+	 * @return L'agente mobile.
 	 */
 	public IGuest getAgent() {
 		return agent;
 	}
 
 	/**
-	 * Crea la barra degli strumenti con i pulsanti "Accedi" e "Registrati"
+	 * Crea la barra degli strumenti con i pulsanti "Accedi" e "Registrati".
+	 * @return La toolbar creata.
 	 */
 	@Override
 	protected JToolBar createToolBar() {
@@ -74,6 +75,7 @@ public class GuestUI extends AbstractUI {
 	/**
 	 * Crea il pannello a schede e mostra il tab della 
 	 * programmazione visibile da tutti i visitatori.
+	 * @return La vista a schede creata.
 	 */
 	@Override
 	protected JTabbedPane createTabbedView() {

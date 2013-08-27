@@ -9,8 +9,17 @@ import javax.swing.JToolBar;
 
 import multisala.core.IGuest;
 
+/**
+ * La finestra grafica dell'utente non loggato.
+ * @author Giacomo Annaloro
+ * @author Davide Mazzoni
+ *
+ */
 public class GuestUI extends AbstractUI {
 	
+	/**
+	 * L'agente mobile collegato alla corrente vista grafica.
+	 */
 	private IGuest agent;
 
 	public GuestUI(IGuest guestMA) {
@@ -19,10 +28,17 @@ public class GuestUI extends AbstractUI {
 		this.agent.setWindow(this);
 	}
 	
+	/**
+	 * Restituisce l'agente mobile collegato alla vista grafica.
+	 * @return L'agente mobile
+	 */
 	public IGuest getAgent() {
 		return agent;
 	}
 
+	/**
+	 * Crea la barra degli strumenti con i pulsanti "Accedi" e "Registrati"
+	 */
 	@Override
 	protected JToolBar createToolBar() {
 		JToolBar toolBar = new JToolBar();
@@ -55,6 +71,10 @@ public class GuestUI extends AbstractUI {
 		return toolBar;
 	}
 	
+	/**
+	 * Crea il pannello a schede e mostra il tab della 
+	 * programmazione visibile da tutti i visitatori.
+	 */
 	@Override
 	protected JTabbedPane createTabbedView() {
 		JTabbedPane tabbedView = new JTabbedPane();

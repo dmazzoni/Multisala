@@ -10,12 +10,24 @@ import javax.security.auth.login.AccountException;
 import javax.security.auth.login.LoginException;
 import javax.swing.JOptionPane;
 
+/**
+ * L'agente mobile per il client che non ha effettuato il login.
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
+ *
+ */
 public class GuestMA extends AbstractAgent implements IGuest {
 	
 	public GuestMA(IAuthServer authServer, ICentralServer centralServer) {
 		super(authServer, centralServer);
 	}
 	
+	/**
+	 * Mostra la programmazione (lista di spettacoli) per un giorno specificato.
+	 * @param dt la data del calendario di cui si vuole visualizzare la programmazione
+	 * @return La lista di spettacoli in programma per quella data.
+	 * @see Show
+	 */
 	@Override
 	public List<Show> getSchedule(Calendar dt) {
 		int month = dt.get(Calendar.MONTH) + 1;
@@ -32,6 +44,13 @@ public class GuestMA extends AbstractAgent implements IGuest {
 		return shows;
 	}
 
+	/**
+	 * Effettua il login invocando l'apposito metodo del server di autenticazione.
+	 * @param user il nome utente
+	 * @param password la password
+	 * @return L'agente mobile per il corrispondente tipo di utente.
+	 * @exception LoginException in caso di dati di login non validi.
+	 */
 	@Override
 	public AbstractAgent login(String user, String password) throws LoginException {
 		AbstractAgent agent = null;
@@ -43,6 +62,12 @@ public class GuestMA extends AbstractAgent implements IGuest {
 		return agent;
 	}
 
+	/**
+	 * Effettua la richiesta di registrazione di un nuovo utente, invocando
+	 * l'apposito metodo del server centrale.
+	 * @param user il nome utente
+	 * @param password la password
+	 */
 	@Override
 	public void register(String user, String password) throws AccountException {
 		try {

@@ -12,13 +12,37 @@ import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
 import javax.swing.border.BevelBorder;
 
+/**
+ * Generica finestra grafica contenente le parti comuni
+ * a tutte le finestre.
+ *  @author Davide Mazzoni
+ *  @author Giacomo Annaloro
+ */
 public abstract class AbstractUI extends JFrame implements Runnable {
 
+	/**
+	 * La barra degli strumenti.
+	 */
 	protected JToolBar toolBar;
+	
+	/**
+	 * Il pannello a schede.
+	 */
 	protected JTabbedPane tabbedView;
+	
+	/**
+	 * L'etichetta della barra di stato.
+	 */
 	protected JLabel statusLabel;
+	
+	/**
+	 * L'etichetta identificativa dell'utente attualmente connesso.
+	 */
 	protected JLabel userLabel;
 	
+	/**
+	 * Le dimensioni predefinite delle schede.
+	 */
 	protected final Dimension tabSize;
 	
 	protected AbstractUI() {
@@ -27,14 +51,26 @@ public abstract class AbstractUI extends JFrame implements Runnable {
 		userLabel = new JLabel();
 	}
 	
+	/**
+	 * Setta un nuovo messaggio nella barra di stato.
+	 * @param message il messaggio da mostrare
+	 */
 	public void setStatus(String message) {
 		statusLabel.setText(message);
 	}
 	
+	/**
+	 * Restituisce il componente a schede della finestra.
+	 * @return Il pannello a schede della finestra
+	 */
 	public JTabbedPane getTabbedView() {
 		return tabbedView;
 	}
 	
+	/**
+	 * Mostra la finestra grafica, dopo averne opportunamente 
+	 * disposto tutte le componenti.
+	 */
 	@Override
 	public void run() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,6 +89,10 @@ public abstract class AbstractUI extends JFrame implements Runnable {
 
 	protected abstract JToolBar createToolBar();
 	
+	/**
+	 * Crea la barra di stato, con a sinistra un messaggio descrittivo 
+	 * e a destra l'informazione dell'utente connesso.
+	 */
 	protected void createStatusBar() {
 		JPanel statusBar = new JPanel(new GridLayout(1,2));
 		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));

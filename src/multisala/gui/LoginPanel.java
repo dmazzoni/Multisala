@@ -26,14 +26,38 @@ import multisala.core.AbstractAgent;
 import multisala.core.AdminMS;
 import multisala.core.IUser;
 
+/**
+ * Il pannello con il form per effettuare il login.
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
+ *
+ */
 public class LoginPanel extends JPanel {
 	
+	/**
+	 * La finestra che ospita il pannello.
+	 */
 	protected GuestUI parent;
 	
+	/**
+	 * Il campo dove viene inserito il nome utente.
+	 */
 	protected JTextField userField;
+	/**
+	 * Il campo dove viene inserita la password.
+	 */
 	protected JPasswordField passField;
+	/**
+	 * Messaggio di avvertimento del fallimento del login.
+	 */
 	protected JLabel messageLabel;
+	/**
+	 * L'intestazione del form.
+	 */
 	protected JLabel lblHeader;
+	/**
+	 * Il pulsante di conferma.
+	 */
 	protected JButton btnSubmit;
 
 	public LoginPanel(GuestUI parent) {
@@ -41,6 +65,14 @@ public class LoginPanel extends JPanel {
 		this.initView();
 	}
 	
+	/**
+	 * Effettua il login invocando l'apposito metodo dell'agente mobile.
+	 * In caso di esito positivo chiude l'attuale grafica dell'utente ospite e apre
+	 * quella dell'utente registrato o dell'amministratore, a seconda del tipo
+	 * di registrazione di tale utente.<br>
+	 * In caso di esito negativo, mostra una stringa di spiegazione o apre una nuova
+	 * finestra di avviso mostrando il messaggio dell'eccezione remota.
+	 */
 	protected void submitAction() {
 		try {
 			String username = userField.getText();
@@ -63,11 +95,17 @@ public class LoginPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * Rimuove la scheda corrente.
+	 */
 	private void cancelAction() {
 		parent.tabbedView.remove(this);
 		parent.repaint();
 	}
 
+	/**
+	 * Setta le proprietà dei componenti grafici e li dispone sul pannello.
+	 */
 	private void initView() {
 		setLayout(new BorderLayout(0, 0));
 		

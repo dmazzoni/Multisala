@@ -38,7 +38,7 @@ public class GuestUI extends AbstractUI {
 
 	/**
 	 * Crea la barra degli strumenti con i pulsanti "Accedi" e "Registrati".
-	 * @return La toolbar creata.
+	 * @return La toolbar.
 	 */
 	@Override
 	protected JToolBar createToolBar() {
@@ -75,7 +75,7 @@ public class GuestUI extends AbstractUI {
 	/**
 	 * Crea il pannello a schede e mostra il tab della 
 	 * programmazione visibile da tutti i visitatori.
-	 * @return La vista a schede creata.
+	 * @return La vista a schede.
 	 */
 	@Override
 	protected JTabbedPane createTabbedView() {

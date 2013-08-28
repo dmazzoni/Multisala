@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
  * L'agente mobile per il client che non ha effettuato il login.
  * @author Davide Mazzoni
  * @author Giacomo Annaloro
- *
+ * 
  */
 public class GuestMA extends AbstractAgent implements IGuest {
 	

@@ -13,6 +13,9 @@ import multisala.core.IUser;
 
 public class UserUI extends GuestUI {
 
+	/**
+	 * L'agente mobile dell'utente loggato, collegato alla corrente vista grafica.
+	 */
 	private IUser agent;
 
 	public UserUI(IUser agent) {
@@ -26,6 +29,11 @@ public class UserUI extends GuestUI {
 		return agent;
 	}
 
+	/**
+	 * Crea il pannello a schede e mostra il tab della 
+	 * programmazione con le opzioni disponibili per l'utente registrato.
+	 * @return La vista a schede.
+	 */
 	@Override
 	protected JTabbedPane createTabbedView() {
 		JTabbedPane tabbedView = new JTabbedPane();
@@ -33,7 +41,12 @@ public class UserUI extends GuestUI {
 		tabbedView.addTab("Programmazione", new UserSchedulePanel(this));
 		return tabbedView;
 	}
-
+	
+	/**
+	 * Crea la barra degli strumenti con i pulsanti per visualizzare le 
+	 * prenotazioni effettuate e fare logout.
+	 * @return La toolbar.
+	 */
 	@Override
 	protected JToolBar createToolBar() {
 		JToolBar toolBar = new JToolBar();

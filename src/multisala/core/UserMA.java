@@ -9,8 +9,17 @@ import javax.swing.JOptionPane;
 
 import multisala.exceptions.ReservationException;
 
+/**
+ * L'agente mobile per l'utente standard.
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
+ * 
+ */
 public class UserMA extends GuestMA implements IUser {
 	
+	/**
+	 * Il nome dell'utente loggato.
+	 */
 	protected String username;
 	
 	public UserMA(IAuthServer authServer, ICentralServer centralServer, String username) {
@@ -18,11 +27,20 @@ public class UserMA extends GuestMA implements IUser {
 		this.username = username;
 	}
 
+	/**
+	 * Fornisce il nome dell'utente loggato.
+	 * @return Il nome utente.
+	 */
 	@Override
 	public String getUsername() {
 		return username;
 	}
 	
+	/**
+	 * Fornisce l'elenco di prenotazioni effettuate dall'utente corrente.
+	 * @return La lista delle prenotazioni.
+	 * @see Reservation
+	 */
 	@Override
 	public List<Reservation> getReservations() {
 		List<Reservation> reservations = new Vector<Reservation>();
@@ -34,6 +52,10 @@ public class UserMA extends GuestMA implements IUser {
 		return reservations;
 	}
 
+	/**
+	 * Inserisce una nuova prenotazione per l'utente.
+	 * @param res la prenotazione da inserire 
+	 */
 	@Override
 	public void insertReservation(Reservation res) throws ReservationException {
 		try {
@@ -43,6 +65,10 @@ public class UserMA extends GuestMA implements IUser {
 		}
 	}
 
+	/**
+	 * Modifica il numero di posti di una prenotazione dell'utente.
+	 * @param updated la prenotazione col numero di posti aggiornato
+	 */
 	@Override
 	public void editReservation(Reservation updated) throws ReservationException {
 		try {
@@ -52,6 +78,10 @@ public class UserMA extends GuestMA implements IUser {
 		}
 	}
 
+	/**
+	 * Elimina una prenotazione specificata.
+	 * @param id l'id della prenotazione da eliminare
+	 */
 	@Override
 	public void deleteReservation(int id) {
 		try {
@@ -61,6 +91,13 @@ public class UserMA extends GuestMA implements IUser {
 		}
 	}
 
+	/**
+	 * Crea un nuovo agente mobile di tipo "ospite" e lo ritorna,
+	 * permettendo al chiamante di sostituire il corrente agente dello
+	 * user con quest'ultimo.
+	 * @return L'agente mobile per il client non loggato.
+	 * 
+	 */
 	@Override
 	public IGuest logout() {
 		IGuest guestAgent = null;

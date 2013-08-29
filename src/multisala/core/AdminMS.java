@@ -11,12 +11,22 @@ import multisala.gui.AdminUI;
 import multisala.gui.ConfirmUsersPanel;
 import multisala.gui.ShowManagementPanel;
 
+/**
+ * Il mobile server per l'utente amministratore.
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
+ * 
+ */
 public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	
 	public AdminMS(IAuthServer authServer, ICentralServer centralServer, String username) {
 		super(authServer, centralServer, username);
 	}
 
+	/**
+	 * Inserisce un nuovo spettacolo.
+	 * @param sh lo spettacolo da inserire
+	 */
 	@Override
 	public void insertShow(Show sh) {
 		try {
@@ -26,6 +36,10 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 		}
 	}
 
+	/**
+	 * Modifica uno spettacolo esistente.
+	 * @param updated lo spettacolo con i dati modificati
+	 */
 	@Override
 	public void editShow(Show updated) {
 		try {
@@ -35,6 +49,10 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 		}
 	}
 
+	/**
+	 * Elimina uno spettacolo specificato.
+	 * @param id l'id dello spettacolo da eliminare
+	 */
 	@Override
 	public void deleteShow(int id) {
 		try {
@@ -44,6 +62,13 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 		}
 	}
 
+	/**
+	 * Permette di effettuare la vendita diretta alla cassa,
+	 * per i clienti che acquistano i biglietti per uno spettacolo
+	 * senza aver effettuato la prenotazione.
+	 * @param sh lo spettacolo di cui si vogliono vendere i biglietti
+	 * @param tickets il numero di biglietti richiesti
+	 */
 	@Override
 	public void sellTickets(Show sh, int tickets) {
 		try {
@@ -53,6 +78,11 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 		}
 	}
 
+	/**
+	 * Mostra all'amministratore tutte le prenotazioni presenti nel sistema.
+	 * @return La lista di prenotazioni.
+	 * @see Reservation
+	 */
 	@Override
 	public List<Reservation> getAllReservations() {
 		List<Reservation> reservations = new Vector<Reservation>();
@@ -63,7 +93,12 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 		}
 		return reservations;
 	}
-
+	
+	/**
+	 * {@inheritDoc} <br>
+	 * Notifica inoltre al server centrale la disconnessione del client
+	 * amministratore.
+	 */
 	@Override
 	public IGuest logout() {
 		try {
@@ -74,6 +109,9 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 		return super.logout();
 	}
 	
+	/**
+	 * Segnala al server centrale che un utente amministratore si è connesso.
+	 */
 	@Override
 	public void adminConnected() {
 		try {

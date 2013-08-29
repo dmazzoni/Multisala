@@ -93,8 +93,8 @@ public class UserMA extends GuestMA implements IUser {
 
 	/**
 	 * Crea un nuovo agente mobile di tipo "ospite" e lo ritorna,
-	 * permettendo al chiamante di sostituire il corrente agente dello
-	 * user con quest'ultimo.
+	 * permettendo al chiamante di sostituire il corrente agente del client
+	 * registrato con quest'ultimo.
 	 * @return L'agente mobile per il client non loggato.
 	 * 
 	 */

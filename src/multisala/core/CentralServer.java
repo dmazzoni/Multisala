@@ -71,6 +71,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setString(1, user);
 			query.setString(2, password);
 			query.executeUpdate();
+			pendingUsers.add(user);
 		} finally {
 			if (query != null)
 				query.close();

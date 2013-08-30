@@ -14,9 +14,18 @@ import multisala.core.Show;
 
 public class AdminSchedulePanel extends UserSchedulePanel {
 
+	/**
+	 * La finestra che ospita il pannello.
+	 */
 	private AdminUI parent;
 	
+	/**
+	 * Il menù contestuale per il click destro del mouse.
+	 */
 	private JPopupMenu popupMenu;
+	/**
+	 * Il campo di testo per il numero di biglietti da vendere.
+	 */
 	private JTextField seatsField;
 	
 	public AdminSchedulePanel(AdminUI parent) {
@@ -26,6 +35,11 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 		this.list.setComponentPopupMenu(popupMenu);
 	}
 	
+	/**
+	 * {@inheritDoc} <br>
+	 * Per l'ammministratore mostra anche una barra inferiore che permette
+	 * di effettuare la vendita diretta di biglietti di uno spettacolo selezionato.
+	 */
 	@Override
 	protected void initView() {
 		super.initView();

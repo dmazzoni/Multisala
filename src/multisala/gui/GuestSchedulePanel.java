@@ -24,12 +24,30 @@ import javax.swing.SwingConstants;
 import multisala.core.Show;
 import java.awt.Color;
 
+/**
+ * Il pannello che mostra la programmazione per l'utente non loggato.
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
+ *
+ */
 public class GuestSchedulePanel extends AbstractListPanel {
 	
+	/**
+	 * La data odierna.
+	 */
 	private Calendar currentDate;
+	/**
+	 * La finestra che ospita il pannello.
+	 */
 	private GuestUI parent;
 	
+	/**
+	 * L'etichetta che mostra la data a cui si riferisce la programmazione.
+	 */
 	private JLabel lblScheduleDate;
+	/**
+	 * Il riquadro centrale del pannello principale.
+	 */
 	protected JPanel panel;
 	
 	public GuestSchedulePanel(GuestUI parent) {
@@ -41,11 +59,19 @@ public class GuestSchedulePanel extends AbstractListPanel {
 		initView();
 	}
 	
+	/**
+	 * Aggiorna la vista con i dati attuali
+	 */
 	@Override
 	protected void updateView() {
 		updateSchedule(0);
 	}	
 
+	/**
+	 * Modifica la visualizzazione della programmazione mostrando
+	 * quella di {@code offset} giorni dalla data odierna.
+	 * @param offset lo spostamento in giorni dalla data corrente;
+	 */
 	protected void updateSchedule(int offset) {
 		currentDate.add(Calendar.DAY_OF_MONTH, offset);
 		String dtString = new String("Programmazione del " + currentDate.get(Calendar.DAY_OF_MONTH) + "/" + 
@@ -55,6 +81,9 @@ public class GuestSchedulePanel extends AbstractListPanel {
 		list.setModel(new ScheduleTableModel(shows));
 	}
 	
+	/**
+	 * Setta le proprietà dei componenti grafici e li dispone sul pannello.
+	 */
 	protected void initView() {
 		setLayout(new BorderLayout(0, 0));
 		

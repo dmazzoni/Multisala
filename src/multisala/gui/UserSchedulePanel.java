@@ -9,6 +9,9 @@ import multisala.core.Show;
 
 public class UserSchedulePanel extends GuestSchedulePanel {
 
+	/**
+	 * La finestra che ospita il pannello.
+	 */
 	private UserUI parent;
 	
 	public UserSchedulePanel(UserUI parent) {
@@ -23,6 +26,12 @@ public class UserSchedulePanel extends GuestSchedulePanel {
 		});
 	}
 	
+	/**
+	 * Riconosce il doppio click del tasto sinistro del mouse e apre
+	 * una scheda per la prenotazione di biglietti per lo spettacolo 
+	 * selezionato.
+	 * @param e l'evento del mouse
+	 */
 	protected void handleClick(MouseEvent e) {
 		if(SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
 			int selection = list.convertRowIndexToModel(list.getSelectedRow());

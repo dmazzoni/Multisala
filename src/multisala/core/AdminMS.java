@@ -121,6 +121,14 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 		}
 	}
 	
+	/**
+	 * Invocato dal server centrale per notificare all'amministratore la presenza 
+	 * di nuovi utenti che hanno richiesto la registrazione nel sistema. 
+	 * Ne mostra l'elenco in una finestra di dialogo e permette di 
+	 * selezionare quali approvare.
+	 * @param users la lista degli utenti in attesa di conferma
+	 * @return La lista degli utenti approvati.
+	 */
 	@Override
 	public List<String> confirmUsers(List<String> users) throws RemoteException {
 		ConfirmUsersPanel confirmationPanel = new ConfirmUsersPanel(users);
@@ -128,6 +136,11 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 		return confirmationPanel.getConfirmedUsers();
 	}
 	
+	/**
+	 * Invocato dal server centrale per informare l'amministratore che
+	 * sono stati venduti tutti i biglietti per un dato spettacolo.
+	 * @param sh lo spettacolo di cui sono esauriti i posti disponibili
+	 */
 	@Override
 	public void showSoldOut(Show sh) throws RemoteException {
 		String message = "Posti esauriti per lo spettacolo " + sh.getTitle() + " del " + sh.getDate() + " " + sh.getTime() + 
@@ -140,6 +153,10 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 		}
 	}
 	
+	/**
+	 * Necessario per la gestione dell'insieme di utenti connessi
+	 * lato server centrale.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof AdminMS && ((AdminMS) obj).username.equals(this.username));

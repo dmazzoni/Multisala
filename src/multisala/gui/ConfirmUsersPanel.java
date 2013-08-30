@@ -7,6 +7,9 @@ import javax.swing.JPanel;
 
 public class ConfirmUsersPanel extends JPanel {
 	
+	/**
+	 * 
+	 */
 	List<String> users;
 	
 	JList<String> confirmationList;

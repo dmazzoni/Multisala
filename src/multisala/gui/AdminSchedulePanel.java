@@ -12,6 +12,12 @@ import javax.swing.JToolBar;
 
 import multisala.core.Show;
 
+/**
+ * Il pannello che mostra la programmazione per l'amministratore.
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
+ *
+ */
 public class AdminSchedulePanel extends UserSchedulePanel {
 
 	/**
@@ -19,10 +25,12 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 	 */
 	private AdminUI parent;
 	
+	
 	/**
 	 * Il menù contestuale per il click destro del mouse.
 	 */
 	private JPopupMenu popupMenu;
+	
 	/**
 	 * Il campo di testo per il numero di biglietti da vendere.
 	 */
@@ -66,6 +74,11 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 		panel.add(lowerToolbar);
 	}
 	
+	/**
+	 * Crea il menù contestuale con le opzioni per modificare o 
+	 * eliminare uno spettacolo selezionato.
+	 * @return Il menù creato.
+	 */
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu menu = new JPopupMenu();
 		JMenuItem editMenuItem = new JMenuItem("Modifica");

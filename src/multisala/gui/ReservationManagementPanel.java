@@ -22,18 +22,59 @@ import multisala.core.Reservation;
 import multisala.core.Show;
 import multisala.exceptions.ReservationException;
 
+/**
+ * Il form di gestione di una prenotazione.
+ * Permette l'inserimento dei dati di una nuova prenotazione per un dato
+ * spettacolo, o la modifica dei dati di una prenotazione esistente.
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
+ */
 public class ReservationManagementPanel extends JPanel {
 	
+	/**
+	 * Il pannello da cui si è generato il form per la prenotazione.
+	 */
 	private AbstractListPanel parentTab;
+	
+	/**
+	 * La finestra che ospita il pannello.
+	 */
 	private UserUI parentWindow;
 	
+	
+	/**
+	 * La prenotazione oggetto della modifica.
+	 */
 	private Reservation res;
+	
+	/**
+	 * Lo spettacolo di cui si sta effettuando la prenotazione.
+	 */
 	private Show sh;
 	
+	/**
+	 * Il titolo dello spettacolo.
+	 */
 	private JLabel titleValue;
+	
+	/**
+	 * Data e ora dello spettacolo.
+	 */
 	private JLabel dateValue;
+	
+	/**
+	 * Campo per l'inserimento del numero di posti.
+	 */
 	private JTextField seatsField;
+	
+	/**
+	 * Messaggio informativo in caso di errori.
+	 */
 	private JLabel messageLabel;
+	
+	/**
+	 * Pulsante per confermare la modifica o l'inserimento della prenotazione.
+	 */
 	private JButton btnSubmit;
 
 	public ReservationManagementPanel(UserUI parentWindow, AbstractListPanel parentTab, Reservation res) {
@@ -51,17 +92,24 @@ public class ReservationManagementPanel extends JPanel {
 		dateValue.setText(sh.getDate() + " " + sh.getTime());
 	}
 	
+	/**
+	 * Conferma le modifiche apportate e:
+	 * <li> inserisce la nuova prenotazione se il pannello originario era quello 
+	 * della programmazione (ovvero se nessuna prenotazione è stata passata al costruttore)
+	 * <li> aggiorna i dati della prenotazione specificata se il pannello originario 
+	 * era quello delle prenotazioni
+	 */
 	private void submitReservation() {
 		try {
 			int seats = Integer.parseInt(seatsField.getText());
 			if (res == null) {
 				res = new Reservation(0, sh, parentWindow.getAgent().getUsername(), seats);
 				parentWindow.getAgent().insertReservation(res);
-				parentWindow.statusLabel.setText("Prenotazione effettuata con successo");
+				parentWindow.setStatus("Prenotazione effettuata con successo");
 			} else {
 				res.setSeats(seats);
 				parentWindow.getAgent().editReservation(res);
-				parentWindow.statusLabel.setText("Prenotazione aggiornata con successo");
+				parentWindow.setStatus("Prenotazione aggiornata con successo");
 			}
 			parentWindow.tabbedView.setSelectedComponent(parentTab);
 			parentWindow.tabbedView.remove(this);
@@ -72,11 +120,18 @@ public class ReservationManagementPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * Chiude la scheda di modifica o inserimento della prenotazione senza
+	 * salvare i cambiamenti apportati.
+	 */
 	private void cancel() {
 		parentWindow.tabbedView.setSelectedComponent(parentTab);
 		parentWindow.tabbedView.remove(this);
 	}
 	
+	/**
+	 * Setta le proprietà dei componenti grafici e li dispone sul pannello.
+	 */
 	public void initView() {
 		setLayout(new BorderLayout(0, 0));
 		

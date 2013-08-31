@@ -15,8 +15,8 @@ import javax.swing.border.BevelBorder;
 /**
  * Generica finestra grafica contenente le parti comuni
  * a tutte le finestre.
- *  @author Davide Mazzoni
- *  @author Giacomo Annaloro
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
  */
 public abstract class AbstractUI extends JFrame implements Runnable {
 
@@ -33,7 +33,7 @@ public abstract class AbstractUI extends JFrame implements Runnable {
 	/**
 	 * L'etichetta della barra di stato.
 	 */
-	protected JLabel statusLabel;
+	private JLabel statusLabel;
 	
 	/**
 	 * L'etichetta identificativa dell'utente attualmente connesso.

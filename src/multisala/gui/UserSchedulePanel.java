@@ -7,6 +7,12 @@ import javax.swing.SwingUtilities;
 
 import multisala.core.Show;
 
+/**
+ * Il pannello che mostra la programmazione per l'utente loggato.
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
+ *
+ */
 public class UserSchedulePanel extends GuestSchedulePanel {
 
 	/**

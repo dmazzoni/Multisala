@@ -36,6 +36,7 @@ public class GuestSchedulePanel extends AbstractListPanel {
 	 * La data odierna.
 	 */
 	private Calendar currentDate;
+	
 	/**
 	 * La finestra che ospita il pannello.
 	 */
@@ -45,6 +46,7 @@ public class GuestSchedulePanel extends AbstractListPanel {
 	 * L'etichetta che mostra la data a cui si riferisce la programmazione.
 	 */
 	private JLabel lblScheduleDate;
+	
 	/**
 	 * Il riquadro centrale del pannello principale.
 	 */

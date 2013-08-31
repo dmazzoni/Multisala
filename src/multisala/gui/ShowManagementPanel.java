@@ -59,12 +59,12 @@ public class ShowManagementPanel extends JPanel {
 			if (sh == null) {
 				sh = new Show(0, titleField.getText(), dateField.getText(), timeField.getText(), theaterField.getText(), seats);
 				parent.getAgent().insertShow(sh);
-				parent.statusLabel.setText("Spettacolo inserito con successo");
+				parent.setStatus("Spettacolo inserito con successo");
 			} else {
 				int id = sh.getId();
 				sh = new Show(id, titleField.getText(), dateField.getText(), timeField.getText(), theaterField.getText(), seats);
 				parent.getAgent().editShow(sh);
-				parent.statusLabel.setText("Spettacolo aggiornato con successo");
+				parent.setStatus("Spettacolo aggiornato con successo");
 			}
 			parent.tabbedView.setSelectedIndex(0);
 			parent.tabbedView.remove(this);

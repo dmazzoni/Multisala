@@ -60,6 +60,7 @@ public class UserMA extends GuestMA implements IUser {
 	public void insertReservation(Reservation res) throws ReservationException {
 		try {
 			centralServer.insertReservation(res);
+			window.setStatus("Prenotazione effettuata con successo");
 		} catch (RemoteException | SQLException e) {
 			JOptionPane.showMessageDialog(window, e);
 		}
@@ -73,6 +74,7 @@ public class UserMA extends GuestMA implements IUser {
 	public void editReservation(Reservation updated) throws ReservationException {
 		try {
 			centralServer.editReservation(updated);
+			window.setStatus("Prenotazione aggiornata con successo");
 		} catch (RemoteException | SQLException e) {
 			JOptionPane.showMessageDialog(window, e);
 		}
@@ -86,14 +88,15 @@ public class UserMA extends GuestMA implements IUser {
 	public void deleteReservation(int id) {
 		try {
 			centralServer.deleteReservation(id);
+			window.setStatus("Prenotazione annullata");
 		} catch (RemoteException | SQLException e) {
 			JOptionPane.showMessageDialog(window, e);
 		}
 	}
 
 	/**
-	 * Crea un nuovo agente mobile di tipo "ospite" e lo ritorna,
-	 * permettendo al chiamante di sostituire il corrente agente del client
+	 * Ottiene dal server di autenticazione un nuovo agente mobile di tipo "ospite" 
+	 * e lo ritorna, permettendo al chiamante di sostituire il corrente agente del client
 	 * registrato con quest'ultimo.
 	 * @return L'agente mobile per il client non loggato.
 	 * 

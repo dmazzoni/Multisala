@@ -41,7 +41,6 @@ public class ReservationManagementPanel extends JPanel {
 	 */
 	private UserUI parentWindow;
 	
-	
 	/**
 	 * La prenotazione oggetto della modifica.
 	 */
@@ -105,11 +104,9 @@ public class ReservationManagementPanel extends JPanel {
 			if (res == null) {
 				res = new Reservation(0, sh, parentWindow.getAgent().getUsername(), seats);
 				parentWindow.getAgent().insertReservation(res);
-				parentWindow.setStatus("Prenotazione effettuata con successo");
 			} else {
 				res.setSeats(seats);
 				parentWindow.getAgent().editReservation(res);
-				parentWindow.setStatus("Prenotazione aggiornata con successo");
 			}
 			parentWindow.tabbedView.setSelectedComponent(parentTab);
 			parentWindow.tabbedView.remove(this);

@@ -31,6 +31,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	public void insertShow(Show sh) {
 		try {
 			centralServer.insertShow(sh);
+			window.setStatus("Spettacolo inserito con successo");
 		} catch (RemoteException | SQLException e) {
 			JOptionPane.showMessageDialog(window, e);
 		}
@@ -44,6 +45,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	public void editShow(Show updated) {
 		try {
 			centralServer.editShow(updated);
+			window.setStatus("Spettacolo aggiornato con successo");
 		} catch (RemoteException | SQLException e) {
 			JOptionPane.showMessageDialog(window, e);
 		}

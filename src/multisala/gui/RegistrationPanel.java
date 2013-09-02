@@ -27,6 +27,7 @@ public class RegistrationPanel extends LoginPanel {
 		String username = userField.getText();
 		try {
 			parent.getAgent().register(username, new String(passField.getPassword()));
+			parent.tabbedView.remove(this);
 		} catch (AccountException e) {
 			messageLabel.setText(e.getMessage());
 		}

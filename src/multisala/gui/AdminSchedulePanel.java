@@ -63,10 +63,12 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int selection = list.convertRowIndexToModel(list.getSelectedRow());
-				Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection);
-				int seats = Integer.parseInt(seatsField.getText());
-				parent.getAgent().sellTickets(sh, seats);
-				seatsField.setText("");
+				if (selection >= 0) {
+					Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection);
+					int seats = Integer.parseInt(seatsField.getText());
+					parent.getAgent().sellTickets(sh, seats);
+					seatsField.setText("");
+				}
 			}
 			
 		});

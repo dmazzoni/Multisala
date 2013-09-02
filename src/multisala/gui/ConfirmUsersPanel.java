@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  * Il pannello che mostra l'elenco di utenti che richiedono la registrazione
@@ -27,6 +28,7 @@ public class ConfirmUsersPanel extends JPanel {
 	public ConfirmUsersPanel(List<String> users) {
 		this.users = users;
 		this.confirmationList = new JList<String>(users.toArray(new String[users.size()]));
+		this.add(new JScrollPane(confirmationList));
 	}
 
 	/**

@@ -59,6 +59,13 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 			prop2.put("java.naming.provider.url", "iiop://localhost:2098");
 			InitialContext cxt2 = new InitialContext(prop2);
 			
+			String certPath = System.getProperty("multisala.certLocation");
+			System.setProperty("javax.net.ssl.debug", "all");
+			System.setProperty("javax.net.ssl.keyStore", certPath + "clientKeys");
+			System.setProperty("javax.net.ssl.keyStorePassword", "multisala");
+			System.setProperty("javax.net.ssl.trustStore", certPath + "clientTrust");
+			System.setProperty("javax.net.ssl.trustStorePassword", "multisala");
+			
 			//TODO Recupero ref da codebase se lookup fallisce
 			IAuthServer auth = (IAuthServer) cxt1.lookup("AuthServer");
 			bootServer = new BootstrapServer(auth, cxt1, cxt2);

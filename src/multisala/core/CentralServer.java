@@ -4,12 +4,10 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.Socket;
 import java.rmi.MarshalledObject;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.activation.Activatable;
 import java.rmi.activation.ActivationException;
 import java.rmi.activation.ActivationID;
-import java.rmi.registry.LocateRegistry;
 import java.rmi.server.RMIClientSocketFactory;
 import java.rmi.server.Unreferenced;
 import java.sql.Connection;
@@ -81,6 +79,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setString(2, password);
 			query.executeUpdate();
 			pendingUsers.add(user);
+			new Notifier().start();
 		} finally {
 			if (query != null)
 				query.close();
@@ -287,27 +286,24 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 	}
 	
 	@Override
-	public synchronized void adminConnected(IAdminMS admin) {
+	public synchronized void adminConnected(IAdminMS admin) throws RemoteException {
 		administrators.add(admin);
-		try {
-			notifyAdmins();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		if (!pendingUsers.isEmpty())
+			new Notifier().start();
+		System.out.println("Notifier lanciato");
 	}
 
 	@Override
-	public synchronized void adminDisconnected(IAdminMS admin) {
+	public synchronized void adminDisconnected(IAdminMS admin) throws RemoteException {
 		administrators.remove(admin);
 	}
 	
 	@Override
 	public void unreferenced() {
 		try {
-			LocateRegistry.getRegistry(1098).unbind("CentralServer");
 			inactive(getID());
 			dbConnection.close();
-		} catch (RemoteException | NotBoundException | ActivationException | SQLException e) {
+		} catch (RemoteException | ActivationException | SQLException e) {
 			e.printStackTrace();
 		}
 		System.gc();
@@ -326,19 +322,6 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			if (query != null)
 				query.close();
 		}
-	}
-
-	private void notifyAdmins() throws SQLException {
-		List<String> confirmedUsers = new Vector<String>();
-		for(IAdminMS admin : administrators) {
-			try {
-				confirmedUsers = admin.confirmUsers(pendingUsers);
-				break;
-			} catch (RemoteException e) {
-				administrators.remove(admin);
-			}
-		}
-		updateUsers(confirmedUsers);
 	}
 	
 	private void updateUsers(List<String> confirmedUsers) throws SQLException {
@@ -369,19 +352,44 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setInt(1, sh.getId());
 			ResultSet rs = query.executeQuery();
 			if (rs.next() && rs.getInt("free_seats") == tickets)
-				for (IAdminMS admin : administrators) {
-					try {
-						admin.showSoldOut(sh);
-						break;
-					} catch (RemoteException e) {
-						administrators.remove(admin);
-					}
-				}
+				new Notifier(sh).run();
 			else if (rs.getInt("free_seats") < tickets)
 				throw new ReservationException("Posti liberi insufficienti");
 		} finally {
 			if (query != null)
 				query.close();
+		}
+	}
+	
+	private class Notifier extends Thread {
+		
+		private Show sh;
+		
+		public Notifier() {
+			super();
+		}
+		
+		public Notifier(Show sh) {
+			this.sh = sh;
+		}
+		
+		@Override
+		public void run() {
+			for (IAdminMS admin : administrators) {
+				try {
+					if (sh != null)
+						admin.showSoldOut(sh);
+					else {
+						List<String> confirmedUsers = admin.confirmUsers(pendingUsers);
+						updateUsers(confirmedUsers);
+					}
+					break;
+				} catch (RemoteException e) {
+					administrators.remove(admin);
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	

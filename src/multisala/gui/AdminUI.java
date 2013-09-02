@@ -22,6 +22,7 @@ public class AdminUI extends UserUI {
 		super(agent);
 		this.agent = agent;
 		UnicastRemoteObject.exportObject(agent, 6000);
+		agent.adminConnected();
 	}
 	
 	@Override

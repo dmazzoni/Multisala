@@ -27,7 +27,6 @@ public class RegistrationPanel extends LoginPanel {
 		String username = userField.getText();
 		try {
 			parent.getAgent().register(username, new String(passField.getPassword()));
-			parent.setStatus("Richiesta di registrazione effettuata con successo");
 		} catch (AccountException e) {
 			messageLabel.setText(e.getMessage());
 		}

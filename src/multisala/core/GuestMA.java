@@ -72,6 +72,7 @@ public class GuestMA extends AbstractAgent implements IGuest {
 	public void register(String user, String password) throws AccountException {
 		try {
 			centralServer.register(user, password);
+			window.setStatus("Richiesta di registrazione effettuata con successo");
 		} catch (RemoteException | SQLException e) {
 			JOptionPane.showMessageDialog(window, e);
 		}

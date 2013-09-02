@@ -352,7 +352,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setInt(1, sh.getId());
 			ResultSet rs = query.executeQuery();
 			if (rs.next() && rs.getInt("free_seats") == tickets)
-				new Notifier(sh).run();
+				new Notifier(sh).start();
 			else if (rs.getInt("free_seats") < tickets)
 				throw new ReservationException("Posti liberi insufficienti");
 		} finally {

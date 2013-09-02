@@ -105,9 +105,10 @@ public class ReservationManagementPanel extends JPanel {
 				res = new Reservation(0, sh, parentWindow.getAgent().getUsername(), seats);
 				parentWindow.getAgent().insertReservation(res);
 			} else {
-				res.setSeats(seats);
-				parentWindow.getAgent().editReservation(res);
+				Reservation updated = new Reservation(res.getId(), res.getShow(), res.getUser(), seats);
+				parentWindow.getAgent().editReservation(res, updated);
 			}
+			parentTab.updateView();
 			parentWindow.tabbedView.setSelectedComponent(parentTab);
 			parentWindow.tabbedView.remove(this);
 		} catch (NumberFormatException e) {

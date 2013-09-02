@@ -11,7 +11,6 @@ public class AllReservationsPanel extends ReservationPanel {
 	public AllReservationsPanel(AdminUI parent) {
 		super(parent);
 		this.parent = parent;
-		updateView();
 	}
 	
 	@Override

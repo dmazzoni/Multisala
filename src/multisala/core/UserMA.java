@@ -71,9 +71,9 @@ public class UserMA extends GuestMA implements IUser {
 	 * @param updated la prenotazione col numero di posti aggiornato
 	 */
 	@Override
-	public void editReservation(Reservation updated) throws ReservationException {
+	public void editReservation(Reservation current, Reservation updated) throws ReservationException {
 		try {
-			centralServer.editReservation(updated);
+			centralServer.editReservation(current, updated);
 			window.setStatus("Prenotazione aggiornata con successo");
 		} catch (RemoteException | SQLException e) {
 			JOptionPane.showMessageDialog(window, e);

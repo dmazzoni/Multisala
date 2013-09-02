@@ -23,6 +23,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.security.auth.login.AccountException;
+
+import multisala.exceptions.ReservationException;
+
 public class CentralServer extends Activatable implements ICentralServer, Unreferenced {
 
 	private Connection dbConnection;
@@ -35,7 +39,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		Class.forName("org.sqlite.JDBC");
 		dbConnection = DriverManager.getConnection("jdbc:sqlite:multisala.db");
 		administrators = new HashSet<IAdminMS>();
-		pendingUsers = new Vector<String>();
+		initPendingUsers();
 	}
 	
 	@Override
@@ -63,9 +67,14 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 	}
 
 	@Override
-	public synchronized void register(String user, String password) throws RemoteException, SQLException {
+	public synchronized void register(String user, String password) throws AccountException, RemoteException, SQLException {
 		PreparedStatement query = null;
 		try {
+			query = dbConnection.prepareStatement("SELECT * FROM users WHERE user_id = ?");
+			query.setString(1, user);
+			ResultSet rs = query.executeQuery();
+			if(rs.next())
+				throw new AccountException("Nome utente non disponibile");
 			query = dbConnection.prepareStatement("INSERT OR ROLLBACK INTO users " +
 					"VALUES (?, ?, 'user', 0)");
 			query.setString(1, user);
@@ -125,10 +134,11 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 	}
 
 	@Override
-	public synchronized void insertReservation(Reservation res) throws RemoteException, SQLException {
+	public synchronized void insertReservation(Reservation res) throws RemoteException, ReservationException, SQLException {
 		PreparedStatement query1 = null;
 		PreparedStatement query2 = null;
 		try {
+			checkFreeSeats(res);
 			dbConnection.setAutoCommit(false);
 			query1 = dbConnection.prepareStatement("INSERT INTO reservations " +
 					"VALUES (NULL, ?, ?, ?)");
@@ -142,7 +152,6 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query2.setInt(2, res.getShow().getId());
 			query2.executeUpdate();
 			dbConnection.commit();
-			checkFreeSeats(res.getShow());
 		} catch (SQLException e) {
 			dbConnection.rollback();
 			throw e;
@@ -156,10 +165,13 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 	}
 
 	@Override
-	public synchronized void editReservation(Reservation updated) throws RemoteException, SQLException {
+	public synchronized void editReservation(Reservation current, Reservation updated) throws RemoteException, ReservationException, SQLException {
 		PreparedStatement query1 = null;
 		PreparedStatement query2 = null;
 		try {
+			int ticketDiff = updated.getSeats() - current.getSeats();
+			if(ticketDiff > 0)
+				checkFreeSeats(updated.getShow(), ticketDiff);
 			dbConnection.setAutoCommit(false);
 			query1 = dbConnection.prepareStatement("UPDATE shows SET free_seats = free_seats + " +
 					"((SELECT seats FROM reservations WHERE reservation_id = ?) - ?)");
@@ -171,7 +183,6 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query2.setInt(2, updated.getId());
 			query2.executeUpdate();
 			dbConnection.commit();
-			checkFreeSeats(updated.getShow());
 		} catch (SQLException e) { 
 			dbConnection.rollback();
 			throw e;
@@ -260,15 +271,15 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 	}
 
 	@Override
-	public synchronized void sellTickets(Show sh, int tickets) throws RemoteException, SQLException {
+	public synchronized void sellTickets(Show sh, int tickets) throws RemoteException, ReservationException, SQLException {
 		PreparedStatement query = null;
 		try {
+			checkFreeSeats(sh, tickets);
 			query = dbConnection.prepareStatement("UPDATE OR ROLLBACK shows " +
 					"SET free_seats = free_seats - ? WHERE show_id = ?");
 			query.setInt(1, tickets);
 			query.setInt(2, sh.getId());
 			query.executeUpdate();
-			checkFreeSeats(sh);
 		} finally {
 			if (query != null)
 				query.close();
@@ -301,6 +312,21 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 		System.gc();
 	}
+	
+	private void initPendingUsers() throws SQLException {
+		pendingUsers = new Vector<String>();
+		PreparedStatement query = null;
+		try {
+			query = dbConnection.prepareStatement("SELECT user_id FROM users WHERE approved = 0");
+			ResultSet rs = query.executeQuery();
+			while (rs.next()) {
+				pendingUsers.add(rs.getString("user_id"));
+			}
+		} finally {
+			if (query != null)
+				query.close();
+		}
+	}
 
 	private void notifyAdmins() throws SQLException {
 		List<String> confirmedUsers = new Vector<String>();
@@ -332,13 +358,17 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 	
-	private void checkFreeSeats(Show sh) throws SQLException {
+	private void checkFreeSeats(Reservation res) throws ReservationException, SQLException {
+		checkFreeSeats(res.getShow(), res.getSeats());
+	}
+	
+	private void checkFreeSeats(Show sh, int tickets) throws ReservationException, SQLException {
 		PreparedStatement query = null;
 		try {
 			query = dbConnection.prepareStatement("SELECT free_seats FROM shows WHERE show_id = ?");
 			query.setInt(1, sh.getId());
 			ResultSet rs = query.executeQuery();
-			if (rs.next() && rs.getInt("free_seats") == 0)
+			if (rs.next() && rs.getInt("free_seats") == tickets)
 				for (IAdminMS admin : administrators) {
 					try {
 						admin.showSoldOut(sh);
@@ -347,6 +377,8 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 						administrators.remove(admin);
 					}
 				}
+			else if (rs.getInt("free_seats") < tickets)
+				throw new ReservationException("Posti liberi insufficienti");
 		} finally {
 			if (query != null)
 				query.close();

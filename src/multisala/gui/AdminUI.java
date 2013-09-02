@@ -49,6 +49,7 @@ public class AdminUI extends UserUI {
 			@Override
             public void actionPerformed(ActionEvent e) {
 				ReservationPanel rPanel = new ReservationPanel(AdminUI.this);
+				rPanel.updateView();
 				AdminUI.this.tabbedView.addTab("Prenotazioni", rPanel);
 				AdminUI.this.tabbedView.setSelectedComponent(rPanel);
 				AdminUI.this.repaint();
@@ -60,6 +61,7 @@ public class AdminUI extends UserUI {
 			@Override
             public void actionPerformed(ActionEvent e) {
 				AllReservationsPanel rPanel = new AllReservationsPanel(AdminUI.this);
+				rPanel.updateView();
 				AdminUI.this.tabbedView.addTab("Prenotazioni", rPanel);
 				AdminUI.this.tabbedView.setSelectedComponent(rPanel);
 				AdminUI.this.repaint();
@@ -70,7 +72,8 @@ public class AdminUI extends UserUI {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ShowManagementPanel sPanel = new ShowManagementPanel(AdminUI.this);
+				AbstractListPanel scheduleTab = (AbstractListPanel) AdminUI.this.tabbedView.getComponentAt(0);
+				ShowManagementPanel sPanel = new ShowManagementPanel(AdminUI.this, scheduleTab);
 				AdminUI.this.tabbedView.addTab("Nuovo spettacolo", sPanel);
 				AdminUI.this.tabbedView.setSelectedComponent(sPanel);
 				AdminUI.this.repaint();

@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import multisala.gui.AbstractListPanel;
 import multisala.gui.AdminUI;
 import multisala.gui.ConfirmUsersPanel;
 import multisala.gui.ShowManagementPanel;
@@ -149,7 +150,8 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 				". Inserire un nuovo spettacolo?";
 		int result = JOptionPane.showConfirmDialog(window, message, "Posti esauriti", JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
-			ShowManagementPanel sPanel = new ShowManagementPanel((AdminUI) window, sh.getTitle());
+			AbstractListPanel scheduleTab = (AbstractListPanel) window.getTabbedView().getComponentAt(0);
+			ShowManagementPanel sPanel = new ShowManagementPanel((AdminUI) window, scheduleTab, sh.getTitle());
 			window.getTabbedView().addTab("Nuovo spettacolo", sPanel);
 			window.getTabbedView().setSelectedComponent(sPanel);
 		}

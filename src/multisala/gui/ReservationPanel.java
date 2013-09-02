@@ -29,7 +29,6 @@ public class ReservationPanel extends AbstractListPanel {
 		this.parent = parent;
 		this.popupMenu = createPopupMenu();
 		this.list.setComponentPopupMenu(popupMenu);
-		updateView();
 		initView();
 	}
 	

@@ -90,7 +90,7 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 				for (int i = 0; i < selection.length; i++) {
 					selection[i] = list.convertRowIndexToModel(selection[i]);
 					Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection[i]);
-					ShowManagementPanel sPanel = new ShowManagementPanel(parent, sh);
+					ShowManagementPanel sPanel = new ShowManagementPanel(parent, AdminSchedulePanel.this, sh);
 					parent.tabbedView.addTab("Modifica spettacolo", sPanel);
 					parent.tabbedView.setSelectedComponent(sPanel);
 				}

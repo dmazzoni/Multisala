@@ -32,7 +32,4 @@ public class Reservation implements Serializable {
 		return seats;
 	}
 	
-	public void setSeats(int seats) {
-		this.seats = seats;
-	}
 }

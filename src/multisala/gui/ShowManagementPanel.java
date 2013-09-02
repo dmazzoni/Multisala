@@ -22,7 +22,8 @@ import multisala.core.Show;
 
 public class ShowManagementPanel extends JPanel {
 
-	private AdminUI parent;
+	private AdminUI parentWindow;
+	private AbstractListPanel parentTab;
 	private Show sh;
 	
 	private JTextField titleField;
@@ -33,13 +34,14 @@ public class ShowManagementPanel extends JPanel {
 	private JLabel messageLabel;
 	private JButton btnSubmit;
 	
-	public ShowManagementPanel(AdminUI parent) {
-		this.parent = parent;
+	public ShowManagementPanel(AdminUI parentWindow, AbstractListPanel parentTab) {
+		this.parentWindow = parentWindow;
+		this.parentTab = parentTab;
 		initView();
 	}
 	
-	public ShowManagementPanel(AdminUI parent, Show sh) {
-		this(parent);
+	public ShowManagementPanel(AdminUI parentWindow, AbstractListPanel parentTab, Show sh) {
+		this(parentWindow, parentTab);
 		this.sh = sh;
 		titleField.setText(sh.getTitle());
 		dateField.setText(sh.getDate());
@@ -48,8 +50,8 @@ public class ShowManagementPanel extends JPanel {
 		seatsField.setText(sh.getFreeSeats() + "");
 	}
 	
-	public ShowManagementPanel(AdminUI parent, String showTitle) {
-		this(parent);
+	public ShowManagementPanel(AdminUI parentWindow, AbstractListPanel parentTab, String showTitle) {
+		this(parentWindow, parentTab);
 		titleField.setText(showTitle);
 	}
 
@@ -58,22 +60,23 @@ public class ShowManagementPanel extends JPanel {
 			int seats = Integer.parseInt(seatsField.getText());
 			if (sh == null) {
 				sh = new Show(0, titleField.getText(), dateField.getText(), timeField.getText(), theaterField.getText(), seats);
-				parent.getAgent().insertShow(sh);
+				parentWindow.getAgent().insertShow(sh);
 			} else {
 				int id = sh.getId();
 				sh = new Show(id, titleField.getText(), dateField.getText(), timeField.getText(), theaterField.getText(), seats);
-				parent.getAgent().editShow(sh);
+				parentWindow.getAgent().editShow(sh);
 			}
-			parent.tabbedView.setSelectedIndex(0);
-			parent.tabbedView.remove(this);
+			parentTab.updateView();
+			parentWindow.tabbedView.setSelectedComponent(parentTab);
+			parentWindow.tabbedView.remove(this);
 		} catch (NumberFormatException e) {
 			messageLabel.setText("Numero posti non valido");
 		}
 	}
 	
 	private void cancel() {
-		parent.tabbedView.setSelectedIndex(0);
-		parent.tabbedView.remove(this);
+		parentWindow.tabbedView.setSelectedComponent(parentTab);
+		parentWindow.tabbedView.remove(this);
 	}
 	
 	private void initView() {

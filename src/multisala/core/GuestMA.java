@@ -23,10 +23,7 @@ public class GuestMA extends AbstractAgent implements IGuest {
 	}
 	
 	/**
-	 * Mostra la programmazione (lista di spettacoli) per un giorno specificato.
-	 * @param dt la data del calendario di cui si vuole visualizzare la programmazione
-	 * @return La lista di spettacoli in programma per quella data.
-	 * @see Show
+	 * {@inheritDoc}
 	 */
 	@Override
 	public List<Show> getSchedule(Calendar dt) {
@@ -45,11 +42,7 @@ public class GuestMA extends AbstractAgent implements IGuest {
 	}
 
 	/**
-	 * Effettua il login invocando l'apposito metodo del server di autenticazione.
-	 * @param user il nome utente
-	 * @param password la password
-	 * @return L'agente mobile per il corrispondente tipo di utente.
-	 * @exception LoginException in caso di dati di login non validi.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public AbstractAgent login(String user, String password) throws LoginException {
@@ -63,10 +56,7 @@ public class GuestMA extends AbstractAgent implements IGuest {
 	}
 
 	/**
-	 * Effettua la richiesta di registrazione di un nuovo utente, invocando
-	 * l'apposito metodo del server centrale.
-	 * @param user il nome utente
-	 * @param password la password
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void register(String user, String password) throws AccountException {

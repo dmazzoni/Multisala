@@ -25,8 +25,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 
 	/**
-	 * Inserisce un nuovo spettacolo.
-	 * @param sh lo spettacolo da inserire
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void insertShow(Show sh) {
@@ -39,8 +38,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 
 	/**
-	 * Modifica uno spettacolo esistente.
-	 * @param updated lo spettacolo con i dati modificati
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void editShow(Show updated) {
@@ -53,8 +51,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 
 	/**
-	 * Elimina uno spettacolo specificato.
-	 * @param id l'id dello spettacolo da eliminare
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void deleteShow(int id) {
@@ -66,11 +63,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 
 	/**
-	 * Permette di effettuare la vendita diretta alla cassa,
-	 * per i clienti che acquistano i biglietti per uno spettacolo
-	 * senza aver effettuato la prenotazione.
-	 * @param sh lo spettacolo di cui si vogliono vendere i biglietti
-	 * @param tickets il numero di biglietti richiesti
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void sellTickets(Show sh, int tickets) {
@@ -82,9 +75,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 
 	/**
-	 * Mostra all'amministratore tutte le prenotazioni presenti nel sistema.
-	 * @return La lista di prenotazioni.
-	 * @see Reservation
+	 * {@inheritDoc}
 	 */
 	@Override
 	public List<Reservation> getAllReservations() {
@@ -113,7 +104,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 	
 	/**
-	 * Segnala al server centrale che un utente amministratore si è connesso.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void adminConnected() {
@@ -125,12 +116,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 	
 	/**
-	 * Invocato dal server centrale per notificare all'amministratore la presenza 
-	 * di nuovi utenti che hanno richiesto la registrazione nel sistema. 
-	 * Ne mostra l'elenco in una finestra di dialogo e permette di 
-	 * selezionare quali approvare.
-	 * @param users la lista degli utenti in attesa di conferma
-	 * @return La lista degli utenti approvati.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public List<String> confirmUsers(List<String> users) throws RemoteException {
@@ -140,9 +126,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 	
 	/**
-	 * Invocato dal server centrale per informare l'amministratore che
-	 * sono stati venduti tutti i biglietti per un dato spettacolo.
-	 * @param sh lo spettacolo di cui sono esauriti i posti disponibili
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void showSoldOut(Show sh) throws RemoteException {
@@ -158,14 +142,21 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 	
 	/**
-	 * Necessario per la gestione dell'insieme di utenti connessi
-	 * lato server centrale.
+	 * Necessario per la gestione dell'insieme di amministratori 
+	 * connessi al server centrale.
+	 * @param obj l'oggetto da confrontare
+	 * @return <code>true</code> se <b>obj</b> equivale a <b>this</b>, <code>false</code> altrimenti
 	 */
 	@Override
 	public boolean equals(Object obj) {
 		return (obj instanceof AdminMS && ((AdminMS) obj).username.equals(this.username));
 	}
 	
+	/**
+	 * Restituisce l'hashcode del mobile server, basandosi sul
+	 * nome utente dell'amministratore.
+	 * @return l'hashcode del mobile server
+	 */
 	@Override
 	public int hashCode() {
 		return username.hashCode();

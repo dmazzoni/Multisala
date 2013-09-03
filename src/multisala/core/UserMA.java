@@ -28,8 +28,7 @@ public class UserMA extends GuestMA implements IUser {
 	}
 
 	/**
-	 * Fornisce il nome dell'utente loggato.
-	 * @return Il nome utente.
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getUsername() {
@@ -37,9 +36,7 @@ public class UserMA extends GuestMA implements IUser {
 	}
 	
 	/**
-	 * Fornisce l'elenco di prenotazioni effettuate dall'utente corrente.
-	 * @return La lista delle prenotazioni.
-	 * @see Reservation
+	 * {@inheritDoc}
 	 */
 	@Override
 	public List<Reservation> getReservations() {
@@ -53,8 +50,7 @@ public class UserMA extends GuestMA implements IUser {
 	}
 
 	/**
-	 * Inserisce una nuova prenotazione per l'utente.
-	 * @param res la prenotazione da inserire 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void insertReservation(Reservation res) throws ReservationException {
@@ -67,8 +63,7 @@ public class UserMA extends GuestMA implements IUser {
 	}
 
 	/**
-	 * Modifica il numero di posti di una prenotazione dell'utente.
-	 * @param updated la prenotazione col numero di posti aggiornato
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void editReservation(Reservation current, Reservation updated) throws ReservationException {
@@ -81,8 +76,7 @@ public class UserMA extends GuestMA implements IUser {
 	}
 
 	/**
-	 * Elimina una prenotazione specificata.
-	 * @param id l'id della prenotazione da eliminare
+	 * {@inheritDoc}
 	 */
 	@Override
 	public void deleteReservation(int id) {
@@ -95,11 +89,7 @@ public class UserMA extends GuestMA implements IUser {
 	}
 
 	/**
-	 * Ottiene dal server di autenticazione un nuovo agente mobile di tipo "ospite" 
-	 * e lo ritorna, permettendo al chiamante di sostituire il corrente agente del client
-	 * registrato con quest'ultimo.
-	 * @return L'agente mobile per il client non loggato.
-	 * 
+	 * {@inheritDoc}
 	 */
 	@Override
 	public IGuest logout() {

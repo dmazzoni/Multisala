@@ -19,9 +19,22 @@ import javax.rmi.ssl.SslRMIClientSocketFactory;
 import javax.rmi.ssl.SslRMIServerSocketFactory;
 import javax.security.auth.login.LoginException;
 
+/**
+ * Implementazione del server di autenticazione attivabile.
+ * @author Giacomo Annaloro
+ * @author Davide Mazzoni
+ *
+ */
 public class AuthServer extends Activatable implements IAuthServer, Unreferenced {
 
+	/**
+	 * La referenza al server centrale.
+	 */
 	private ICentralServer centralServer;
+	
+	/**
+	 * La connessione al database.
+	 */
 	private Connection dbConnection;
 
 	public AuthServer(ActivationID id, MarshalledObject<ICentralServer> centralServer) 
@@ -33,6 +46,9 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 		LocateRegistry.getRegistry(1098).rebind("AuthServer", this);
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AbstractAgent login(String user, String password) 
 			throws LoginException, RemoteException, SQLException {
@@ -56,11 +72,18 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IGuest login() throws RemoteException {
 		return new GuestMA(this, centralServer);
 	}
 
+	/**
+	 * Deregistra il server dal servizio di naming e lo disattiva,
+	 * rendendolo disponibile per la GC locale.
+	 */
 	@Override
 	public void unreferenced() {
 		try {

@@ -5,7 +5,7 @@ import java.io.Serializable;
 import multisala.gui.AbstractUI;
 
 /**
- * Generico agente mobile che implementa le funzionalità comuni 
+ * Generico agente mobile che implementa le funzioni comuni 
  * tra i diversi agenti inviati ai client.
  *  @author Davide Mazzoni
  *  @author Giacomo Annaloro

@@ -65,7 +65,7 @@ public class GuestSchedulePanel extends AbstractListPanel {
 	 * Aggiorna la vista con i dati attuali
 	 */
 	@Override
-	protected void updateView() {
+	public void updateView() {
 		updateSchedule(0);
 	}	
 

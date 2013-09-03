@@ -32,8 +32,13 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 		try {
 			centralServer.insertShow(sh);
 			window.setStatus("Spettacolo inserito con successo");
-		} catch (RemoteException | SQLException e) {
+		} catch (RemoteException e) {
 			JOptionPane.showMessageDialog(window, e);
+		} catch (SQLException e) {
+			int result = JOptionPane.showConfirmDialog(window, "Inserimento dello spettacolo fallito. Riprovare?",
+					"Errore", JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION)
+				insertShow(sh);
 		}
 	}
 
@@ -45,8 +50,13 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 		try {
 			centralServer.editShow(updated);
 			window.setStatus("Spettacolo aggiornato con successo");
-		} catch (RemoteException | SQLException e) {
+		} catch (RemoteException e) {
 			JOptionPane.showMessageDialog(window, e);
+		} catch (SQLException e) {
+			int result = JOptionPane.showConfirmDialog(window, "Modifica dello spettacolo fallita. Riprovare?",
+					"Errore", JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION)
+				editShow(updated);
 		}
 	}
 
@@ -57,8 +67,15 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	public void deleteShow(int id) {
 		try {
 			centralServer.deleteShow(id);
-		} catch (RemoteException | SQLException e) {
+			AbstractListPanel panel = (AbstractListPanel)window.getTabbedView().getComponentAt(0);
+			panel.updateView();
+		} catch (RemoteException e) {
 			JOptionPane.showMessageDialog(window, e);
+		} catch (SQLException e) {
+			int result = JOptionPane.showConfirmDialog(window, "Eliminazione dello spettacolo fallita. Riprovare?",
+					"Errore", JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION)
+				deleteShow(id);
 		}
 	}
 
@@ -69,8 +86,15 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	public void sellTickets(Show sh, int tickets) {
 		try {
 			centralServer.sellTickets(sh, tickets);
-		} catch (RemoteException | SQLException e) {
+			AbstractListPanel panel = (AbstractListPanel)window.getTabbedView().getComponentAt(0);
+			panel.updateView();
+		} catch (RemoteException e) {
 			JOptionPane.showMessageDialog(window, e);
+		} catch (SQLException e) {
+			int result = JOptionPane.showConfirmDialog(window, "Emissione biglietti fallita. Riprovare?",
+					"Errore", JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION)
+				sellTickets(sh, tickets);
 		}
 	}
 
@@ -145,7 +169,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	 * Necessario per la gestione dell'insieme di amministratori 
 	 * connessi al server centrale.
 	 * @param obj l'oggetto da confrontare
-	 * @return <code>true</code> se <b>obj</b> equivale a <b>this</b>, <code>false</code> altrimenti
+	 * @return <code>true</code> se <b>obj</b> equivale a <b>this</b>, <code>false</code> altrimenti.
 	 */
 	@Override
 	public boolean equals(Object obj) {
@@ -155,7 +179,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	/**
 	 * Restituisce l'hashcode del mobile server, basandosi sul
 	 * nome utente dell'amministratore.
-	 * @return l'hashcode del mobile server
+	 * @return L'hashcode del mobile server.
 	 */
 	@Override
 	public int hashCode() {

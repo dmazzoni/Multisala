@@ -62,6 +62,11 @@ public class ReservationManagementPanel extends JPanel {
 	private JLabel dateValue;
 	
 	/**
+	 * Numero di posti disponibili.
+	 */
+	private JLabel freeSeatsValue;
+	
+	/**
 	 * Campo per l'inserimento del numero di posti.
 	 */
 	private JTextField seatsField;
@@ -89,6 +94,7 @@ public class ReservationManagementPanel extends JPanel {
 		initView();
 		titleValue.setText(sh.getTitle());
 		dateValue.setText(sh.getDate() + " " + sh.getTime());
+		freeSeatsValue.setText(sh.getFreeSeats() + "");
 	}
 	
 	/**
@@ -192,9 +198,9 @@ public class ReservationManagementPanel extends JPanel {
 		lblFreeSeats.setFont(new Font("Dialog", Font.BOLD, 14));
 		panel_4.add(lblFreeSeats);
 		
-		JLabel FreeSeatsValue = new JLabel();
-		FreeSeatsValue.setFont(new Font("Dialog", Font.PLAIN, 14));
-		panel_4.add(FreeSeatsValue);
+		freeSeatsValue = new JLabel();
+		freeSeatsValue.setFont(new Font("Dialog", Font.PLAIN, 14));
+		panel_4.add(freeSeatsValue);
 		
 		Component verticalStrut_3 = Box.createVerticalStrut(20);
 		panel.add(verticalStrut_3);

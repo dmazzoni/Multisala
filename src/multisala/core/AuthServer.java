@@ -41,8 +41,9 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 			throws ClassNotFoundException, IOException, RemoteException, SQLException {
 		super(id, 12000, new SslRMIClientSocketFactory(), new SslRMIServerSocketFactory());
 		this.centralServer = centralServer.get();
+		String dbPath = System.getProperty("multisala.dbLocation");
 		Class.forName("org.sqlite.JDBC");
-		dbConnection = DriverManager.getConnection("jdbc:sqlite:multisala.db");
+		dbConnection = DriverManager.getConnection("jdbc:sqlite:" + dbPath + "multisala.db");
 		LocateRegistry.getRegistry(1098).rebind("AuthServer", this);
 	}
 	

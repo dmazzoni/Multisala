@@ -1,9 +1,15 @@
 package multisala.core;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.rmi.MarshalledObject;
 import java.rmi.NoSuchObjectException;
 import java.rmi.RemoteException;
+import java.rmi.activation.ActivationGroupID;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Properties;
 import java.util.Set;
@@ -66,13 +72,12 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 			System.setProperty("javax.net.ssl.trustStore", certPath + "clientTrust");
 			System.setProperty("javax.net.ssl.trustStorePassword", "multisala");
 			
-			//TODO Recupero ref da codebase se lookup fallisce
-			IAuthServer auth = (IAuthServer) cxt1.lookup("AuthServer");
+			IAuthServer auth = getAuthRef(cxt1);
+
 			bootServer = new BootstrapServer(auth, cxt1, cxt2);
-			
 			cxt1.rebind("BootstrapServer", bootServer);
 			cxt2.rebind("BootstrapServer", bootServer);
-		} catch (RemoteException | NamingException e) {
+		} catch (ClassNotFoundException | NamingException | IOException e) {
 			e.printStackTrace();
 		}
 	}
@@ -88,6 +93,26 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 		} catch (IOException e) {
 			return null;
 		}
+	}
+	
+	private static IAuthServer getAuthRef(InitialContext cxt) throws ClassNotFoundException, IOException {
+		IAuthServer auth = null;
+		File f = new File("authRef");
+		try {
+			auth = (IAuthServer) cxt.lookup("AuthServer");
+			if(!f.exists()) {
+				FileOutputStream fOutStream = new FileOutputStream(f);
+				ObjectOutputStream oOutStream = new ObjectOutputStream(fOutStream);
+				oOutStream.writeObject(auth);
+				oOutStream.close();
+			}
+		} catch (NamingException e) {
+			FileInputStream fInStream = new FileInputStream(f);
+			ObjectInputStream oInStream = new ObjectInputStream(fInStream);
+			auth = (IAuthServer) oInStream.readObject();
+			oInStream.close();
+		}
+		return auth;
 	}
 
 	@Override

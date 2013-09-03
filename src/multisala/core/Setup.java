@@ -13,14 +13,15 @@ public final class Setup {
 	public static void main(String[] args) {
 		String groupPolicy = System.getProperty("multisala.policy");
 		String implCodebase = System.getProperty("multisala.codebase");
-		String path = System.getProperty("multisala.refLocation");
 		String certPath = System.getProperty("multisala.certLocation");
+		String dbPath = System.getProperty("multisala.dbLocation");
 		System.setSecurityManager(new RMISecurityManager());
 		try {
 			Properties group2Properties = new Properties();
 			group2Properties.put("java.security.policy", groupPolicy);
 			group2Properties.put("multisala.codebase", implCodebase);
 			group2Properties.put("java.class.path", "no_classpath");
+			group2Properties.put("multisala.dbLocation", dbPath);
 			
 			Properties group1Properties = new Properties();
 			group1Properties.put("javax.net.ssl.debug", "all");
@@ -31,6 +32,7 @@ public final class Setup {
 			group1Properties.put("java.security.policy", groupPolicy);
 			group1Properties.put("multisala.codebase", implCodebase);
 			group1Properties.put("java.class.path", "no_classpath");
+			group1Properties.put("multisala.dbLocation", dbPath);
 
 			// Registrazione dei gruppi o recupero del loro ID
 			ActivationGroupID groupID1 = getGroupID("group1", group1Properties);
@@ -42,41 +44,33 @@ public final class Setup {
 			IAuthServer authStub = (IAuthServer) Activatable.register(authDesc);
 			// Binding del server di autenticazione
 			LocateRegistry.getRegistry(1098).rebind("AuthServer", authStub);
-			// Backup su disco dello stub al server di autenticazione
-			saveObject(path + "AuthServer", authStub);
 			initDB();
 		}
 		catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	private static void saveObject(String path, Object obj) {
-		try {
-			FileOutputStream fStream = new FileOutputStream(path);
-			ObjectOutputStream oStream = new ObjectOutputStream(fStream);
-			oStream.writeObject(obj);
-			oStream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
+		
 	private static ActivationGroupID getGroupID(String path, Properties groupProperties) 
 			throws ActivationException, IOException, ClassNotFoundException {
 		ActivationGroupID groupID;
 		File f = new File(path);
 		
 		if (f.exists()) {
-			FileInputStream fStream = new FileInputStream(f);
-			ObjectInputStream oStream = new ObjectInputStream(fStream);
-			groupID = (ActivationGroupID) oStream.readObject();
-			oStream.close();
+			FileInputStream fInStream = new FileInputStream(f);
+			ObjectInputStream oInStream = new ObjectInputStream(fInStream);
+			groupID = (ActivationGroupID) oInStream.readObject();
+			oInStream.close();
 			return groupID;
 		}
 		ActivationGroupDesc groupDesc = new ActivationGroupDesc(groupProperties, null);
 		groupID = ActivationGroup.getSystem().registerGroup(groupDesc);
-		saveObject(path, groupID);
+		
+		FileOutputStream fOutStream = new FileOutputStream(path);
+		ObjectOutputStream oOutStream = new ObjectOutputStream(fOutStream);
+		oOutStream.writeObject(groupID);
+		oOutStream.close();
+		
 		return groupID;
 	}
 	

@@ -34,8 +34,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 	public CentralServer(ActivationID id, MarshalledObject<?> obj) 
 			throws ClassNotFoundException, IOException, RemoteException, SQLException {
 		super(id, 12001, new ClientSocketFactory(30000), null);
+		String dbPath = System.getProperty("multisala.dbLocation");
 		Class.forName("org.sqlite.JDBC");
-		dbConnection = DriverManager.getConnection("jdbc:sqlite:multisala.db");
+		dbConnection = DriverManager.getConnection("jdbc:sqlite:" + dbPath + "multisala.db");
 		administrators = new HashSet<IAdminMS>();
 		initPendingUsers();
 	}
@@ -232,8 +233,10 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setString(4, sh.getTheater());
 			query.executeUpdate();
 		} finally {
-			if (query != null)
-				query.close();
+			try {
+				if (query != null)
+					query.close();
+			} catch (SQLException e) {}
 		}
 	}
 
@@ -251,8 +254,10 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setInt(5, updated.getId());
 			query.executeUpdate();
 		} finally {
-			if (query != null)
-				query.close();
+			try {
+				if (query != null)
+					query.close();
+			} catch (SQLException e) {}
 		}
 	}
 
@@ -264,8 +269,10 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setInt(1, id);
 			query.executeUpdate();
 		} finally {
-			if (query != null)
-				query.close();
+			try {
+				if (query != null)
+					query.close();
+			} catch (SQLException e) {}
 		}
 	}
 
@@ -280,8 +287,10 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setInt(2, sh.getId());
 			query.executeUpdate();
 		} finally {
-			if (query != null)
-				query.close();
+			try {
+				if (query != null)
+					query.close();
+			} catch (SQLException e) {}
 		}
 	}
 	

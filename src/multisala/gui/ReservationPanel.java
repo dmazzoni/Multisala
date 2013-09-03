@@ -33,7 +33,7 @@ public class ReservationPanel extends AbstractListPanel {
 	}
 	
 	@Override
-	protected void updateView() {
+	public void updateView() {
 		List<Reservation> res = parent.getAgent().getReservations();
 		list.setModel(new ReservationTableModel(res));
 	}

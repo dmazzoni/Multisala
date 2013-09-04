@@ -83,7 +83,7 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 
 	/**
 	 * Deregistra il server dal servizio di naming e lo disattiva,
-	 * rendendolo disponibile per la GC locale.
+	 * rendendolo disponibile per la garbage collection locale.
 	 */
 	@Override
 	public void unreferenced() {

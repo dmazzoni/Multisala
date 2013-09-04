@@ -8,8 +8,19 @@ import java.rmi.registry.LocateRegistry;
 import java.sql.*;
 import java.util.Properties;
 
+/**
+ * Codice di setup del sistema di attivazione.
+ * @author Giacomo Annaloro
+ * @author Davide Mazzoni
+ */
 public final class Setup {
 
+	/**
+	 * Effettua il setup dei gruppi di attivazione e dei relativi server
+	 * attivabili, registrando il server di autenticazione sul registro
+	 * RMI lanciato da RMID. <br>Inizializza inoltre il database 
+	 * utilizzato dai server.
+	 */
 	public static void main(String[] args) {
 		String groupPolicy = System.getProperty("multisala.policy");
 		String implCodebase = System.getProperty("multisala.codebase");
@@ -50,7 +61,15 @@ public final class Setup {
 			e.printStackTrace();
 		}
 	}
-		
+	
+	/**
+	 * Restituisce l'ID del gruppo di attivazione richiesto. La referenza viene
+	 * recuperata da file in caso il gruppo sia stato precedentemente registrato,
+	 * altrimenti viene ottenuta effettuandone la registrazione presso RMID.
+	 * @param path il percorso in cui cercare la referenza al gruppo
+	 * @param groupProperties le proprietà con cui creare il descrittore del gruppo
+	 * @return L'ID del gruppo di attivazione.
+	 */
 	private static ActivationGroupID getGroupID(String path, Properties groupProperties) 
 			throws ActivationException, IOException, ClassNotFoundException {
 		ActivationGroupID groupID;
@@ -74,6 +93,10 @@ public final class Setup {
 		return groupID;
 	}
 	
+	/**
+	 * Inizializza il database SQLite utilizzato dal server centrale 
+	 * e dal server di autenticazione.
+	 */
 	private static void initDB()
 			throws ClassNotFoundException, SQLException {
 		Connection dbConnection;

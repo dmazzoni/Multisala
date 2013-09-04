@@ -20,7 +20,8 @@ import javax.rmi.ssl.SslRMIServerSocketFactory;
 import javax.security.auth.login.LoginException;
 
 /**
- * Implementazione del server di autenticazione attivabile.
+ * Implementazione del server di autenticazione attivabile, che utilizza
+ * socket SSL.
  * @author Giacomo Annaloro
  * @author Davide Mazzoni
  *

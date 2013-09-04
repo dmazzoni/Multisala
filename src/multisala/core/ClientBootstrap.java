@@ -8,10 +8,19 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 
+/**
+ * Codice di bootstrap del client minimale.
+ * @author Giacomo Annaloro
+ * @author Davide Mazzoni
+ *
+ */
 public class ClientBootstrap {
 
 	/**
-	 * @param args
+	 * Contatta il server di bootstrap per ottenere un'istanza dell'applicazione
+	 * lato client. <br>Il server è contattato utilizzando host e protocollo
+	 * specificati da linea di comando.
+	 * @param args l'IP del server di bootstrap e il protocollo per la comunicazione
 	 */
 	public static void main(String[] args) {
 		InitialContext cxt;

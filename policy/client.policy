@@ -1,0 +1,26 @@
+grant codeBase "file:///home/giacomo/workspace/Multisala/client/-" {
+            permission java.net.SocketPermission "192.168.1.5:8000", "connect";
+
+	    permission java.net.SocketPermission "192.168.1.5:12000", "connect";
+            permission java.net.SocketPermission "192.168.1.5:12001", "connect";
+
+	    //Permesso per esportare AdminMS
+	    permission java.net.SocketPermission "localhost:6000", "listen";
+
+	    //Permesso per accettare invocazioni dal central server
+	    permission java.net.SocketPermission "192.168.1.5:12001", "accept";
+
+
+	    permission java.net.SocketPermission "192.168.1.5:1024-", "connect";
+    }; 
+    
+grant codeBase "http://192.168.1.5:8000/" {
+            permission java.net.SocketPermission "192.168.1.5:12000", "connect";
+            permission java.net.SocketPermission "192.168.1.5:12001", "connect";
+
+	    //Permesso per esportare AdminMS
+	    permission java.net.SocketPermission "localhost:6000", "listen";
+
+	    //Permesso per accettare invocazioni dal central server
+	    permission java.net.SocketPermission "192.168.1.5:12001", "accept";
+    }; 

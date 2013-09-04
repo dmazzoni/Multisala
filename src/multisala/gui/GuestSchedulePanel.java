@@ -33,7 +33,7 @@ import java.awt.Color;
 public class GuestSchedulePanel extends AbstractListPanel {
 	
 	/**
-	 * La data odierna.
+	 * La data a cui si riferisce la programmazione.
 	 */
 	private Calendar currentDate;
 	

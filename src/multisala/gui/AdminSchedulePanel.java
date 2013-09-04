@@ -68,6 +68,8 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 					int seats = Integer.parseInt(seatsField.getText());
 					parent.getAgent().sellTickets(sh, seats);
 					seatsField.setText("");
+				} else {
+					parent.setStatus("Nessuno spettacolo selezionato");
 				}
 			}
 			

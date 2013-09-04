@@ -97,7 +97,7 @@ public abstract class AbstractUI extends JFrame implements Runnable {
 		JPanel statusBar = new JPanel(new GridLayout(1,2));
 		statusBar.setBorder(new BevelBorder(BevelBorder.LOWERED));
 		statusBar.setPreferredSize(new Dimension(this.getContentPane().getWidth(), 24));
-		statusLabel = new JLabel("status");
+		statusLabel = new JLabel();
 		statusLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		statusBar.add(statusLabel);
 		userLabel.setHorizontalAlignment(SwingConstants.RIGHT);

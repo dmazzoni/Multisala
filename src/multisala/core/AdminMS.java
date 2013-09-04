@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import javax.swing.JOptionPane;
 
+import multisala.exceptions.ReservationException;
 import multisala.gui.AbstractListPanel;
 import multisala.gui.AdminUI;
 import multisala.gui.ConfirmUsersPanel;
@@ -90,6 +91,8 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 			panel.updateView();
 		} catch (RemoteException e) {
 			JOptionPane.showMessageDialog(window, e);
+		} catch (ReservationException e) {
+			window.setStatus("Posti liberi insufficienti per la vendita");
 		} catch (SQLException e) {
 			int result = JOptionPane.showConfirmDialog(window, "Emissione biglietti fallita. Riprovare?",
 					"Errore", JOptionPane.YES_NO_OPTION);

@@ -8,6 +8,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.rmi.MarshalledObject;
 import java.rmi.NoSuchObjectException;
+import java.rmi.RMISecurityManager;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Properties;
@@ -19,6 +21,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
 import javax.rmi.PortableRemoteObject;
 
@@ -84,7 +87,7 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 		COSNaming = cxt2;
 		dgcTimer = new Timer();
 		dgcTasks = new ConcurrentHashMap<Integer, DGCTask>();
-		UnicastRemoteObject.exportObject(this);
+		UnicastRemoteObject.exportObject(this, 12002);
 		PortableRemoteObject.exportObject(this);
 		gotReference();
 	}
@@ -94,7 +97,9 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 	 */
 	public static void main(String[] args) {
         try {
-        	IBootstrapServer bootServer;
+        	if (System.getSecurityManager() == null)
+        		System.setSecurityManager(new RMISecurityManager());
+        	
 			Properties prop1 = new Properties();
 			prop1.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.rmi.registry.RegistryContextFactory");
 			prop1.put(Context.PROVIDER_URL, "rmi://localhost:1098");
@@ -114,7 +119,7 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 			
 			IAuthServer auth = getAuthRef(cxt1);
 
-			bootServer = new BootstrapServer(auth, cxt1, cxt2);
+			IBootstrapServer bootServer = new BootstrapServer(auth, cxt1, cxt2);
 			cxt1.rebind("BootstrapServer", bootServer);
 			cxt2.rebind("BootstrapServer", bootServer);
 		} catch (ClassNotFoundException | NamingException | IOException e) {
@@ -152,7 +157,7 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 	 * @return La referenza al server di autenticazione.
 	 * @see IAuthServer
 	 */
-	private static IAuthServer getAuthRef(InitialContext cxt) throws ClassNotFoundException, IOException {
+	private static IAuthServer getAuthRef(InitialContext cxt) throws ClassNotFoundException, IOException, NamingException {
 		IAuthServer auth = null;
 		File f = new File("authRef");
 		try {
@@ -163,7 +168,7 @@ public class BootstrapServer implements IBootstrapServer, IGarbageCollection {
 				oOutStream.writeObject(auth);
 				oOutStream.close();
 			}
-		} catch (NamingException e) {
+		} catch (NameNotFoundException e) {
 			FileInputStream fInStream = new FileInputStream(f);
 			ObjectInputStream oInStream = new ObjectInputStream(fInStream);
 			auth = (IAuthServer) oInStream.readObject();

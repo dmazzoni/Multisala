@@ -26,6 +26,7 @@ public final class Setup {
 		String implCodebase = System.getProperty("multisala.codebase");
 		String certPath = System.getProperty("multisala.certLocation");
 		String dbPath = System.getProperty("multisala.dbLocation");
+		String hostname = System.getProperty("java.rmi.server.hostname");
 		System.setSecurityManager(new RMISecurityManager());
 		try {
 			Properties group2Properties = new Properties();
@@ -33,6 +34,7 @@ public final class Setup {
 			group2Properties.put("multisala.codebase", implCodebase);
 			group2Properties.put("java.class.path", "no_classpath");
 			group2Properties.put("multisala.dbLocation", dbPath);
+			group2Properties.put("java.rmi.server.hostname", hostname);
 			
 			Properties group1Properties = new Properties();
 			group1Properties.put("javax.net.ssl.debug", "all");
@@ -44,6 +46,7 @@ public final class Setup {
 			group1Properties.put("multisala.codebase", implCodebase);
 			group1Properties.put("java.class.path", "no_classpath");
 			group1Properties.put("multisala.dbLocation", dbPath);
+			group1Properties.put("java.rmi.server.hostname", hostname);
 
 			// Registrazione dei gruppi o recupero del loro ID
 			ActivationGroupID groupID1 = getGroupID("group1", group1Properties);

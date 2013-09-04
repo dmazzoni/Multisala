@@ -226,11 +226,12 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		PreparedStatement query = null;
 		try {
 			query = dbConnection.prepareStatement("INSERT OR ROLLBACK INTO shows " +
-					"(title, show_date, show_time, theater) VALUES (?, ?, ?, ?)");
+					"(title, show_date, show_time, theater, free_seats) VALUES (?, ?, ?, ?, ?)");
 			query.setString(1, sh.getTitle());
 			query.setString(2, sh.getDate());
 			query.setString(3, sh.getTime());
 			query.setString(4, sh.getTheater());
+			query.setInt(5, sh.getFreeSeats());
 			query.executeUpdate();
 		} finally {
 			try {

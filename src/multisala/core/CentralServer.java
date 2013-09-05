@@ -25,10 +25,28 @@ import javax.security.auth.login.AccountException;
 
 import multisala.exceptions.ReservationException;
 
+/**
+ * Implementazione del server centrale attivabile, che utilizza socket
+ * con timeout per il lato client.
+ * @author Giacomo Annaloro
+ * @author Davide Mazzoni
+ *
+ */
 public class CentralServer extends Activatable implements ICentralServer, Unreferenced {
 
+	/**
+	 * La connessione al database.
+	 */
 	private Connection dbConnection;
+	
+	/**
+	 * L'insieme degli amministratori in linea.
+	 */
 	private Set<IAdminMS> administrators;
+	
+	/**
+	 * La lista degli utenti in attesa di conferma.
+	 */
 	private List<String> pendingUsers;
 	
 	public CentralServer(ActivationID id, MarshalledObject<?> obj) 
@@ -41,6 +59,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		initPendingUsers();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized List<Show> getSchedule(String dt) throws RemoteException, SQLException {
 		PreparedStatement query = null;
@@ -65,6 +86,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void register(String user, String password) throws AccountException, RemoteException, SQLException {
 		PreparedStatement query = null;
@@ -87,6 +111,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized List<Reservation> getReservations() throws RemoteException, SQLException {
 		Statement query = null;
@@ -103,6 +130,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized List<Reservation> getReservations(String user) throws RemoteException, SQLException {
 		PreparedStatement query = null;
@@ -133,6 +163,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void insertReservation(Reservation res) throws RemoteException, ReservationException, SQLException {
 		PreparedStatement query1 = null;
@@ -164,6 +197,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void editReservation(Reservation current, Reservation updated) throws RemoteException, ReservationException, SQLException {
 		PreparedStatement query1 = null;
@@ -195,6 +231,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void deleteReservation(int id) throws RemoteException, SQLException {
 		PreparedStatement query1 = null;
@@ -221,6 +260,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void insertShow(Show sh) throws RemoteException, SQLException {
 		PreparedStatement query = null;
@@ -241,6 +283,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void editShow(Show updated) throws RemoteException, SQLException {
 		PreparedStatement query = null;
@@ -262,6 +307,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void deleteShow(int id) throws RemoteException, SQLException {
 		PreparedStatement query = null;
@@ -277,6 +325,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void sellTickets(Show sh, int tickets) throws RemoteException, ReservationException, SQLException {
 		PreparedStatement query = null;
@@ -295,6 +346,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void adminConnected(IAdminMS admin) throws RemoteException {
 		administrators.add(admin);
@@ -303,11 +357,17 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		System.out.println("Notifier lanciato");
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public synchronized void adminDisconnected(IAdminMS admin) throws RemoteException {
 		administrators.remove(admin);
 	}
 	
+	/**
+	 * Disattiva il server, rendendolo disponibile per la garbage collection locale.
+	 */
 	@Override
 	public void unreferenced() {
 		try {
@@ -319,6 +379,9 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		System.gc();
 	}
 	
+	/**
+	 * Inizializza la lista degli utenti in attesa di approvazione.
+	 */
 	private void initPendingUsers() throws SQLException {
 		pendingUsers = new Vector<String>();
 		PreparedStatement query = null;
@@ -334,6 +397,11 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 	
+	/**
+	 * Attiva gli account confermati da un amministratore, ed elimina quelli non approvati.
+	 * @param confirmedUsers la lista degli utenti approvati
+	 * @see IAdminMS#confirmUsers(List)
+	 */
 	private void updateUsers(List<String> confirmedUsers) throws SQLException {
 		PreparedStatement query = dbConnection.prepareStatement("UPDATE OR ROLLBACK users SET approved = 1 " +
 				"WHERE user_id = ?");
@@ -351,10 +419,24 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 	
+	/**
+	 * Incapsula {@link CentralServer#checkFreeSeats(Show, int)}
+	 * @param res la prenotazione da verificare
+	 * @throws ReservationException in caso di prenotazione non ammissibile
+	 */
 	private void checkFreeSeats(Reservation res) throws ReservationException, SQLException {
 		checkFreeSeats(res.getShow(), res.getSeats());
 	}
 	
+	/**
+	 * Verifica se i posti disponibili per lo spettacolo specificato sono
+	 * sufficienti per emettere il numero di biglietti richiesto.<br>
+	 * Se i posti si esauriscono viene avviato il procedimento di
+	 * notifica ad un amministratore.
+	 * @param sh lo spettacolo
+	 * @param tickets il numero di biglietti richiesto
+	 * @throws ReservationException in caso non ci siano abbastanza posti disponibili
+	 */
 	private void checkFreeSeats(Show sh, int tickets) throws ReservationException, SQLException {
 		PreparedStatement query = null;
 		try {
@@ -371,18 +453,45 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 	
+	/**
+	 * Itera sull'insieme di amministratori in linea per effettuare una notifica.
+	 * @author Giacomo Annaloro
+	 * @author Davide Mazzoni
+	 *
+	 */
 	private class Notifier extends Thread {
 		
+		/**
+		 * Lo spettacolo i cui posti disponibili sono esauriti.
+		 */
 		private Show sh;
 		
+		/**
+		 * Costruisce un <code>Notifier</code> per comunicare ad un
+		 * amministratore la lista di utenti in attesa di conferma.
+		 */
 		public Notifier() {
 			super();
 		}
 		
+		/**
+		 * Costruisce un <code>Notifier</code> per comunicare ad un
+		 * amministratore l'esaurimento dei posti liberi per lo
+		 * spettacolo specificato.
+		 * @param sh lo spettacolo
+		 */
 		public Notifier(Show sh) {
 			this.sh = sh;
 		}
 		
+		/**
+		 * Itera sull'insieme di amministratori in linea per effettuare la notifica richiesta.<br>
+		 * Il procedimento termina al primo mobile server contattato con successo; in caso di 
+		 * amministratore non raggiungibile, esso viene rimosso dalla lista di quelli in linea.
+		 * @see CentralServer#administrators
+		 * @see IAdminMS#confirmUsers(List)
+		 * @see IAdminMS#showSoldOut(Show)
+		 */
 		@Override
 		public void run() {
 			for (IAdminMS admin : administrators) {
@@ -403,14 +512,32 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		}
 	}
 	
+	/**
+	 * La factory di socket con timeout per il lato client.
+	 * @author Giacomo Annaloro
+	 * @author Davide Mazzoni
+	 * 
+	 */
 	private static class ClientSocketFactory implements RMIClientSocketFactory, Serializable {
 
-		int timeout;
+		/**
+		 * Il timeout del client, espresso in millisecondi.
+		 */
+		private int timeout;
 		
+		/**
+		 * Costruisce una <code>ClientSocketFactory</code> con il timeout specificato.
+		 * @param timeout il timeout in millisecondi
+		 */
 		public ClientSocketFactory(int timeout) {
 			this.timeout = timeout;
 		}
 
+		/**
+		 * Crea un socket con timeout connesso all'interfaccia di rete specificata.
+		 * @param host l'indirizzo dell'host
+		 * @param port la porta
+		 */
 		@Override
 		public Socket createSocket(String host, int port) throws IOException {
 			Socket s = new Socket(host, port);
@@ -418,11 +545,18 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			return s;
 		}
 		
+		/**
+		 * @param obj l'oggetto da confrontare
+		 * @return <code>true</code> se <b>obj</b> equivale a <b>this</b>, <code>false</code> altrimenti.
+		 */
 		@Override
 		public boolean equals(Object obj) {
 			return (obj instanceof ClientSocketFactory && this.timeout == ((ClientSocketFactory) obj).timeout);
 		}
 		
+		/**
+		 * @return L'hashcode della socket factory, basato sul timeout impostato.
+		 */
 		@Override
 		public int hashCode() {
 			return timeout;

@@ -169,8 +169,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 	
 	/**
-	 * Necessario per la gestione dell'insieme di amministratori 
-	 * connessi al server centrale.
+	 * Necessario per la gestione dell'insieme di amministratori connessi al server centrale.
 	 * @param obj l'oggetto da confrontare
 	 * @return <code>true</code> se <b>obj</b> equivale a <b>this</b>, <code>false</code> altrimenti.
 	 */
@@ -180,9 +179,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	}
 	
 	/**
-	 * Restituisce l'hashcode del mobile server, basandosi sul
-	 * nome utente dell'amministratore.
-	 * @return L'hashcode del mobile server.
+	 * @return L'hashcode del mobile server, basato sul nome utente dell'amministratore.
 	 */
 	@Override
 	public int hashCode() {

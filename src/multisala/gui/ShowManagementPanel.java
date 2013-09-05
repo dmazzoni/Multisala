@@ -20,18 +20,64 @@ import javax.swing.SwingConstants;
 
 import multisala.core.Show;
 
+/**
+ * Il form di gestione di una prenotazione.
+ * Permette l'inserimento dei dati di una nuova prenotazione per un dato
+ * spettacolo, o la modifica dei dati di una prenotazione esistente.
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
+ */
 public class ShowManagementPanel extends JPanel {
 
+	/**
+	 * La finestra che ospita il pannello.
+	 */
 	private AdminUI parentWindow;
+	
+	/**
+	 * Il pannello da cui si è generato il form per la prenotazione.
+	 */
 	private AbstractListPanel parentTab;
+	
+	/**
+	 * Lo spettacolo di cui si desidera modificare i dati.
+	 */
 	private Show sh;
 	
+	
+	/**
+	 * Campo di testo per l'inserimento del titolo
+	 */
 	private JTextField titleField;
+	
+	/**
+	 * Campo di testo per l'inserimento della data
+	 */
 	private JTextField dateField;
+	
+	/**
+	 * Campo di testo per l'inserimento dell'ora
+	 */
 	private JTextField timeField;
+	
+	/**
+	 * Campo di testo per l'inserimento della sala
+	 */
 	private JTextField theaterField;
+	
+	/**
+	 * Campo di testo per l'inserimento del numero di posti totali
+	 */
 	private JTextField seatsField;
+	
+	/**
+	 * Messaggio informativo in caso di inserimento di un numero di posti non valido.
+	 */
 	private JLabel messageLabel;
+	
+	/**
+	 * Pulsante per confermare la modifica o l'inserimento dello spettacolo.
+	 */
 	private JButton btnSubmit;
 	
 	public ShowManagementPanel(AdminUI parentWindow, AbstractListPanel parentTab) {
@@ -55,6 +101,11 @@ public class ShowManagementPanel extends JPanel {
 		titleField.setText(showTitle);
 	}
 
+	/**
+	 * Conferma i dati inseriti: se il pannello è stato costruito senza aver specificato uno
+	 * spettacolo esistente chiama sull'agente mobile l'inserimento di un nuovo spettacolo, 
+	 * altrimenti invoca il metodo per la modifica dello spettacolo passato.
+	 */
 	private void submitShow() {
 		try {
 			int seats = Integer.parseInt(seatsField.getText());
@@ -74,11 +125,19 @@ public class ShowManagementPanel extends JPanel {
 		}
 	}
 	
+	/**
+	 * Chiude la scheda di modifica o inserimento dello spettacolo senza
+	 * salvare i cambiamenti apportati, e mostra in primo piano la scheda
+	 * da cui è stata originata.
+	 */
 	private void cancel() {
 		parentWindow.tabbedView.setSelectedComponent(parentTab);
 		parentWindow.tabbedView.remove(this);
 	}
 	
+	/**
+	 * Setta le proprietà dei componenti grafici e li dispone sul pannello.
+	 */
 	private void initView() {
 		setLayout(new BorderLayout(0, 0));
 		

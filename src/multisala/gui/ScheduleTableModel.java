@@ -7,9 +7,21 @@ import javax.swing.table.AbstractTableModel;
 
 import multisala.core.Show;
 
+/**
+ * Il modello per la tabella (JTable) che contiene i dati della programmazione.
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
+ */
 public class ScheduleTableModel extends AbstractTableModel implements Serializable {
 
+	/**
+	 * Gli spettacoli presenti nel database.
+	 */
 	private Show[] shows;
+	
+	/**
+	 * I nomi delle colonne della tabella.
+	 */
 	private final String[] colNames = {"Titolo", "Ora", "Sala", "Posti liberi"};
 	
 	public ScheduleTableModel(List<Show> shows) {
@@ -26,6 +38,9 @@ public class ScheduleTableModel extends AbstractTableModel implements Serializab
 		return colNames[columnIndex];
 	}
 	
+	/**
+	 * @return Il numero di righe della tabella, corrispondente al numero di spettacoli.
+	 */
 	@Override
 	public int getRowCount() {
 		return shows.length;
@@ -42,6 +57,11 @@ public class ScheduleTableModel extends AbstractTableModel implements Serializab
 		throw new IllegalArgumentException();
 	}
 
+	/**
+	 * Restituisce lo spettacolo che nella tabella si trova all'indice di riga specificato.
+	 * @param i l'indice della riga
+	 * @return Lo spettacolo selezionato.
+	 */
 	public Show getShowAtIndex(int i) {
 		return shows[i];
 	}

@@ -126,7 +126,8 @@ public class ReservationManagementPanel extends JPanel {
 	
 	/**
 	 * Chiude la scheda di modifica o inserimento della prenotazione senza
-	 * salvare i cambiamenti apportati.
+	 * salvare i cambiamenti apportati, e mostra in primo piano la scheda
+	 * da cui è stata originata.
 	 */
 	private void cancel() {
 		parentWindow.tabbedView.setSelectedComponent(parentTab);

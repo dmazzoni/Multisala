@@ -22,7 +22,7 @@ public final class Setup {
 	 * utilizzato dai server.
 	 */
 	public static void main(String[] args) {
-		String groupPolicy = System.getProperty("multisala.policy");
+		String groupPolicyLocation = System.getProperty("multisala.policyLocation");
 		String implCodebase = System.getProperty("multisala.codebase");
 		String certPath = System.getProperty("multisala.certLocation");
 		String dbPath = System.getProperty("multisala.dbLocation");
@@ -30,7 +30,7 @@ public final class Setup {
 		System.setSecurityManager(new RMISecurityManager());
 		try {
 			Properties group2Properties = new Properties();
-			group2Properties.put("java.security.policy", groupPolicy);
+			group2Properties.put("java.security.policy", groupPolicyLocation + "centralGroup.policy");
 			group2Properties.put("multisala.codebase", implCodebase);
 			group2Properties.put("java.class.path", "no_classpath");
 			group2Properties.put("multisala.dbLocation", dbPath);
@@ -41,7 +41,7 @@ public final class Setup {
 			group1Properties.put("javax.net.ssl.keyStorePassword", "multisala");
 			group1Properties.put("javax.net.ssl.trustStore", certPath + "serverTrust");
 			group1Properties.put("javax.net.ssl.trustStorePassword", "multisala");
-			group1Properties.put("java.security.policy", groupPolicy);
+			group1Properties.put("java.security.policy", groupPolicyLocation + "authGroup.policy");
 			group1Properties.put("multisala.codebase", implCodebase);
 			group1Properties.put("java.class.path", "no_classpath");
 			group1Properties.put("multisala.dbLocation", dbPath);

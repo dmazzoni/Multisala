@@ -25,26 +25,27 @@ public class ClientBootstrap {
 	public static void main(String[] args) {
 		InitialContext cxt;
 		Properties pr = new Properties();
-		if(args.length != 2)
-			throw new IllegalArgumentException("Utilizzo: multisala.core.ClientBootstrap <hostName> <protocol>");
-		if(!args[1].equalsIgnoreCase("jrmp") && !args[1].equalsIgnoreCase("iiop"))
+		if(args.length != 1)
+			throw new IllegalArgumentException("Utilizzo: multisala.core.ClientBootstrap <protocollo>");
+		if(!args[0].equalsIgnoreCase("jrmp") && !args[0].equalsIgnoreCase("iiop"))
 			throw new IllegalArgumentException("Protocollo: jrmp o iiop");
 		if (System.getSecurityManager() == null) 
 			System.setSecurityManager(new SecurityManager());
 		String certPath = System.getProperty("multisala.certLocation");
+		String serverAddress = System.getProperty("multisala.serverAddress");
 		System.setProperty("javax.net.ssl.keyStore", certPath + "clientKeys");
 		System.setProperty("javax.net.ssl.keyStorePassword", "multisala");
 		System.setProperty("javax.net.ssl.trustStore", certPath + "clientTrust");
 		System.setProperty("javax.net.ssl.trustStorePassword", "multisala");
 		
 		try {
-			if (args[1].equalsIgnoreCase("jrmp")) {
+			if (args[0].equalsIgnoreCase("jrmp")) {
 	            pr.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.rmi.registry.RegistryContextFactory");
-	            pr.put(Context.PROVIDER_URL, "rmi://" + args[0] + ":1098");
+	            pr.put(Context.PROVIDER_URL, "rmi://" + serverAddress + ":1098");
 	            cxt = new InitialContext(pr);
 			} else {
 				pr.put("java.naming.factory.initial", "com.sun.jndi.cosnaming.CNCtxFactory");
-		        pr.put("java.naming.provider.url", "iiop://" + args[0] + ":2098");
+		        pr.put("java.naming.provider.url", "iiop://" + serverAddress + ":2098");
 		        cxt = new InitialContext(pr);
 			}
 

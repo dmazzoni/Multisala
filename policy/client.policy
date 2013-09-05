@@ -1,15 +1,15 @@
 grant codeBase "file:///home/davide/workspace/Multisala/client/-" {
-	permission java.net.SocketPermission "192.168.1.3:8000", "connect";
-	permission java.net.SocketPermission "192.168.1.3:12000", "connect";
-	permission java.net.SocketPermission "192.168.1.3:12001", "connect";
+	permission java.net.SocketPermission "${multisala.serverAddress}:8000", "connect";
+	permission java.net.SocketPermission "${multisala.serverAddress}:12000", "connect";
+	permission java.net.SocketPermission "${multisala.serverAddress}:12001", "connect";
 
 	//Permesso per esportare AdminMS
 	permission java.net.SocketPermission "localhost:6000", "listen";
 
 	//Permesso per accettare invocazioni dal central server
-	permission java.net.SocketPermission "192.168.1.3:1024-", "accept";
+	permission java.net.SocketPermission "${multisala.serverAddress}:1024-", "accept";
 	
-	permission java.net.SocketPermission "192.168.1.3:1024-", "connect";
+	permission java.net.SocketPermission "${multisala.serverAddress}:1024-", "connect";
 
 	permission java.lang.RuntimePermission "exitVM.0";
 
@@ -17,7 +17,7 @@ grant codeBase "file:///home/davide/workspace/Multisala/client/-" {
 	permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledProtocols", "read";
 }; 
     
-grant codeBase "http://192.168.1.3:8000/" {
+grant codeBase "http://${multisala.serverAddress}:8000/" {
 	permission java.lang.RuntimePermission "exitVM.0";
 	permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledCipherSuites", "read";
 	permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledProtocols", "read";

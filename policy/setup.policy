@@ -1,18 +1,18 @@
-grant codeBase "file:///home/giacomo/workspace/Multisala/bin/-" {
+grant codeBase "file:///home/davide/git/Multisala/bin/-" {
 	permission java.util.PropertyPermission "user.dir", "read";
 	permission java.net.SocketPermission "localhost:1098", "connect";
-	permission java.net.SocketPermission "192.168.1.5:1098", "connect";
+	permission java.net.SocketPermission "${java.rmi.server.hostname}:1098", "connect";
 	permission java.io.FilePermission "group1", "write";
 	permission java.io.FilePermission "group2", "write";
-	permission java.io.FilePermission "/home/giacomo/workspace/Multisala/bin", "read";
-	permission java.io.FilePermission "/home/giacomo/workspace/Multisala/bin/multisala.db", "read,write,delete";
-	permission java.io.FilePermission "/home/giacomo/workspace/Multisala/bin/multisala.db-journal", "read,write,delete";
+	permission java.io.FilePermission "${user.dir}", "read";
+	permission java.io.FilePermission "${user.dir}/multisala.db", "read,write,delete";
+	permission java.io.FilePermission "${user.dir}/multisala.db-journal", "read,write,delete";
 	permission java.lang.RuntimePermission "accessClassInPackage.sun.rmi.server";
 }; 
 
-grant codeBase "file:///home/giacomo/public_html/-" {
+grant codeBase "file://${user.home}/public_html/-" {
 	permission java.util.PropertyPermission "user.dir", "read";
-	permission java.io.FilePermission "/home/giacomo/workspace/Multisala/bin", "read";
-	permission java.io.FilePermission "/home/giacomo/workspace/Multisala/bin/multisala.db", "read,write,delete";
-	permission java.io.FilePermission "/home/giacomo/workspace/Multisala/bin/multisala.db-journal", "read,write,delete";
+	permission java.io.FilePermission "${user.dir}", "read";
+	permission java.io.FilePermission "${user.dir}/multisala.db", "read,write,delete";
+	permission java.io.FilePermission "${user.dir}/multisala.db-journal", "read,write,delete";
 }; 

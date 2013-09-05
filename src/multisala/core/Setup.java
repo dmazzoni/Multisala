@@ -37,7 +37,6 @@ public final class Setup {
 			group2Properties.put("java.rmi.server.hostname", hostname);
 			
 			Properties group1Properties = new Properties();
-			group1Properties.put("javax.net.ssl.debug", "all");
 			group1Properties.put("javax.net.ssl.keyStore", certPath + "serverKeys");
 			group1Properties.put("javax.net.ssl.keyStorePassword", "multisala");
 			group1Properties.put("javax.net.ssl.trustStore", certPath + "serverTrust");
@@ -54,10 +53,13 @@ public final class Setup {
 			// Creazione dei descrittori e registrazione presso i gruppi
 			ActivationDesc centralDesc = new ActivationDesc(groupID2, "multisala.core.CentralServer", implCodebase, null);
 			ICentralServer centralStub = (ICentralServer) Activatable.register(centralDesc);
+			System.out.println("Server centrale registrato presso gruppo 2");
 			ActivationDesc authDesc = new ActivationDesc(groupID1, "multisala.core.AuthServer", implCodebase, new MarshalledObject<ICentralServer>(centralStub));
 			IAuthServer authStub = (IAuthServer) Activatable.register(authDesc);
+			System.out.println("Server di autenticazione registrato presso gruppo 1");
 			// Binding del server di autenticazione
 			LocateRegistry.getRegistry(1098).rebind("AuthServer", authStub);
+			System.out.println("Effettuata rebind del server di autenticazione sul registro RMI alla porta 1098");
 			initDB();
 		}
 		catch (Exception e) {
@@ -83,11 +85,12 @@ public final class Setup {
 			ObjectInputStream oInStream = new ObjectInputStream(fInStream);
 			groupID = (ActivationGroupID) oInStream.readObject();
 			oInStream.close();
+			System.out.println("ID del gruppo " + path + " recuperato da file");
 			return groupID;
 		}
 		ActivationGroupDesc groupDesc = new ActivationGroupDesc(groupProperties, null);
 		groupID = ActivationGroup.getSystem().registerGroup(groupDesc);
-		
+		System.out.println("Gruppo " + path + " registrato presso RMID");
 		FileOutputStream fOutStream = new FileOutputStream(path);
 		ObjectOutputStream oOutStream = new ObjectOutputStream(fOutStream);
 		oOutStream.writeObject(groupID);
@@ -130,5 +133,6 @@ public final class Setup {
 		dbStatement.executeUpdate("INSERT OR IGNORE INTO users values ('admin', 'admin', 'admin', 1)");
 		dbStatement.executeUpdate("INSERT OR IGNORE INTO users values ('james', 'cameron', 'user', 1)");
 		dbConnection.close();
+		System.out.println("Inizializzazione database completata");
 	}
 }

@@ -31,6 +31,11 @@ public class ClientBootstrap {
 			throw new IllegalArgumentException("Protocollo: jrmp o iiop");
 		if (System.getSecurityManager() == null) 
 			System.setSecurityManager(new SecurityManager());
+		String certPath = System.getProperty("multisala.certLocation");
+		System.setProperty("javax.net.ssl.keyStore", certPath + "clientKeys");
+		System.setProperty("javax.net.ssl.keyStorePassword", "multisala");
+		System.setProperty("javax.net.ssl.trustStore", certPath + "clientTrust");
+		System.setProperty("javax.net.ssl.trustStorePassword", "multisala");
 		
 		try {
 			if (args[1].equalsIgnoreCase("jrmp")) {

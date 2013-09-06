@@ -14,8 +14,17 @@ import multisala.core.AdminMS;
 import multisala.core.IAdmin;
 import multisala.core.IGuest;
 
+/**
+ * La finestra grafica dell'amministratore.
+ * @author Davide Mazzoni 
+ * @author Giacomo Annaloro
+ *
+ */
 public class AdminUI extends UserUI {
 
+	/**
+	 * L'agente mobile dell'amministratore, collegato alla corrente vista grafica.
+	 */
 	private AdminMS agent;
 	
 	public AdminUI(AdminMS agent) throws RemoteException {
@@ -38,6 +47,11 @@ public class AdminUI extends UserUI {
 		return tabbedView;
 	}
 	
+	/**
+	 * {@inheritDoc} <br>
+	 * Vengono aggiunti inoltre i pulsanti per la visualizzazione di tutte le prenotazioni
+	 * del sistema e per l'inserimento di un nuovo spettacolo in programmazione.
+	 */
 	@Override
 	protected JToolBar createToolBar() {
 		JToolBar toolBar = new JToolBar();

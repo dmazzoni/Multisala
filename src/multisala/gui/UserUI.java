@@ -11,6 +11,12 @@ import javax.swing.JToolBar;
 import multisala.core.IGuest;
 import multisala.core.IUser;
 
+/**
+ * La finestra grafica dell'utente loggato.
+ * @author Davide Mazzoni 
+ * @author Giacomo Annaloro
+ *
+ */
 public class UserUI extends GuestUI {
 
 	/**
@@ -31,7 +37,7 @@ public class UserUI extends GuestUI {
 
 	/**
 	 * Crea il pannello a schede e mostra il tab della 
-	 * programmazione con le opzioni disponibili per l'utente registrato.
+	 * programmazione con le opzioni disponibili per il tipo di utente registrato.
 	 * @return La vista a schede.
 	 */
 	@Override

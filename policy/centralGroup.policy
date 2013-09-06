@@ -12,4 +12,6 @@ grant codeBase "${multisala.codebase}" {
 	permission java.io.FilePermission "${multisala.dbLocation}", "read";
 	permission java.io.FilePermission "${multisala.dbLocation}/multisala.db", "read,write,delete";
 	permission java.io.FilePermission "${multisala.dbLocation}/multisala.db-journal", "read,write,delete";
+	permission java.io.FilePermission "/var/tmp", "read,write";
+	permission java.io.FilePermission "/var/tmp/*", "read,write,delete";
 };

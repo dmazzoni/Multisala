@@ -298,6 +298,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setString(3, updated.getTime());
 			query.setString(4, updated.getTheater());
 			query.setInt(5, updated.getId());
+			query.setInt(6, updated.getFreeSeats());
 			query.executeUpdate();
 		} finally {
 			try {

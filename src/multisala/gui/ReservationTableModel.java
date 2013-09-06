@@ -7,9 +7,21 @@ import javax.swing.table.AbstractTableModel;
 
 import multisala.core.Reservation;
 
+/**
+ * Il modello per la tabella (JTable) che contiene un elenco di prenotazioni.
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
+ */
 public class ReservationTableModel extends AbstractTableModel implements Serializable {
 
+	/**
+	 * Le prenotazioni da mostrare.
+	 */
 	private Reservation[] reservations;
+	
+	/**
+	 * I nomi delle colonne della tabella.
+	 */
 	private final String[] colNames = {"Codice", "Utente", "Titolo", "Data", "Ora", "Posti"};
 	
 	public ReservationTableModel(List<Reservation> reservations) {
@@ -26,6 +38,9 @@ public class ReservationTableModel extends AbstractTableModel implements Seriali
 		return colNames[columnIndex];
 	}
 	
+	/**
+	 * @return Il numero di righe della tabella, corrispondente al numero di prenotazioni.
+	 */
 	@Override
 	public int getRowCount() {
 		return reservations.length;
@@ -44,6 +59,11 @@ public class ReservationTableModel extends AbstractTableModel implements Seriali
 		throw new IllegalArgumentException();
 	}
 	
+	/**
+	 * Restituisce la prenotazione che nella tabella si trova all'indice di riga specificato.
+	 * @param i l'indice della riga
+	 * @return La prenotazione selezionata.
+	 */
 	public Reservation getReservationAtIndex(int i) {
 		return reservations[i];
 	}

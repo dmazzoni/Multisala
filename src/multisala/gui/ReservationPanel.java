@@ -19,10 +19,22 @@ import javax.swing.JScrollPane;
 
 import multisala.core.Reservation;
 
+/**
+ * Il pannello che mostra le prenotazioni effettuate da un utente registrato.
+ * @author Davide Mazzoni
+ * @author Giacomo Annaloro
+ *
+ */
 public class ReservationPanel extends AbstractListPanel {
 	
+	/**
+	 * La finestra che ospita il pannello.
+	 */
 	private UserUI parent;
 	
+	/**
+	 * Il menù contestuale con le opzioni disponibili per una prenotazione selezionata.
+	 */
 	private JPopupMenu popupMenu;
 
 	public ReservationPanel(UserUI parent) {
@@ -38,6 +50,11 @@ public class ReservationPanel extends AbstractListPanel {
 		list.setModel(new ReservationTableModel(res));
 	}
 	
+	/**
+	 * Crea il menù contestuale con le opzioni per modificare o 
+	 * eliminare una prenotazione selezionata.
+	 * @return Il menù creato.
+	 */
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu menu = new JPopupMenu();
 		JMenuItem editMenuItem = new JMenuItem("Modifica");
@@ -74,6 +91,9 @@ public class ReservationPanel extends AbstractListPanel {
 		return menu;
 	}
 	
+	/**
+	 * Setta le proprietà dei componenti grafici e li dispone sul pannello.
+	 */
 	private void initView() {
 		JPanel panel = new JPanel();
 		

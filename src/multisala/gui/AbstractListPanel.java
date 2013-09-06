@@ -20,6 +20,9 @@ public abstract class AbstractListPanel extends JPanel {
 		list = new JTable();
 	}
 	
+	/**
+	 * Aggiorna i dati nella tabella del pannello.
+	 */
 	public abstract void updateView();
 
 }

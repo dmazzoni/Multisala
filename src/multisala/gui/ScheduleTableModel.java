@@ -15,7 +15,7 @@ import multisala.core.Show;
 public class ScheduleTableModel extends AbstractTableModel implements Serializable {
 
 	/**
-	 * Gli spettacoli presenti nel database.
+	 * Gli spettacoli da mostrare.
 	 */
 	private Show[] shows;
 	

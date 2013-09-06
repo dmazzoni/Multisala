@@ -1,4 +1,4 @@
-grant codeBase "file:///home/davide/git/Multisala/bin/-" {
+grant codeBase "file://${user.home}/workspace/Multisala/bin/-" {
 	permission java.util.PropertyPermission "user.dir", "read";
 	permission java.net.SocketPermission "localhost:1098", "connect";
 	permission java.net.SocketPermission "${java.rmi.server.hostname}:1098", "connect";

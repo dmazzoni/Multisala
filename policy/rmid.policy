@@ -1,15 +1,15 @@
 grant {
 	permission java.net.SocketPermission "${java.rmi.server.hostname}:8000", "connect";
 	permission java.io.FilePermission "file://${user.home}/rmid-logs/-", "read,write";
-	permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.security.policy=${user.home}/git/Multisala/policy/authGroup.policy";
-	permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.security.policy=${user.home}/git/Multisala/policy/centralGroup.policy";
+	permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.security.policy=${user.home}/workspace/Multisala/policy/authGroup.policy";
+	permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.security.policy=${user.home}/workspace/Multisala/policy/centralGroup.policy";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Dmultisala.codebase=${java.rmi.server.codebase}";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.class.path=no_classpath";
-	permission com.sun.rmi.rmid.ExecOptionPermission "-Dmultisala.dbLocation=${user.home}/git/Multisala/bin/";
+	permission com.sun.rmi.rmid.ExecOptionPermission "-Dmultisala.dbLocation=${user.home}/workspace/Multisala/bin/";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.rmi.server.hostname=${java.rmi.server.hostname}";
-	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.keyStore=${user.home}/certs/serverKeys";
+	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.keyStore=${user.home}/serverCerts/serverKeys";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.keyStorePassword=multisala";
-	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.trustStore=${user.home}/certs/serverTrust";
+	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.trustStore=${user.home}/serverCerts/serverTrust";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.trustStorePassword=multisala";
 };
 

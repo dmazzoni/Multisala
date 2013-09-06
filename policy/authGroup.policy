@@ -5,7 +5,7 @@ grant {
 grant codeBase "${multisala.codebase}" {
 	permission java.net.SocketPermission "localhost:12000", "listen";
 	permission java.net.SocketPermission "localhost:1098", "connect";
-	permission java.net.SocketPermission "192.168.1.4:1024-", "accept";
+	permission java.net.SocketPermission "192.168.1.2:1024-", "accept";
 	permission java.util.PropertyPermission "multisala.dbLocation", "read";
 	permission java.util.PropertyPermission "user.dir", "read";
 	permission java.io.FilePermission "${multisala.dbLocation}", "read";

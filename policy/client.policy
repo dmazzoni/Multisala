@@ -1,4 +1,4 @@
-grant codeBase "file:///home/davide/workspace/Multisala/client/-" {
+grant codeBase "file://${user.home}/workspace/Multisala/client/-" {
 	permission java.net.SocketPermission "${multisala.serverAddress}:8000", "connect";
 	permission java.net.SocketPermission "${multisala.serverAddress}:12000", "connect";
 	permission java.net.SocketPermission "${multisala.serverAddress}:12001", "connect";

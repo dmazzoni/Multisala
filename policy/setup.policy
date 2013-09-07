@@ -1,12 +1,24 @@
 grant codeBase "file://${user.home}/workspace/Multisala/bin/-" {
+
+	// Per leggere il percorso della cartella corrente
 	permission java.util.PropertyPermission "user.dir", "read";
+
+	// Per connettersi al registro RMI
 	permission java.net.SocketPermission "localhost:1098", "connect";
 	permission java.net.SocketPermission "${java.rmi.server.hostname}:1098", "connect";
+
+	// Per salvare le referenze ai gruppi
 	permission java.io.FilePermission "group1", "write";
 	permission java.io.FilePermission "group2", "write";
+
+	// Per leggere la cartella corrente
 	permission java.io.FilePermission "${user.dir}", "read";
+
+	// Per la gestione del database
 	permission java.io.FilePermission "${user.dir}/multisala.db", "read,write,delete";
 	permission java.io.FilePermission "${user.dir}/multisala.db-journal", "read,write,delete";
+
+	//TODO
 	permission java.lang.RuntimePermission "accessClassInPackage.sun.rmi.server";
 }; 
 

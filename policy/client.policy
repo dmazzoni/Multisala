@@ -1,24 +1,27 @@
 grant codeBase "file://${user.home}/workspace/Multisala/client/-" {
-	permission java.net.SocketPermission "${multisala.serverAddress}:8000", "connect";
-	permission java.net.SocketPermission "${multisala.serverAddress}:12000", "connect";
-	permission java.net.SocketPermission "${multisala.serverAddress}:12001", "connect";
 
-	//Permesso per esportare AdminMS
+	// Per esportare AdminMS
 	permission java.net.SocketPermission "localhost:6000", "listen";
 
-	//Permesso per accettare invocazioni dal central server
+	// Per accettare invocazioni dal central server
 	permission java.net.SocketPermission "${multisala.serverAddress}:1024-", "accept";
 	
+	/* Per connettersi ai server di autenticazione, centrale, e di bootstrap.
+	   Il server di bootstrap è esportato sul protocollo IIOP su una porta anonima */
 	permission java.net.SocketPermission "${multisala.serverAddress}:1024-", "connect";
 
+	// Per chiudere la JVM con codice di uscita 0
 	permission java.lang.RuntimePermission "exitVM.0";
 
+	// Per stabilire la connessione SSL
 	permission java.util.PropertyPermission "javax.net.ssl.keyStore", "write";
 	permission java.util.PropertyPermission "javax.net.ssl.keyStorePassword", "write";
 	permission java.util.PropertyPermission "javax.net.ssl.trustStore", "write";
 	permission java.util.PropertyPermission "javax.net.ssl.trustStorePassword", "write";
 	permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledCipherSuites", "read";
 	permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledProtocols", "read";
+
+	// Per leggere le proprietà passate da riga di comando
 	permission java.util.PropertyPermission "multisala.certLocation", "read";
 	permission java.util.PropertyPermission "multisala.serverAddress", "read";
 }; 

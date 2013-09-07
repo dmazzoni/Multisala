@@ -30,6 +30,9 @@ public class UserUI extends GuestUI {
 		this.userLabel.setText("Benvenuto, " + agent.getUsername());
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IUser getAgent() {
 		return agent;

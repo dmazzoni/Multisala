@@ -34,11 +34,17 @@ public class AdminUI extends UserUI {
 		agent.adminConnected();
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public IAdmin getAgent() {
 		return agent;
 	}
 	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected JTabbedPane createTabbedView() {
 		JTabbedPane tabbedView = new JTabbedPane();

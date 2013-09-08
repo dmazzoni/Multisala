@@ -33,4 +33,6 @@ grant codeBase "http://${multisala.serverAddress}:8000/" {
 	permission java.lang.RuntimePermission "exitVM.0";
 	permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledCipherSuites", "read";
 	permission java.util.PropertyPermission "javax.rmi.ssl.client.enabledProtocols", "read";
+	
+	permission java.awt.AWTPermission "showWindowWithoutWarningBanner";
 }; 

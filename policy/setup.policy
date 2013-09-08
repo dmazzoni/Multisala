@@ -18,7 +18,7 @@ grant codeBase "file://${user.home}/workspace/Multisala/bin/-" {
 	permission java.io.FilePermission "${user.dir}/multisala.db", "read,write,delete";
 	permission java.io.FilePermission "${user.dir}/multisala.db-journal", "read,write,delete";
 
-	//TODO
+	// Per deserializzare gli oggetti della classe ActivationGroupID
 	permission java.lang.RuntimePermission "accessClassInPackage.sun.rmi.server";
 }; 
 

@@ -57,6 +57,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		dbConnection = DriverManager.getConnection("jdbc:sqlite:" + dbPath + "multisala.db");
 		administrators = new HashSet<IAdminMS>();
 		initPendingUsers();
+		System.out.println("Server centrale attivato con successo");
 	}
 	
 	/**
@@ -374,6 +375,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		try {
 			inactive(getID());
 			dbConnection.close();
+			System.out.println("Server centrale disattivato");
 		} catch (RemoteException | ActivationException | SQLException e) {
 			e.printStackTrace();
 		}

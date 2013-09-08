@@ -24,6 +24,9 @@ grant codeBase "file://${user.home}/workspace/Multisala/client/-" {
 	// Per leggere le proprietà passate da riga di comando
 	permission java.util.PropertyPermission "multisala.certLocation", "read";
 	permission java.util.PropertyPermission "multisala.serverAddress", "read";
+	
+	// Per mostrare le finestre senza avvisi
+	permission java.awt.AWTPermission "showWindowWithoutWarningBanner";
 }; 
     
 grant codeBase "http://${multisala.serverAddress}:8000/" {

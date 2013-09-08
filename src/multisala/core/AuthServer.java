@@ -46,6 +46,7 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 		Class.forName("org.sqlite.JDBC");
 		dbConnection = DriverManager.getConnection("jdbc:sqlite:" + dbPath + "multisala.db");
 		LocateRegistry.getRegistry(1098).rebind("AuthServer", this);
+		System.out.println("Server di autenticazione attivato con successo");
 	}
 	
 	/**
@@ -92,6 +93,7 @@ public class AuthServer extends Activatable implements IAuthServer, Unreferenced
 			LocateRegistry.getRegistry(1098).unbind("AuthServer");
 			inactive(getID());
 			dbConnection.close();
+			System.out.println("Server di autenticazione disattivato");
 		} catch (RemoteException | NotBoundException | ActivationException | SQLException e) {
 			e.printStackTrace();
 		}

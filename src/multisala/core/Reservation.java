@@ -2,6 +2,8 @@ package multisala.core;
 
 import java.io.Serializable;
 
+import multisala.exceptions.ReservationException;
+
 /**
  * Una prenotazione per uno spettacolo, effettuata da
  * un utente registrato.
@@ -31,7 +33,9 @@ public class Reservation implements Serializable {
 	 */
 	private int seats;
 	
-	public Reservation(int id, Show show, String user, int seats) {
+	public Reservation(int id, Show show, String user, int seats) throws ReservationException {
+		if (seats <= 0)
+			throw new ReservationException("Numero posti non valido");
 		this.id = id;
 		this.show = show;
 		this.user = user;

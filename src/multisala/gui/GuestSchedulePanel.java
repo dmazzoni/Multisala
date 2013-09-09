@@ -35,7 +35,7 @@ public class GuestSchedulePanel extends AbstractListPanel {
 	/**
 	 * La data a cui si riferisce la programmazione.
 	 */
-	private Calendar currentDate;
+	protected Calendar scheduleDate;
 	
 	/**
 	 * La finestra che ospita il pannello.
@@ -54,7 +54,7 @@ public class GuestSchedulePanel extends AbstractListPanel {
 	
 	public GuestSchedulePanel(GuestUI parent) {
 		this.parent = parent;
-		this.currentDate = new GregorianCalendar();
+		this.scheduleDate = new GregorianCalendar();
 		this.lblScheduleDate = new JLabel();
 		this.panel = new JPanel();
 		updateView();
@@ -72,11 +72,11 @@ public class GuestSchedulePanel extends AbstractListPanel {
 	 * @param offset lo spostamento in giorni dalla data corrente;
 	 */
 	protected void updateSchedule(int offset) {
-		currentDate.add(Calendar.DAY_OF_MONTH, offset);
-		String dtString = new String("Programmazione del " + currentDate.get(Calendar.DAY_OF_MONTH) + "/" + 
-				(currentDate.get(Calendar.MONTH) + 1) + "/" + currentDate.get(Calendar.YEAR));
+		scheduleDate.add(Calendar.DAY_OF_MONTH, offset);
+		String dtString = new String("Programmazione del " + scheduleDate.get(Calendar.DAY_OF_MONTH) + "/" + 
+				(scheduleDate.get(Calendar.MONTH) + 1) + "/" + scheduleDate.get(Calendar.YEAR));
 		lblScheduleDate.setText(dtString);
-		List<Show> shows = parent.getAgent().getSchedule(currentDate);
+		List<Show> shows = parent.getAgent().getSchedule(scheduleDate);
 		list.setModel(new ScheduleTableModel(shows));
 	}
 	

@@ -27,6 +27,9 @@ public final class Setup {
 		String certPath = System.getProperty("multisala.certLocation");
 		String dbPath = System.getProperty("multisala.dbLocation");
 		String hostname = System.getProperty("java.rmi.server.hostname");
+		String leaseValue = System.getProperty("java.rmi.dgc.leaseValue");
+		if (leaseValue == null)
+			leaseValue = "600000";
 		System.setSecurityManager(new RMISecurityManager());
 		try {
 			Properties group2Properties = new Properties();
@@ -35,6 +38,7 @@ public final class Setup {
 			group2Properties.put("java.class.path", "no_classpath");
 			group2Properties.put("multisala.dbLocation", dbPath);
 			group2Properties.put("java.rmi.server.hostname", hostname);
+			group2Properties.put("java.rmi.dgc.leaseValue", leaseValue);
 			
 			Properties group1Properties = new Properties();
 			group1Properties.put("javax.net.ssl.keyStore", certPath + "serverKeys");
@@ -46,6 +50,7 @@ public final class Setup {
 			group1Properties.put("java.class.path", "no_classpath");
 			group1Properties.put("multisala.dbLocation", dbPath);
 			group1Properties.put("java.rmi.server.hostname", hostname);
+			group1Properties.put("java.rmi.dgc.leaseValue", leaseValue);
 
 			// Registrazione dei gruppi o recupero del loro ID
 			ActivationGroupID groupID1 = getGroupID("group1", group1Properties);
@@ -129,7 +134,7 @@ public final class Setup {
 										"seats INTEGER NOT NULL CHECK (seats >= 0)," +
 										"FOREIGN KEY(user_id) REFERENCES users(user_id)," +
 										"FOREIGN KEY(show_id) REFERENCES shows(show_id))");
-		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (0, 'Skyfall', '2013-09-02', '21:15', '3', 150)");
+		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (0, 'Skyfall', '2013-09-10', '21:15', '3', 150)");
 		dbStatement.executeUpdate("INSERT OR IGNORE INTO users values ('admin', 'admin', 'admin', 1)");
 		dbStatement.executeUpdate("INSERT OR IGNORE INTO users values ('james', 'cameron', 'user', 1)");
 		dbConnection.close();

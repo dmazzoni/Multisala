@@ -85,6 +85,7 @@ public class ReservationManagementPanel extends JPanel {
 		this(parentWindow, parentTab, res.getShow());
 		this.res = res;
 		seatsField.setText(res.getSeats() + "");
+		btnSubmit.setText("Aggiorna");
 	}
 	
 	public ReservationManagementPanel(UserUI parentWindow, AbstractListPanel parentTab, Show sh) {

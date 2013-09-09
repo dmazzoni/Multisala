@@ -68,7 +68,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		PreparedStatement query = null;
 		List<Show> schedule = new Vector<Show>();
 		try {
-			query = dbConnection.prepareStatement("SELECT * FROM shows WHERE show_date = ?");
+			query = dbConnection.prepareStatement("SELECT * FROM shows WHERE show_date = ? ORDER BY show_time");
 			query.setString(1, dt);
 			ResultSet rs = query.executeQuery();
 			while (rs.next()) {
@@ -121,7 +121,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		List<Reservation> reservations = new Vector<Reservation>();
 		try {
 			query = dbConnection.createStatement();
-			ResultSet rs = query.executeQuery("SELECT user_id FROM users");
+			ResultSet rs = query.executeQuery("SELECT user_id FROM users ORDER BY user_id");
 			while (rs.next())
 				reservations.addAll(getReservations(rs.getString("user_id")));
 			return reservations;
@@ -142,7 +142,8 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query = dbConnection.prepareStatement("SELECT a.reservation_id, a.seats," +
 					"b.show_id, b.title, b.show_date, b.show_time, b.theater, b.free_seats " +
 					"FROM reservations AS a, shows AS b " +
-					"WHERE a.user_id = ? AND a.show_id = b.show_id");
+					"WHERE a.user_id = ? AND a.show_id = b.show_id " +
+					"ORDER BY show_date, show_time");
 			query.setString(1, user);
 			ResultSet rs = query.executeQuery();
 			while (rs.next()) {
@@ -298,8 +299,8 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query.setString(2, updated.getDate());
 			query.setString(3, updated.getTime());
 			query.setString(4, updated.getTheater());
-			query.setInt(5, updated.getId());
-			query.setInt(6, updated.getFreeSeats());
+			query.setInt(5, updated.getFreeSeats());
+			query.setInt(6, updated.getId());
 			query.executeUpdate();
 		} finally {
 			try {

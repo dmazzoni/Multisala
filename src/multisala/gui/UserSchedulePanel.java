@@ -2,6 +2,8 @@ package multisala.gui;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.SwingUtilities;
 
@@ -40,12 +42,18 @@ public class UserSchedulePanel extends GuestSchedulePanel {
 	 */
 	protected void handleClick(MouseEvent e) {
 		if(SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-			int selection = list.convertRowIndexToModel(list.getSelectedRow());
-			if (selection >= 0) {
-				Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection);
-				ReservationManagementPanel rPanel = new ReservationManagementPanel(parent, this, sh);
-				parent.tabbedView.addTab("Nuova prenotazione", rPanel);
-				parent.tabbedView.setSelectedComponent(rPanel);
+			Calendar today = new GregorianCalendar();
+			if (scheduleDate.get(Calendar.YEAR) >= today.get(Calendar.YEAR) && scheduleDate.get(Calendar.MONTH) >= today.get(Calendar.MONTH)
+					&& scheduleDate.get(Calendar.DAY_OF_MONTH) >= today.get(Calendar.DAY_OF_MONTH)) {
+				int selection = list.convertRowIndexToModel(list.getSelectedRow());
+				if (selection >= 0) {
+					Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection);
+					ReservationManagementPanel rPanel = new ReservationManagementPanel(parent, this, sh);
+					parent.tabbedView.addTab("Nuova prenotazione", rPanel);
+					parent.tabbedView.setSelectedComponent(rPanel);
+				}
+			} else {
+				parent.setStatus("Impossibile prenotare: spettacolo già passato");
 			}
 		}
 	}

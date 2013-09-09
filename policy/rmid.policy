@@ -12,26 +12,10 @@ grant {
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Dmultisala.codebase=${java.rmi.server.codebase}";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.class.path=no_classpath";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Dmultisala.dbLocation=${user.home}/workspace/Multisala/bin/";
+	permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.rmi.dgc.leaseValue=*";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.rmi.server.hostname=${java.rmi.server.hostname}";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.keyStore=${user.home}/serverCerts/serverKeys";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.keyStorePassword=multisala";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.trustStore=${user.home}/serverCerts/serverTrust";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.trustStorePassword=multisala";
-};
-
-grant codeBase "${java.rmi.server.codebase}" {
-
-	// Per i gruppi
-	permission java.net.SocketPermission "localhost:12000-12001", "listen";
-	permission java.net.SocketPermission "localhost:1098", "connect";
-	permission java.net.SocketPermission "192.168.1.2:1024-", "accept";
-	permission java.util.PropertyPermission "multisala.dbLocation", "read";
-	permission java.util.PropertyPermission "user.dir", "read";
-	permission java.io.FilePermission "${multisala.dbLocation}", "read";
-	permission java.io.FilePermission "${multisala.dbLocation}/multisala.db", "read,write,delete";
-	permission java.io.FilePermission "${multisala.dbLocation}/multisala.db-journal", "read,write,delete";
-
-	permission java.net.SocketPermission "192.168.1.2:1024-", "connect";
-	permission java.io.FilePermission "/var/tmp", "read,write";
-	permission java.io.FilePermission "/var/tmp/*", "read,write,delete";
 };

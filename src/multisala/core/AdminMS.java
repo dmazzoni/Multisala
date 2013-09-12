@@ -87,7 +87,8 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	public void sellTickets(Show sh, int tickets) {
 		try {
 			centralServer.sellTickets(sh, tickets);
-			AbstractListPanel panel = (AbstractListPanel)window.getTabbedView().getComponentAt(0);
+			window.setStatus("Vendita effettuata con successo");
+			AbstractListPanel panel = (AbstractListPanel) window.getTabbedView().getComponentAt(0);
 			panel.updateView();
 		} catch (RemoteException e) {
 			JOptionPane.showMessageDialog(window, e);

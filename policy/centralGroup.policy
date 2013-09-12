@@ -1,7 +1,7 @@
 grant {
 
 	// Per accedere al codebase
-	permission java.net.SocketPermission "${java.rmi.server.hostname}:8000", "connect";
+	permission java.net.SocketPermission "localhost:8000", "connect";
 };
 
 grant codeBase "${multisala.codebase}" {
@@ -13,10 +13,10 @@ grant codeBase "${multisala.codebase}" {
 	permission java.net.SocketPermission "localhost:1098", "connect";
 
 	// Per accettare connessioni dai client
-	permission java.net.SocketPermission "192.168.1.6:1024-", "accept";
+	permission java.net.SocketPermission "192.168.1.3:1024-", "accept";
 
 	// Per connettersi al mobile server dell'amministratore
-	permission java.net.SocketPermission "192.168.1.6:6000", "connect";
+	permission java.net.SocketPermission "192.168.1.3:6000", "connect";
 
 	// Per leggere il percorso del database
 	permission java.util.PropertyPermission "multisala.dbLocation", "read";

@@ -30,7 +30,7 @@ import multisala.exceptions.ReservationException;
  * @author Giacomo Annaloro
  */
 public class ReservationManagementPanel extends JPanel {
-	
+
 	/**
 	 * Il pannello da cui si è generato il form per la prenotazione.
 	 */

@@ -26,7 +26,6 @@ public final class Setup {
 		String implCodebase = System.getProperty("multisala.codebase");
 		String certPath = System.getProperty("multisala.certLocation");
 		String dbPath = System.getProperty("multisala.dbLocation");
-		String hostname = System.getProperty("java.rmi.server.hostname");
 		String leaseValue = System.getProperty("java.rmi.dgc.leaseValue");
 		if (leaseValue == null)
 			leaseValue = "600000";
@@ -37,7 +36,6 @@ public final class Setup {
 			group2Properties.put("multisala.codebase", implCodebase);
 			group2Properties.put("java.class.path", "no_classpath");
 			group2Properties.put("multisala.dbLocation", dbPath);
-			group2Properties.put("java.rmi.server.hostname", hostname);
 			group2Properties.put("java.rmi.dgc.leaseValue", leaseValue);
 			
 			Properties group1Properties = new Properties();
@@ -49,7 +47,6 @@ public final class Setup {
 			group1Properties.put("multisala.codebase", implCodebase);
 			group1Properties.put("java.class.path", "no_classpath");
 			group1Properties.put("multisala.dbLocation", dbPath);
-			group1Properties.put("java.rmi.server.hostname", hostname);
 			group1Properties.put("java.rmi.dgc.leaseValue", leaseValue);
 
 			// Registrazione dei gruppi o recupero del loro ID

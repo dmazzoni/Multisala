@@ -65,12 +65,19 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 				int selection = list.convertRowIndexToModel(list.getSelectedRow());
 				if (selection >= 0) {
 					Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection);
-					int seats = Integer.parseInt(seatsField.getText());
-					parent.getAgent().sellTickets(sh, seats);
+					int seats;
+					try {
+						seats = Integer.parseInt(seatsField.getText());
+						if(seats > 0)
+							parent.getAgent().sellTickets(sh, seats);
+						else
+							parent.setStatus("Numero posti non valido");
+					} catch (NumberFormatException ex) {
+						parent.setStatus("Numero posti non valido");
+					}
 					seatsField.setText("");
-				} else {
+				} else 
 					parent.setStatus("Nessuno spettacolo selezionato");
-				}
 			}
 			
 		});

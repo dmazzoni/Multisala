@@ -149,7 +149,10 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	@Override
 	public List<String> confirmUsers(List<String> users) throws RemoteException {
 		ConfirmUsersPanel confirmationPanel = new ConfirmUsersPanel(users);
-		JOptionPane.showConfirmDialog(window, confirmationPanel, "Conferma utenti", JOptionPane.OK_OPTION);
+		//JOptionPane.showConfirmDialog(window, confirmationPanel, "Conferma utenti", JOptionPane.OK_OPTION);
+		Object[] options = {"OK"};
+		JOptionPane.showOptionDialog(window, confirmationPanel, "Conferma utenti", JOptionPane.PLAIN_MESSAGE, 
+				JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 		return confirmationPanel.getConfirmedUsers();
 	}
 	

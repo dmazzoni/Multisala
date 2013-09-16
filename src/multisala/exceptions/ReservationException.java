@@ -2,7 +2,7 @@ package multisala.exceptions;
 
 /**
  * Eccezione lanciata nel caso una prenotazione o un'emissione
- * di biglietti non sia effettuabile per mancanza di posti.
+ * di biglietti non sia effettuabile.
  * @author Giacomo Annaloro
  * @author Davide Mazzoni
  *

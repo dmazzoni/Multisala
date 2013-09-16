@@ -14,6 +14,7 @@ grant codeBase "${multisala.codebase}" {
 
 	// Per accettare connessioni dai client
 	permission java.net.SocketPermission "192.168.1.3:1024-", "accept";
+	//permission java.net.SocketPermission "*.univr.it:1024-", "accept";
 
 	// Per leggere il percorso del database 
 	permission java.util.PropertyPermission "multisala.dbLocation", "read";

@@ -2,6 +2,8 @@ package multisala.core;
 
 import java.rmi.RemoteException;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Vector;
 
@@ -85,7 +87,17 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 	 */
 	@Override
 	public void sellTickets(Show sh, int tickets) {
+		Calendar today = new GregorianCalendar();
+		int month = today.get(Calendar.MONTH) + 1;
+		String monthString = new String((month < 10 ? "0" : "") + month);
+		int day = today.get(Calendar.DATE);
+		String dayString = new String((day < 10 ? "0" : "") + day);
+		String todayString = new String(today.get(Calendar.YEAR) + "-" + monthString + "-" +  dayString);		
 		try {
+			if(tickets <= 0)
+				throw new ReservationException("Numero posti non valido");
+			if(todayString.compareTo(sh.getDate()) > 0)
+				throw new ReservationException("Impossibile procedere: spettacolo già passato");			
 			centralServer.sellTickets(sh, tickets);
 			window.setStatus("Vendita effettuata con successo");
 			AbstractListPanel panel = (AbstractListPanel) window.getTabbedView().getComponentAt(0);
@@ -93,7 +105,7 @@ public class AdminMS extends UserMA implements IAdmin, IAdminMS {
 		} catch (RemoteException e) {
 			JOptionPane.showMessageDialog(window, e);
 		} catch (ReservationException e) {
-			window.setStatus("Posti liberi insufficienti per la vendita");
+			window.setStatus(e.getMessage());
 		} catch (SQLException e) {
 			int result = JOptionPane.showConfirmDialog(window, "Emissione biglietti fallita. Riprovare?",
 					"Errore", JOptionPane.YES_NO_OPTION);

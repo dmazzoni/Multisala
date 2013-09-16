@@ -47,7 +47,7 @@ public abstract class AbstractUI extends JFrame implements Runnable {
 	
 	protected AbstractUI() {
 		super("Multisala");
-		tabSize = new Dimension(640, 480);
+		tabSize = new Dimension(800, 600);
 		userLabel = new JLabel();
 	}
 	

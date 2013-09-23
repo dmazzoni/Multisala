@@ -40,7 +40,7 @@ public class Show implements Serializable {
 	 */
 	private int freeSeats;
 	
-	public Show(int id, String title, String date, String time, String theater, int freeSeats) throws IllegalArgumentException {
+	public Show(int id, String title, String date, String time, String theater, int freeSeats) {
 		this.id = id;
 		this.title = title;
 	    this.date = date;

@@ -181,7 +181,7 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 			query1.setInt(2, res.getShow().getId());
 			query1.setInt(3, res.getSeats());
 			query1.executeUpdate();
-			query2 = dbConnection.prepareStatement("UPDATE shows SET free_seats = free_seats - ?" +
+			query2 = dbConnection.prepareStatement("UPDATE shows SET free_seats = free_seats - ? " +
 					"WHERE show_id = ?");
 			query2.setInt(1, res.getSeats());
 			query2.setInt(2, res.getShow().getId());
@@ -212,9 +212,11 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 				checkFreeSeats(updated.getShow(), ticketDiff);
 			dbConnection.setAutoCommit(false);
 			query1 = dbConnection.prepareStatement("UPDATE shows SET free_seats = free_seats + " +
-					"((SELECT seats FROM reservations WHERE reservation_id = ?) - ?)");
+					"((SELECT seats FROM reservations WHERE reservation_id = ?) - ?) " +
+					"WHERE show_id = ?");
 			query1.setInt(1, updated.getId());
 			query1.setInt(2, updated.getSeats());
+			query1.setInt(3, updated.getShow().getId());
 			query1.executeUpdate();
 			query2 = dbConnection.prepareStatement("UPDATE reservations SET seats = ? WHERE reservation_id = ?");
 			query2.setInt(1, updated.getSeats());

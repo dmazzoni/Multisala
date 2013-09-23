@@ -68,10 +68,7 @@ public class AdminSchedulePanel extends UserSchedulePanel {
 					int seats;
 					try {
 						seats = Integer.parseInt(seatsField.getText());
-						if(seats > 0)
-							parent.getAgent().sellTickets(sh, seats);
-						else
-							parent.setStatus("Numero posti non valido");
+						parent.getAgent().sellTickets(sh, seats);
 					} catch (NumberFormatException ex) {
 						parent.setStatus("Numero posti non valido");
 					}

@@ -1,7 +1,4 @@
 grant {
-	
-	// Per accedere al codebase
-	permission java.net.SocketPermission "${java.rmi.server.hostname}:8000", "connect";
 
 	// Per la gestione dei log
 	permission java.io.FilePermission "file://${user.home}/rmid-logs/-", "read,write";

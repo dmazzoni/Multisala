@@ -13,11 +13,9 @@ grant codeBase "${multisala.codebase}" {
 	permission java.net.SocketPermission "localhost:1098", "connect";
 
 	// Per accettare connessioni dai client
-	//permission java.net.SocketPermission "157.27.241.163:1024-", "accept";
 	permission java.net.SocketPermission "*.univr.it:1024-", "accept";
 
 	// Per connettersi al mobile server dell'amministratore
-	//permission java.net.SocketPermission "157.27.241.163:6000", "connect";
 	permission java.net.SocketPermission "*.univr.it:6000", "connect";
 
 	// Per leggere il percorso del database

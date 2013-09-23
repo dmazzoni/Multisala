@@ -10,7 +10,6 @@ grant {
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.class.path=no_classpath";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Dmultisala.dbLocation=${user.home}/workspace/Multisala/bin/";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.rmi.dgc.leaseValue=*";
-	permission com.sun.rmi.rmid.ExecOptionPermission "-Djava.rmi.server.hostname=${java.rmi.server.hostname}";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.keyStore=${user.home}/serverCerts/serverKeys";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.keyStorePassword=multisala";
 	permission com.sun.rmi.rmid.ExecOptionPermission "-Djavax.net.ssl.trustStore=${user.home}/serverCerts/serverTrust";

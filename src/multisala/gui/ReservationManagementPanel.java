@@ -109,8 +109,8 @@ public class ReservationManagementPanel extends JPanel {
 		try {
 			int seats = Integer.parseInt(seatsField.getText());
 			if (res == null) {
-				res = new Reservation(0, sh, parentWindow.getAgent().getUsername(), seats);
-				parentWindow.getAgent().insertReservation(res);
+				Reservation temp = new Reservation(0, sh, parentWindow.getAgent().getUsername(), seats);
+				parentWindow.getAgent().insertReservation(temp);
 			} else {
 				Reservation updated = new Reservation(res.getId(), res.getShow(), res.getUser(), seats);
 				parentWindow.getAgent().editReservation(res, updated);

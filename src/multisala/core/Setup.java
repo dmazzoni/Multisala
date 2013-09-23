@@ -131,14 +131,14 @@ public final class Setup {
 										"seats INTEGER NOT NULL CHECK (seats >= 0)," +
 										"FOREIGN KEY(user_id) REFERENCES users(user_id)," +
 										"FOREIGN KEY(show_id) REFERENCES shows(show_id))");
-		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (0, 'Skyfall', '2013-09-18', '21:15', '3', 150)");
-		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (1, 'Argo', '2013-09-18', '20:45', '4', 130)");
-		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (2, 'Il Lato Positivo', '2013-09-18', '18:30', '2', 150)");
-		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (3, 'E Ora Dove Andiamo?', '2013-09-18', '22:00', '1', 120)");
-		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (4, 'World War Z', '2013-09-18', '20:45', '1', 120)");
-		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (5, 'Fast And Furious 6', '2013-09-19', '21:15', '3', 150)");
-		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (6, 'Il Grande Gatsby', '2013-09-19', '22:30', '4', 130)");
-		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (7, 'Il Cavaliere Oscuro', '2013-09-19', '23:20', '2', 150)");
+		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (0, 'Skyfall', '2013-09-24', '21:15', '3', 150)");
+		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (1, 'Argo', '2013-09-24', '20:45', '4', 130)");
+		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (2, 'Il Lato Positivo', '2013-09-24', '18:30', '2', 150)");
+		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (3, 'E Ora Dove Andiamo?', '2013-09-24', '22:00', '1', 120)");
+		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (4, 'World War Z', '2013-09-24', '20:45', '1', 120)");
+		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (5, 'Fast And Furious 6', '2013-09-25', '21:15', '3', 150)");
+		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (6, 'Il Grande Gatsby', '2013-09-25', '22:30', '4', 130)");
+		dbStatement.executeUpdate("INSERT OR IGNORE INTO shows values (7, 'Il Cavaliere Oscuro', '2013-09-25', '23:20', '2', 150)");
 		dbStatement.executeUpdate("INSERT OR IGNORE INTO users values ('davide', 'admin', 'admin', 1)");
 		dbStatement.executeUpdate("INSERT OR IGNORE INTO users values ('giacomo', 'admin', 'admin', 1)");
 		dbStatement.executeUpdate("INSERT OR IGNORE INTO users values ('sara', 'sara', 'user', 1)");

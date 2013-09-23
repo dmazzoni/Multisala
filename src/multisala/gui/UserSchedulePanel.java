@@ -42,9 +42,7 @@ public class UserSchedulePanel extends GuestSchedulePanel {
 	 */
 	protected void handleClick(MouseEvent e) {
 		if(SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-			Calendar today = new GregorianCalendar();
-			if (scheduleDate.get(Calendar.YEAR) >= today.get(Calendar.YEAR) && scheduleDate.get(Calendar.MONTH) >= today.get(Calendar.MONTH)
-					&& scheduleDate.get(Calendar.DAY_OF_MONTH) >= today.get(Calendar.DAY_OF_MONTH)) {
+			if (!isBeforeToday(scheduleDate)) {
 				int selection = list.convertRowIndexToModel(list.getSelectedRow());
 				if (selection >= 0) {
 					Show sh = ((ScheduleTableModel) list.getModel()).getShowAtIndex(selection);
@@ -56,6 +54,29 @@ public class UserSchedulePanel extends GuestSchedulePanel {
 				parent.setStatus("Impossibile prenotare: spettacolo già passato");
 			}
 		}
+	}
+	
+	/**
+	 * Verifica se la data della programmazione visualizzata precede la data di oggi.
+	 * @param scheduleDate la data della programmazione
+	 * @return <code>true</code> se la data della programmazione precede quella odierna.
+	 */
+	private static boolean isBeforeToday(Calendar scheduleDate) {
+		Calendar today = new GregorianCalendar();
+		
+		int month = today.get(Calendar.MONTH) + 1;
+		String monthString = new String((month < 10 ? "0" : "") + month);
+		int day = today.get(Calendar.DATE);
+		String dayString = new String((day < 10 ? "0" : "") + day);
+		String todayString = new String(today.get(Calendar.YEAR) + "-" + monthString + "-" +  dayString);
+		
+		month = scheduleDate.get(Calendar.MONTH) + 1;
+		monthString = new String((month < 10 ? "0" : "") + month);
+		day = scheduleDate.get(Calendar.DATE);
+		dayString = new String((day < 10 ? "0" : "") + day);
+		String scheduleDateString = new String(scheduleDate.get(Calendar.YEAR) + "-" + monthString + "-" +  dayString);	
+		
+		return scheduleDateString.compareTo(todayString) < 0;
 	}
 }
 

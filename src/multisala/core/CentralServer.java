@@ -243,8 +243,10 @@ public class CentralServer extends Activatable implements ICentralServer, Unrefe
 		try {
 			dbConnection.setAutoCommit(false);
 			query1 = dbConnection.prepareStatement("UPDATE shows SET free_seats = free_seats + " +
-					"(SELECT seats FROM reservations WHERE reservation_id = ?)");
+					"(SELECT seats FROM reservations WHERE reservation_id = ?) " +
+					"WHERE show_id = (SELECT show_id FROM reservations WHERE reservation_id = ?)");
 			query1.setInt(1, id);
+			query1.setInt(2, id);
 			query1.executeUpdate();
 			query2 = dbConnection.prepareStatement("DELETE FROM reservations WHERE reservation_id = ?");
 			query2.setInt(1, id);
